@@ -2,20 +2,25 @@ package model;
 
 public class User {
     private int id;
-    private String login;
+    private String username;
     private String password;
+    private String email;
+    private UserType type;
 
-    public User(String login, String password) {
-        this.login = login;
-        this.password = password;
+    public int getId() {
+        return id;
     }
 
-    public String getLogin() {
-        return login;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -26,12 +31,19 @@ public class User {
         this.password = password;
     }
 
-    public int getId() {
-
-        return id;
+    public String getEmail() {
+        return email;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
     }
 }
