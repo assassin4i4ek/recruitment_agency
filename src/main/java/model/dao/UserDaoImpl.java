@@ -6,7 +6,6 @@ import model.user_model.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -30,8 +29,7 @@ public class UserDaoImpl implements UserDao {
         return users.size() > 0 ? users.get(0) : null;
     }
 
-    private class UserMapper implements RowMapper<User> {
-        @Nullable
+    public class UserMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             User user = new User();
