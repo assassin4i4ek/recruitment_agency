@@ -1,4 +1,4 @@
-package model.user_model;
+package application.model.user;
 
 import application.Application;
 import org.junit.Test;
@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
@@ -17,13 +18,15 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    public void checkAutowired() {
-        assertNotNull(userService);
+    public void validateTrueUserTest() {
+        Login login = new Login("a1", "a1");
+        User user = userService.validateUser(login);
+        assertNotEquals(user, null);
     }
 
-    //@Test
-    public void validateUserTest() {
-        Login login = new Login("a1", "a1");
+    @Test
+    public void validateWrongUserTest() {
+        Login login = new Login("a-1","a-1");
         User user = userService.validateUser(login);
         assertEquals(user, null);
     }

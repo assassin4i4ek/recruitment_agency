@@ -1,11 +1,10 @@
-package model.user_model;
+package application.model.user;
 
-import model.dao.UserDao;
+import application.model.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service("userService")
+@Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;

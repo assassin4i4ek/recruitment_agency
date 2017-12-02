@@ -1,8 +1,8 @@
-package model.dao;
+package application.model.dao;
 
-import model.user_model.Login;
-import model.user_model.User;
-import model.user_model.UserType;
+import application.model.user.Login;
+import application.model.user.User;
+import application.model.user.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -37,7 +37,7 @@ public class UserDaoImpl implements UserDao {
             user.setUsername(resultSet.getString("username"));
             user.setPassword(resultSet.getString("password"));
             user.setEmail(resultSet.getString("email"));
-            user.setType(UserType.valueOf(resultSet.getString("user_type")));
+            user.setType(UserType.valueOf(resultSet.getString("type")));
             return user;
         }
     }
