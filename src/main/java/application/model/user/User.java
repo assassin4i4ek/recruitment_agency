@@ -1,11 +1,22 @@
 package application.model.user;
 
-public class User {
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
+
+public class User extends org.springframework.security.core.userdetails.User {
+
     private int id;
-    private String username;
-    private String password;
     private String email;
-    private UserType type;
+
+    public User(String username, String password, boolean enabled, boolean accountNonExpired,
+                boolean credentialsNonExpired, boolean accountNonLocked,
+                Collection<? extends GrantedAuthority> authorities,
+                int id, String email) {
+        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+        this.id = id;
+        this.email = email;
+    }
 
     public int getId() {
         return id;
@@ -15,35 +26,11 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public UserType getType() {
-        return type;
-    }
-
-    public void setType(UserType type) {
-        this.type = type;
     }
 }

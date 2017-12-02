@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
@@ -17,12 +18,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DataSource dataSource;
 
     @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);/*
         auth.jdbcAuthentication().dataSource(dataSource)
                 .usersByUsernameQuery(
                         "SELECT username, password, enabled FROM users WHERE username=?")
                 .authoritiesByUsernameQuery(
-                        "SELECT username, role FROM users WHERE username=?");
+                        "SELECT username, role FROM users WHERE username=?");*/
     }
 
     @Override
@@ -35,7 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     "/css/**",
                     "/img/**",
                     "/webjars/**").permitAll()
-                .antMatchers("/user").hasRole("AGENT")
+                .antMatchers("/agent/**").hasRole("AGENT")
+                .antMatchers("/candidate/**").hasRole("CANDIDATE")
+                .antMatchers("/enterprise/**").hasRole("ENTERPRISE")
                 .anyRequest().authenticated()
     .and()
     .formLogin()
@@ -48,18 +55,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .logoutSuccessUrl("/login?logout").permitAll()
     .and()
     .exceptionHandling()
-            .accessDeniedPage("/error/access-denied")
+            .accessDeniedHandler((request, response, event) ->
+                    response.sendRedirect("/error/access-denied"))
     .and()
-    .csrf();
+        .csrf()
+    .and()
+        .userDetailsService(userDetailsService);
     }
-
-
-/*
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user").password("password").roles("USER")
-                .and()
-                .withUser("manager").password("password").roles("MANAGER");
-    }*/
 }
