@@ -1,6 +1,7 @@
 package application.controllers;
 
 import application.model.user.User;
+import application.services.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -33,12 +34,6 @@ public class WelcomeController {
         return "login";
     }
 
-    @GetMapping("/agent")
-    public String agent(Authentication authentication, Model model) {
-        User user = (User) authentication.getPrincipal();
-        System.out.println(user.getId());
-        return "/agent/index";
-    }
 
     @GetMapping("/candidate")
     public String candidate() {

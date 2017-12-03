@@ -1,12 +1,13 @@
 package application.model.application;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Application {
     private int id;
     private int enterpriseId;
     private int agentId;
-    private Date registrationDate;
+    private Timestamp registrationDate;
     private String profession;
     private short quantity;
     private String agentNote;
@@ -35,11 +36,11 @@ public class Application {
         this.agentId = agentId;
     }
 
-    public Date getRegistrationDate() {
+    public Timestamp getRegistrationTimestamp() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
+    public void setRegistrationTimestamp(Timestamp registrationDate) {
         this.registrationDate = registrationDate;
     }
 
