@@ -35,6 +35,11 @@ public class ApplicationDaoImpl implements ApplicationDao {
         return applications;
     }
 
+    @Override
+    public void reorderApplicationsOfAgent(int agentId) {
+        return;
+    }
+
     private class ApplicationMapper implements RowMapper<Application> {
         @Override
         public Application mapRow(ResultSet resultSet, int i) throws SQLException {

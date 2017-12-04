@@ -55,11 +55,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .logoutSuccessUrl("/login?logout").permitAll()
     .and()
     .exceptionHandling()
-            .accessDeniedHandler((request, response, event) ->
-                    response.sendRedirect("/error/access-denied"))
+            .accessDeniedHandler((request, response, event) -> {
+                event.printStackTrace();
+                response.sendRedirect("/error/access-denied");
+            })
     .and()
-        .csrf()
-    .and()
+        .csrf().disable()
         .userDetailsService(userDetailsService);
     }
 }
