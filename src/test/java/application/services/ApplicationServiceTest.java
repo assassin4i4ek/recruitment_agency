@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
@@ -30,7 +33,7 @@ public class ApplicationServiceTest {
         int agentId = 2;
         List<Application> applications = applicationService.findApplicationsByAgentId(agentId);
         assertNotNull(applications);
-        assertTrue(applications.size() == 1);
+        assertTrue(applications.size() > 0);
     }
 
     @Test
@@ -39,5 +42,19 @@ public class ApplicationServiceTest {
         List<Application> applications = applicationService.findApplicationsByAgentId(agentId);
         assertNotNull(applications);
         assertTrue(applications.size() == 0);
+    }
+
+    @Test
+    public void remainsApplicationsOrder() {
+        int agentId = 2;
+        List<Application> oldApplications = applicationService.findApplicationsByAgentId(agentId);
+        List<Application> newApplications = new ArrayList<>(oldApplications);
+        Collections.reverse(newApplications);
+        applicationService.reorderApplicationsOfAgent(newApplications);
+        Collections.reverse(newApplications);
+        applicationService.reorderApplicationsOfAgent(newApplications);
+        newApplications = applicationService.findApplicationsByAgentId(agentId);
+        for (int i = 0; i < newApplications.size(); ++i)
+            assertEquals(newApplications.get(i).getId(), oldApplications.get(i).getId());
     }
 }

@@ -34,6 +34,6 @@ public class AgentController {
                                     @RequestParam(value="newIndex") int newIndex) {
         Application app1 = applications.remove(prevIndex);
         applications.add(newIndex, app1);
-
+        applicationService.reorderApplicationsOfAgent(applications);
     }
 }

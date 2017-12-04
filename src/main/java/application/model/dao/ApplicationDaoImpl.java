@@ -30,14 +30,19 @@ public class ApplicationDaoImpl implements ApplicationDao {
     @Override
     public List<Application> findApplicationsByAgentId(int agentId) {
         String sql = "SELECT id, enterprise_id, agent_id, registration_timestamp, profession, quantity, agent_note" +
-                " FROM applications WHERE agent_id=" + agentId;
-        List<Application> applications = jdbcTemplate.query(sql, new ApplicationMapper());
-        return applications;
+                " FROM applications WHERE agent_id=" + agentId +
+                " ORDER BY agent_order";
+        return jdbcTemplate.query(sql, new ApplicationMapper());
     }
 
     @Override
-    public void reorderApplicationsOfAgent(int agentId) {
-        return;
+    public void reorderApplicationsOfAgent(List<Application> applications) {
+        int agentId = applications.get(0).getAgentId();
+        for (int i = 0; i < applications.size(); ++i) {
+            String sql = "UPDATE applications SET agent_order=" + i
+                    + " WHERE agent_id=" + agentId;
+            jdbcTemplate.update(sql);
+        }
     }
 
     private class ApplicationMapper implements RowMapper<Application> {

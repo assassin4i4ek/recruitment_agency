@@ -18,4 +18,9 @@ public class ApplicationServiceImpl implements ApplicationService{
         List<Application> applications = applicationDao.findApplicationsByAgentId(agentId);
         return applications != null ? applications : new ArrayList<>(0);
     }
+
+    @Override
+    public void reorderApplicationsOfAgent(List<Application> applications) {
+        applicationDao.reorderApplicationsOfAgent(applications);
+    }
 }
