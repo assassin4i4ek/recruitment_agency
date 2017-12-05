@@ -32,7 +32,6 @@ public class ApplicationServiceTest {
     public void notEmptyApplications() {
         int agentId = 2;
         List<Application> applications = applicationService.findApplicationsByAgentId(agentId);
-        assertNotNull(applications);
         assertTrue(applications.size() > 0);
     }
 
@@ -40,7 +39,6 @@ public class ApplicationServiceTest {
     public void emptyApplications() {
         int agentId = 1;
         List<Application> applications = applicationService.findApplicationsByAgentId(agentId);
-        assertNotNull(applications);
         assertTrue(applications.size() == 0);
     }
 

@@ -32,12 +32,10 @@ public class UserServiceTest {
         assertNotNull(user);
     }
 
-    @Test
+    @Test(expected=UsernameNotFoundException.class)
     public void loadNotExistingUser() {
         String username = "a-1";
-        try {
-            UserDetails user = userDetailsService.loadUserByUsername(username);
-            fail();
-        } catch (UsernameNotFoundException e) {}
+        UserDetails user = userDetailsService.loadUserByUsername(username);
+        fail();
     }
 }
