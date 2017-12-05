@@ -9,6 +9,7 @@
 <div th:fragment="application">
     <a th:href="@{/agent/application/} + (${status.index} + 1)" th:text="${app.profession}" ></a>
     <p th:text="${app.agentNote}"></p>
+    <a th:text="Edit" th:href="@{/agent/application/} + (${status.index} + 1) + '?edit'"></a>
 </div>
 </body>
 </html>

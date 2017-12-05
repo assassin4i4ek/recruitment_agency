@@ -48,6 +48,7 @@ public class AgentPageController {
     @GetMapping("/agent/application/{index}")
     public String getApplication(@ModelAttribute(name="applications") List<Application> applications,
                                  @PathVariable("index") int index,
+                                 @RequestParam(name = "edit", required = false) String edit,
                                  Model model) {
         index = index - 1;
 
@@ -56,10 +57,39 @@ public class AgentPageController {
             Enterprise enterprise = enterpriseService.findEnterpriseById(application.getEnterpriseId());
             model.addAttribute("app", application);
             model.addAttribute("enterprise", enterprise);
+
+            ApplicationRequestParameter parameter = new ApplicationRequestParameter();
+            if (edit != null)
+                parameter.setEdit(true);
+
+            model.addAttribute("param", parameter);
+
             return "/agent/application/index";
         }
         else {
             return "/error/wrong-input";
         }
+    }
+
+    private class ApplicationRequestParameter {
+        private boolean edit = false;
+
+        public boolean isEdit() {
+            return edit;
+        }
+
+        public void setEdit(boolean edit) {
+            this.edit = edit;
+        }
+    }
+
+    @PostMapping("/agent/application/{index}")
+    public String saveApplication(@ModelAttribute(name="applications") List<Application> applications,
+                                 @PathVariable("index") int index,
+                                 @RequestParam(name = "save", required = false) String save,
+                                 Model model) {
+        System.out.println("Hello");
+        //////////
+        return "index";
     }
 }
