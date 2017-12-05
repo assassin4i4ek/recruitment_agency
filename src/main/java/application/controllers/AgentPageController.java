@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@SessionAttributes("applications")
+@SessionAttributes({"applications","application"})
 public class AgentPageController {
     @Autowired
     private ApplicationService applicationService;
@@ -59,7 +59,7 @@ public class AgentPageController {
             return "/agent/application/index";
         }
         else {
-            return "/error/wrong-input";
+            return "/error/access-denied";
         }
     }
 }
