@@ -1,4 +1,4 @@
-package application.services;
+package application.model.application.service;
 
 import application.model.application.Application;
 

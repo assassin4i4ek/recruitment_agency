@@ -8,6 +8,8 @@
 <body>
 <div layout:fragment="content" th:remove="tag">
     <h1>This is a secured Application page!</h1>
+    <a href="#" th:text="${app.profession}"></a>
+    <a href="#" th:text="${enterprise.name}"></a>
     <p><a href="/" th:href="@{/}">Back to home page</a></p>
 </div>
 </body>

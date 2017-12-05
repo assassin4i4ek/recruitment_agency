@@ -1,4 +1,4 @@
-package application.model.dao;
+package application.model.application.dao;
 
 import application.model.application.Application;
 

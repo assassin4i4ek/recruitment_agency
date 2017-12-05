@@ -1,6 +1,6 @@
-package application.services;
+package application.model.user.service;
 
-import application.model.dao.UserDao;
+import application.model.user.dao.UserDao;
 import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

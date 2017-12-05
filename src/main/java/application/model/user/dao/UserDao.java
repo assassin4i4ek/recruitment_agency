@@ -1,4 +1,4 @@
-package application.model.dao;
+package application.model.user.dao;
 
 import application.model.user.User;
 

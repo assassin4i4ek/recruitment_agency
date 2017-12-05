@@ -3,12 +3,12 @@
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{fragments/layout}">
 <head>
-    <title>Secured</title>
+    <title>Access Denied</title>
 </head>
 <body>
-<div th:fragment="application">
-    <a th:href="@{/agent/application/} + (${status.index} + 1)" th:text="${app.profession}" ></a>
-    <p th:text="${app.agentNote}"></p>
+<div layout:fragment="content" th:remove="tag">
+    <h1>Wrong input</h1>
+    <p><a href="/" th:href="@{/}">Back to home page</a></p>
 </div>
 </body>
 </html>

@@ -1,8 +1,10 @@
 package application.controllers;
 
 import application.model.application.Application;
+import application.model.enterprise.Enterprise;
+import application.model.enterprise.serivice.EnterpriseService;
 import application.model.user.User;
-import application.services.ApplicationService;
+import application.model.application.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -14,16 +16,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"applications","application"})
-public class AgentController {
+@SessionAttributes("applications")
+public class AgentPageController {
     @Autowired
     private ApplicationService applicationService;
 
-    @GetMapping("/agent")
-    public String agent(Authentication authentication, Model model) {
+    @Autowired
+    private EnterpriseService enterpriseService;
+
+    @ModelAttribute("applications")
+    private List<Application> applications(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        List<Application> applications = applicationService.findApplicationsByAgentId(user.getId());
-        model.addAttribute("applications", applications);
+        return applicationService.findApplicationsByAgentId(user.getId());
+    }
+
+    @GetMapping("/agent")
+    public String agent() {
         return "/agent/index";
     }
 
@@ -37,16 +45,21 @@ public class AgentController {
         applicationService.reorderApplicationsOfAgent(applications);
     }
 
-    @GetMapping("/agent/getApplication")
+    @GetMapping("/agent/application/{index}")
     public String getApplication(@ModelAttribute(name="applications") List<Application> applications,
-                                 @RequestParam(value="index") int index,
+                                 @PathVariable("index") int index,
                                  Model model) {
-        if (index < applications.size()) {
-            model.addAttribute("application", applications.get(index));
-            return "redirect:/agent/application";
+        index = index - 1;
+
+        if (0 <= index && index < applications.size()) {
+            Application application = applications.get(index);
+            Enterprise enterprise = enterpriseService.findEnterpriseById(application.getEnterpriseId());
+            model.addAttribute("app", application);
+            model.addAttribute("enterprise", enterprise);
+            return "/agent/application/index";
         }
         else {
-            return "/error/access-denied";
+            return "/error/wrong-input";
         }
     }
 }
