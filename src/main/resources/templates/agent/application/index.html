@@ -6,8 +6,9 @@
     <title>Secured</title>
 </head>
 <body>
-<div th:fragment="application">
-    <p th:text="${app.profession} + ':'"/>
+<div layout:fragment="content" th:remove="tag">
+    <h1>This is a secured Application page!</h1>
+    <p><a href="/" th:href="@{/}">Back to home page</a></p>
 </div>
 </body>
 </html>

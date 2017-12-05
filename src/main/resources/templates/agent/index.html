@@ -9,8 +9,8 @@
 <div layout:fragment="content" th:remove="tag">
     <h1>This is a secured AGENT page!</h1>
     <ul th:id="sortable">
-        <li th:each="app : ${applications}">
-            <th:block th:replace="agent/application :: application"></th:block>
+        <li th:each="app,status : ${applications}">
+            <th:block th:replace="agent/application_item :: application"></th:block>
         </li>
     </ul>
     <script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js/}"></script>

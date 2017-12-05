@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@SessionAttributes("applications")
+@SessionAttributes({"applications","application"})
 public class AgentController {
     @Autowired
     private ApplicationService applicationService;
@@ -35,5 +35,18 @@ public class AgentController {
         Application app1 = applications.remove(prevIndex);
         applications.add(newIndex, app1);
         applicationService.reorderApplicationsOfAgent(applications);
+    }
+
+    @GetMapping("/agent/getApplication")
+    public String getApplication(@ModelAttribute(name="applications") List<Application> applications,
+                                 @RequestParam(value="index") int index,
+                                 Model model) {
+        if (index < applications.size()) {
+            model.addAttribute("application", applications.get(index));
+            return "redirect:/agent/application";
+        }
+        else {
+            return "/error/access-denied";
+        }
     }
 }
