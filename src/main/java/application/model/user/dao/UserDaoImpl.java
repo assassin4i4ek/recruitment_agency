@@ -25,7 +25,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findUserByUsername(String username) {
-        String sql = "SELECT id, username, password, email, enabled, role FROM users WHERE username='"
+        String sql = "SELECT id, username, password, enabled, role FROM users WHERE username='"
                 + username + "'";
         List<User> users = jdbcTemplate.query(sql, new UserMapper());
         return users.size() > 0 ? users.get(0) : null;
@@ -42,9 +42,7 @@ public class UserDaoImpl implements UserDao {
                     resultSet.getShort("enabled") == 1,
                     true, true, true,
                     authorities,
-                    resultSet.getInt("id"),
-                    resultSet.getString("email")
-            );
+                    resultSet.getInt("id"));
         }
     }
 }

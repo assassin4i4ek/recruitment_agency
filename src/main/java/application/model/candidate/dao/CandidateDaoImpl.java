@@ -25,14 +25,14 @@ public class CandidateDaoImpl implements CandidateDao {
 
     @Override
     public Candidate findCandidateById(int candidateId) {
-        String sql = "SELECT user_id, name FROM candidates_info WHERE user_id=" + candidateId;
+        String sql = "SELECT user_id, name, email FROM candidates_info WHERE user_id=" + candidateId;
         List<Candidate> candidates = jdbcTemplate.query(sql, new CandidateMapper());
         return candidates != null ? candidates.get(0) : null;
     }
 
     @Override
     public List<Applicant> findApplicantsForApplication(Application application) {
-        String  sql = "SELECT user_id, name, stage FROM candidates_info " +
+        String  sql = "SELECT user_id, name, email, stage FROM candidates_info " +
                 "INNER JOIN applicants_for_applications ON candidates_info.user_id=applicants_for_applications.candidate_id " +
                 "WHERE applicants_for_applications.application_id=" + application.getId();
         List<Applicant> applicants = jdbcTemplate.query(sql, new ApplicantMapper());
@@ -55,6 +55,7 @@ public class CandidateDaoImpl implements CandidateDao {
             Applicant applicant = new Applicant();
             applicant.setId(resultSet.getInt("user_id"));
             applicant.setName(resultSet.getString("name"));
+            applicant.setEmail(resultSet.getString("email"));
             applicant.setApplicantStage(ApplicantStage.valueOf(resultSet.getString("stage")));
             return applicant;
         }
