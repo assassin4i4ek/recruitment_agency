@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Secured</title>
+</head>
+<body>
+<div th:fragment="candidate">
+    <a href="#" th:text="${candidate.name}"></a>
+    <p th:text="${candidate.email}"></p>
+    <form action="#">
+        <select>
+            <option th:value="${candidate.applicantStage}" th:text="'Invited to internal audition'" th:selected="${candidate.applicantStage} == 'INTERNAL_INVITATION'"></option>
+            <option th:value="${candidate.applicantStage}" th:text="'Passed internal audition'" th:selected="${candidate.applicantStage} == 'INTERNAL_DENIED'"></option>
+            <option th:value="${candidate.applicantStage}" th:text="'Failed internal audition'" th:selected="${candidate.applicantStage} == 'INTERNAL_PASSED'"></option>
+            <option th:value="${candidate.applicantStage}" th:text="'Invited to external audition'" th:selected="${candidate.applicantStage} == 'EXTERNAL_INVITED'"></option>
+            <option th:value="${candidate.applicantStage}" th:text="'Passed to internal audition'" th:selected="${candidate.applicantStage} == 'EXTERNAL_DENIED'"></option>
+            <option th:value="${candidate.applicantStage}" th:text="'Failed to internal audition'" th:selected="${candidate.applicantStage} == 'EXTERNAL_PASSED'"></option>
+            <option th:value="${candidate.applicantStage}" th:text="'Got a job'" th:selected="${candidate.applicantStage} == 'GOT_JOB'"></option>
+        </select>
+    </form>
+</div>
+</body>
+</html>

@@ -25,6 +25,11 @@
         <p th:text="${app.profession}"></p>
         <p th:text="${app.quantity}"></p>
         <p th:text="${app.agentNote}"></p>
+        <ul class="#">
+            <li th:each="candidate : ${app.applicants}">
+                <div th:replace="agent/candidate_item :: candidate"></div>
+            </li>
+        </ul>
         <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
     </div>
     <p><a href="/" th:href="@{/}">Back to home page</a></p>

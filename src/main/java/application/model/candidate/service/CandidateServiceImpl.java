@@ -5,9 +5,11 @@ import application.model.candidate.Applicant;
 import application.model.candidate.Candidate;
 import application.model.candidate.dao.CandidateDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CandidateServiceImpl implements CandidateService {
     @Autowired
     private CandidateDao candidateDao;

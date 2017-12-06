@@ -8,7 +8,7 @@
 <body>
 <div layout:fragment="content" th:remove="tag">
     <h1>This is a secured AGENT page!</h1>
-    <ul th:id="sortable">
+    <ul th:id="apps">
         <li th:each="app,status : ${applications}">
             <th:block th:replace="agent/application_item :: application"></th:block>
         </li>
@@ -16,7 +16,7 @@
     <script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js/}"></script>
     <script>
 		$(function() {
-            $( "#sortable" ).sortable({
+            $( "#apps" ).sortable({
                 update: function(event, ui) {
                     $('#newIndex').val(ui.item.index());
                     $('#reorderApplications').submit();
@@ -25,7 +25,7 @@
                     $('#prevIndex').val(ui.item.index())
                 }
             });
-            $( "#sortable" ).disableSelection();
+            $( "#apps" ).disableSelection();
             $('#reorderApplications').on('submit', function() {
                         $.ajax({
                             url: "/agent/reorderApplications",

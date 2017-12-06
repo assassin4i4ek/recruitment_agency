@@ -10,6 +10,33 @@
     <a th:href="@{/agent/application/} + (${status.index} + 1)" th:text="${app.profession}" ></a>
     <p th:text="${app.agentNote}"></p>
     <a th:text="Edit" th:href="@{/agent/application/} + (${status.index} + 1) + '?edit'"></a>
+    <ul class="#">
+        <li th:each="candidate : ${app.applicants}">
+            <div th:replace="agent/candidate_item :: candidate"></div>
+        </li>
+    </ul>
+    <!--<script>
+		$(function() {
+            $( "#apps" ).sortable({
+                update: function(event, ui) {
+                    $('#newIndex').val(ui.item.index());
+                    $('#reorderApplications').submit();
+                },
+                start: function(event, ui) {
+                    $('#prevIndex').val(ui.item.index())
+                }
+            });
+            $( "#apps" ).disableSelection();
+            $('#reorderApplications').on('submit', function() {
+                        $.ajax({
+                            url: "/agent/reorderApplications",
+                            type: "POST",
+                            data: $('#reorderApplications').serialize()
+                        });
+                        return false;
+                    });
+        });
+    </script>-->
 </div>
 </body>
 </html>
