@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -49,6 +48,7 @@ public class AgentPageController {
     public String getApplication(@ModelAttribute(name="applications") List<Application> applications,
                                  @PathVariable("index") int index,
                                  @RequestParam(name = "edit", required = false) String edit,
+                                 @RequestParam(name = "quantityError", required = false) String quantityError,
                                  Model model) {
         index = index - 1;
 
@@ -61,18 +61,42 @@ public class AgentPageController {
             ApplicationRequestParameter parameter = new ApplicationRequestParameter();
             if (edit != null)
                 parameter.setEdit(true);
-
+            if (quantityError != null)
+                parameter.setEdit(true);
             model.addAttribute("param", parameter);
 
             return "/agent/application/index";
         }
         else {
-            return "/error/wrong-input";
+            return "/quantityError/wrong-input";
         }
+    }
+
+    @PostMapping("/agent/application/{index}")
+    public String saveApplication(@ModelAttribute(name="applications") List<Application> applications,
+                                  @PathVariable("index") int index,
+                                  @RequestParam("save") String save,
+                                  @RequestParam("profession") String profession,
+                                  @RequestParam("quantity") String quantity,
+                                  @RequestParam("agentNote") String agentNote) {
+        index = index - 1;
+        Application application = applications.get(index);
+        application.setProfession(profession);
+        String isError = "";
+        try {
+            short shortQuantity = Short.parseShort(quantity);
+            application.setQuantity(shortQuantity);
+        } catch (NumberFormatException e) {
+            isError = "?edit&quantityError";
+        }
+        application.setAgentNote(agentNote);
+        applicationService.updateApplicationInfo(application);
+        return "redirect:/agent/application/" + (index + 1) + isError;
     }
 
     private class ApplicationRequestParameter {
         private boolean edit = false;
+        private boolean quantityError = false;
 
         public boolean isEdit() {
             return edit;
@@ -81,15 +105,13 @@ public class AgentPageController {
         public void setEdit(boolean edit) {
             this.edit = edit;
         }
-    }
 
-    @PostMapping("/agent/application/{index}")
-    public String saveApplication(@ModelAttribute(name="applications") List<Application> applications,
-                                 @PathVariable("index") int index,
-                                 @RequestParam(name = "save", required = false) String save,
-                                 Model model) {
-        System.out.println("Hello");
-        //////////
-        return "index";
+        public boolean isQuantityError() {
+            return quantityError;
+        }
+
+        public void setQuantityError(boolean quantityError) {
+            this.quantityError = quantityError;
+        }
     }
 }

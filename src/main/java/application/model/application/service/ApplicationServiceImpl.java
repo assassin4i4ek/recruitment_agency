@@ -23,4 +23,9 @@ public class ApplicationServiceImpl implements ApplicationService{
     public void reorderApplicationsOfAgent(List<Application> applications) {
         applicationDao.reorderApplicationsOfAgent(applications);
     }
+
+    @Override
+    public void updateApplicationInfo(Application application) {
+        applicationDao.updateApplication(application);
+    }
 }

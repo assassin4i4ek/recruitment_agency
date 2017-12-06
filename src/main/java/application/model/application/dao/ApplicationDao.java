@@ -7,4 +7,5 @@ import java.util.List;
 public interface ApplicationDao {
     List<Application> findApplicationsByAgentId(int agentId);
     void reorderApplicationsOfAgent(List<Application> applications);
+    void updateApplication(Application application);
 }

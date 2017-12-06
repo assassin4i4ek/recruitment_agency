@@ -40,6 +40,16 @@ public class ApplicationDaoImpl implements ApplicationDao {
         }
     }
 
+    @Override
+    public void updateApplication(Application application) {
+        String sql = "UPDATE applications SET profession=?, quantity=?, agent_note=? WHERE id=?";
+        jdbcTemplate.update(sql,
+                application.getProfession(),
+                application.getQuantity(),
+                application.getAgentNote(),
+                application.getId());
+    }
+
     private class ApplicationMapper implements RowMapper<Application> {
         @Override
         public Application mapRow(ResultSet resultSet, int i) throws SQLException {

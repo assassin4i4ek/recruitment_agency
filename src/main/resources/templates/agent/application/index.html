@@ -8,14 +8,22 @@
 <body>
 <div layout:fragment="content" th:remove="tag">
     <h1>This is a secured Application page!</h1>
-
+    <div th:if="${param.quantityError}">
+        <div class="alert alert-danger">
+            Invalid quantity.
+        </div>
+    </div>
     <a href="#" th:text="${app.profession}"></a>
     <a href="#" th:text="${enterprise.name}"></a>
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" th:method="POST">
-        <textarea th:text="${app.agentNote}"></textarea>
+        <input type="text" th:name="profession" th:value="${app.profession}">
+        <input type="text" th:name="quantity" th:value="${app.quantity}">
+        <textarea th:name="agentNote" th:text="${app.agentNote}"></textarea>
         <input type="submit" value="Save">
     </form>
     <div th:if="!${param.edit}">
+        <p th:text="${app.profession}"></p>
+        <p th:text="${app.quantity}"></p>
         <p th:text="${app.agentNote}"></p>
         <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
     </div>
