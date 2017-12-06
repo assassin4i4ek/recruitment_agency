@@ -1,16 +1,19 @@
 package application.model.application;
 
-import java.sql.Date;
+import application.model.candidate.Applicant;
+
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Application {
     private int id;
     private int enterpriseId;
     private int agentId;
-    private Timestamp registrationDate;
+    private Timestamp registrationTimestamp;
     private String profession;
     private short quantity;
     private String agentNote;
+    private List<Applicant> applicants;
 
     public int getId() {
         return id;
@@ -37,11 +40,11 @@ public class Application {
     }
 
     public Timestamp getRegistrationTimestamp() {
-        return registrationDate;
+        return registrationTimestamp;
     }
 
     public void setRegistrationTimestamp(Timestamp registrationDate) {
-        this.registrationDate = registrationDate;
+        this.registrationTimestamp = registrationDate;
     }
 
     public String getProfession() {
@@ -66,5 +69,13 @@ public class Application {
 
     public void setAgentNote(String agentNote) {
         this.agentNote = agentNote;
+    }
+
+    public List<Applicant> getApplicants() {
+        return applicants;
+    }
+
+    public void setApplicants(List<Applicant> applicants) {
+        this.applicants = applicants;
     }
 }

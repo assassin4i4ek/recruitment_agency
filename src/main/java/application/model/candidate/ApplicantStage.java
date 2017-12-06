@@ -1,0 +1,6 @@
+package application.model.candidate;
+
+public enum ApplicantStage {
+    INTERNAL_INVITATION, INTERNAL_DENIED, INTERNAL_PASSED,
+     EXTERNAL_INVITED, EXTERNAL_DENIED, EXTERNAL_PASSED, GOT_JOB
+}

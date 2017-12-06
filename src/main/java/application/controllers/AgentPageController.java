@@ -1,6 +1,8 @@
 package application.controllers;
 
 import application.model.application.Application;
+import application.model.candidate.Applicant;
+import application.model.candidate.service.CandidateService;
 import application.model.enterprise.Enterprise;
 import application.model.enterprise.serivice.EnterpriseService;
 import application.model.user.User;
@@ -15,13 +17,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
-@SessionAttributes("applications")
+@SessionAttributes({"applications", "allApplicants"})
 public class AgentPageController {
     @Autowired
     private ApplicationService applicationService;
 
     @Autowired
     private EnterpriseService enterpriseService;
+
+    @Autowired
+    private CandidateService candidateService;
 
     @ModelAttribute("applications")
     private List<Application> applications(Authentication authentication) {
