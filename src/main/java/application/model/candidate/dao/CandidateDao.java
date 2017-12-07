@@ -9,4 +9,5 @@ import java.util.List;
 public interface CandidateDao {
     Candidate findCandidateById(int candidateId);
     List<Applicant> findApplicantsForApplication(Application application);
+    void reorderApplicantsOfApplication(Application application);
 }

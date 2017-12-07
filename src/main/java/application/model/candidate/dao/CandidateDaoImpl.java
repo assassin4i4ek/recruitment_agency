@@ -32,11 +32,23 @@ public class CandidateDaoImpl implements CandidateDao {
 
     @Override
     public List<Applicant> findApplicantsForApplication(Application application) {
-        String  sql = "SELECT user_id, name, email, stage FROM candidates_info " +
-                "INNER JOIN applicants_for_applications ON candidates_info.user_id=applicants_for_applications.candidate_id " +
-                "WHERE applicants_for_applications.application_id=" + application.getId();
+        String  sql = "SELECT user_id, name, email, stage FROM candidates_info" +
+                " INNER JOIN applicants_for_applications ON candidates_info.user_id=applicants_for_applications.candidate_id" +
+                " WHERE applicants_for_applications.application_id=" + application.getId() +
+                " ORDER BY applicant_order";
         List<Applicant> applicants = jdbcTemplate.query(sql, new ApplicantMapper());
         return applicants != null ? applicants : new ArrayList<>(0);
+    }
+
+    @Override
+    public void reorderApplicantsOfApplication(Application application) {
+        List<Applicant> applicants = application.getApplicants();
+        for (int i = 0; i < applicants.size(); ++i) {
+            String sql = "UPDATE applicants_for_applications SET applicant_order=" + i
+                    + " WHERE application_id=" + application.getId() +
+                    " AND candidate_id=" + applicants.get(i).getId();
+            jdbcTemplate.update(sql);
+        }
     }
 
     private class CandidateMapper implements RowMapper<Candidate> {

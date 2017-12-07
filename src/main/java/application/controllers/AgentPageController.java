@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -44,9 +45,17 @@ public class AgentPageController {
                                     @ModelAttribute(name="applications") List<Application> applications,
                                     @RequestParam(value="prevIndex") int prevIndex,
                                     @RequestParam(value="newIndex") int newIndex) {
-        Application app1 = applications.remove(prevIndex);
-        applications.add(newIndex, app1);
-        applicationService.reorderApplicationsOfAgent(applications);
+        if (0 <= prevIndex && prevIndex < applications.size() && 0 <= newIndex && newIndex < applications.size()) {
+            Application app1 = applications.remove(prevIndex);
+            applications.add(newIndex, app1);
+            applicationService.reorderApplicationsOfAgent(applications);
+        } else {
+            try {
+                response.sendRedirect("/error/wrong-input");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @GetMapping("/agent/application/{index}")
@@ -117,6 +126,32 @@ public class AgentPageController {
 
         public void setQuantityError(boolean quantityError) {
             this.quantityError = quantityError;
+        }
+    }
+
+    @PostMapping("/agent/application/{index}/reorderApplicants")
+    public void reorderApplicants(HttpServletResponse response,
+                                  @ModelAttribute(name = "applications") List<Application> applications,
+                                  @PathVariable("index") int index,
+                                  @RequestParam("prevIndex") int prevIndex,
+                                  @RequestParam("newIndex") int newIndex) {
+        index = index - 1;
+        if (0 <= index && index < applications.size() &&
+                0 <= prevIndex && prevIndex < applications.size() &&
+                0 <= newIndex && index < applications.size()) {
+
+            Application application = applications.get(index);
+            List<Applicant> applicants = application.getApplicants();
+            Applicant applicant1 = applicants.remove(prevIndex);
+            applicants.add(newIndex, applicant1);
+            applicationService.reorderApplicantsOfApplication(application);
+        }
+        else {
+            try {
+                response.sendRedirect("/error/wrong-input");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

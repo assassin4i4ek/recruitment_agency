@@ -10,33 +10,44 @@
     <a th:href="@{/agent/application/} + (${status.index} + 1)" th:text="${app.profession}" ></a>
     <p th:text="${app.agentNote}"></p>
     <a th:text="Edit" th:href="@{/agent/application/} + (${status.index} + 1) + '?edit'"></a>
-    <ul class="#">
+    <ul th:id="'applicants' + (${status.index} + 1)">
         <li th:each="candidate : ${app.applicants}">
             <div th:replace="agent/candidate_item :: candidate"></div>
         </li>
     </ul>
-    <!--<script>
+    <script th:inline="javascript">
 		$(function() {
-            $( "#apps" ).sortable({
+		    var listId = /*[['#applicants' + (${status.index} + 1)]]*/;
+		    var formId = /*[['#reorderApplicants' + (${status.index} + 1)]]*/;
+		    var prevIndexId = /*[['#prevIndex' + (${status.index} + 1)]]*/;
+		    var newIndexId = /*[['#newIndex' + (${status.index} + 1)]]*/;
+		    var mUrl = /*[['agent/application/' + (${status.index} + 1) + '/reorderApplicants']]*/
+		    $(listId).sortable({
                 update: function(event, ui) {
-                    $('#newIndex').val(ui.item.index());
-                    $('#reorderApplications').submit();
+                    $(newIndexId).val(ui.item.index());
+                    $(formId).submit();
                 },
                 start: function(event, ui) {
-                    $('#prevIndex').val(ui.item.index())
+                    $(prevIndexId).val(ui.item.index())
                 }
-            });
-            $( "#apps" ).disableSelection();
-            $('#reorderApplications').on('submit', function() {
+		    });
+            $(listId).disableSelection();
+            $(formId).on('submit', function() {
                         $.ajax({
-                            url: "/agent/reorderApplications",
+                            url: mUrl,
                             type: "POST",
-                            data: $('#reorderApplications').serialize()
+                            data: $(formId).serialize()
                         });
                         return false;
                     });
         });
-    </script>-->
+    </script>
+    <form th:id="'reorderApplicants' + (${status.index} + 1)"
+          th:action="@{agent/application/} + (${status.index} + 1) + '/reorderApplicants'"
+          method="POST">
+        <input type="hidden" th:id="'prevIndex' + (${status.index} + 1)" name="prevIndex" value="0"/>
+        <input type="hidden" th:id="'newIndex' + (${status.index} + 1)" name="newIndex" value="0"/>
+    </form>
 </div>
 </body>
 </html>

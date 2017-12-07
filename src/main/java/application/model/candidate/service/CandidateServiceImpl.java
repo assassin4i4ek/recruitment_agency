@@ -23,4 +23,9 @@ public class CandidateServiceImpl implements CandidateService {
     public List<Applicant> findApplicantsForApplication(Application application) {
         return candidateDao.findApplicantsForApplication(application);
     }
+
+    @Override
+    public void reorderApplicantsOfApplication(Application application) {
+        candidateDao.reorderApplicantsOfApplication(application);
+    }
 }
