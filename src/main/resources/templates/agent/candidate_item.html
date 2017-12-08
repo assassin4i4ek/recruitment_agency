@@ -6,21 +6,39 @@
     <title>Secured</title>
 </head>
 <body>
-<div th:fragment="candidate">
-    <a th:if="${applicationIndex} != null" th:href="@{/agent/application/} + (${applicationIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
-    <a th:if="${applicationIndex} == null" th:href="@{/agent/application/} + (${status.index} + 1) + '/applicant/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
+<div th:fragment="candidate" th:with="appIndex = ${(status == null ? applicationIndex : status.index)}">
+    <a th:href="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
     <p th:text="${candidate.email}"></p>
-    <form action="#">
-        <select>
-            <option th:value="${candidate.applicantStage}" th:text="'Invited to internal audition'" th:selected="${candidate.applicantStage} == 'INTERNAL_INVITATION'"></option>
-            <option th:value="${candidate.applicantStage}" th:text="'Passed internal audition'" th:selected="${candidate.applicantStage} == 'INTERNAL_DENIED'"></option>
-            <option th:value="${candidate.applicantStage}" th:text="'Failed internal audition'" th:selected="${candidate.applicantStage} == 'INTERNAL_PASSED'"></option>
-            <option th:value="${candidate.applicantStage}" th:text="'Invited to external audition'" th:selected="${candidate.applicantStage} == 'EXTERNAL_INVITED'"></option>
-            <option th:value="${candidate.applicantStage}" th:text="'Passed to internal audition'" th:selected="${candidate.applicantStage} == 'EXTERNAL_DENIED'"></option>
-            <option th:value="${candidate.applicantStage}" th:text="'Failed to internal audition'" th:selected="${candidate.applicantStage} == 'EXTERNAL_PASSED'"></option>
-            <option th:value="${candidate.applicantStage}" th:text="'Got a job'" th:selected="${candidate.applicantStage} == 'GOT_JOB'"></option>
+    <form th:action="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1) + '/newStage'"
+            th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStage'">
+        <select name="stage" th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStageSelect'">
+            <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_INVITED'"th:value="INTERNAL_INVITATION" th:text="'Invited to internal audition'"></option>
+            <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_PASSED'"th:value="INTERNAL_PASSED" th:text="'Passed internal audition'"></option>
+            <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_FAILED'" th:value="INTERNAL_FAILED" th:text="'Failed internal audition'"></option>
+            <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_INVITED'" th:value="EXTERNAL_INVITED" th:text="'Invited to external audition'"></option>
+            <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_PASSED'" th:value="EXTERNAL_PASSED" th:text="'Passed to internal audition'"></option>
+            <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_FAILED'" th:value="EXTERNAL_FAILED" th:text="'Failed to internal audition'"></option>
+            <option th:selected="${candidate.applicantStage.name()} == 'GOT_JOB'" th:value="GOT_JOB" th:text="'Got a job'"></option>
         </select>
     </form>
+    <script th:inline="javascript">
+        $(function() {
+            var selectId = /*[['#application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStageSelect']]*/;
+            var formId = /*[['#application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStage']]*/;
+		    var mUrl = /*[['agent/application/' + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1) + '/newStage']]*/
+            $(formId).on('submit', function() {
+                        $.ajax({
+                            url: mUrl,
+                            type: "POST",
+                            data: $(formId).serialize()
+                        });
+                        return false;
+                    });
+            $(selectId).change(function() {
+                $(formId).submit();
+            });
+        });
+    </script>
 </div>
 </body>
 </html>

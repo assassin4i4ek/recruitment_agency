@@ -51,6 +51,14 @@ public class CandidateDaoImpl implements CandidateDao {
         }
     }
 
+    @Override
+    public void updateApplicantOfApplicationStage(Application application, Applicant applicant) {
+        String sql = "UPDATE applicants_for_applications SET stage='" +
+                applicant.getApplicantStage().name() + "' WHERE application_id=" + application.getId() +
+                " AND candidate_id=" + applicant.getId();
+        jdbcTemplate.update(sql);
+    }
+
     private class CandidateMapper implements RowMapper<Candidate> {
         @Override
         public Candidate mapRow(ResultSet resultSet, int i) throws SQLException {

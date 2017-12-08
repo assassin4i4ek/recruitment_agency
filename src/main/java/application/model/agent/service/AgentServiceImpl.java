@@ -3,6 +3,8 @@ package application.model.agent.service;
 import application.model.agent.Agent;
 import application.model.application.Application;
 import application.model.application.service.ApplicationService;
+import application.model.candidate.Applicant;
+import application.model.candidate.service.CandidateService;
 import application.model.enterprise.Enterprise;
 import application.model.enterprise.serivice.EnterpriseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ public class AgentServiceImpl implements AgentService {
 
     @Autowired
     private EnterpriseService enterpriseService;
+
+    @Autowired
+    private CandidateService candidateService;
 
     @Override
     public Agent findAgentById(int agentId) {
@@ -42,6 +47,11 @@ public class AgentServiceImpl implements AgentService {
     @Override
     public void reorderApplicantsOfApplication(Application application) {
         applicationService.reorderApplicantsOfApplication(application);
+    }
+
+    @Override
+    public void updateApplicantOfApplicationStage(Application application, Applicant applicant) {
+        candidateService.updateApplicantOfApplicationStage(application, applicant);
     }
 
 

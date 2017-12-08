@@ -2,6 +2,7 @@ package application.model.agent.service;
 
 import application.model.agent.Agent;
 import application.model.application.Application;
+import application.model.candidate.Applicant;
 import application.model.enterprise.Enterprise;
 
 public interface AgentService {
@@ -10,4 +11,5 @@ public interface AgentService {
     Enterprise findEnterpriseOfApplication(Application application);
     void updateApplicationInfo(Application application);
     void reorderApplicantsOfApplication(Application application);
+    void updateApplicantOfApplicationStage(Application application, Applicant applicant);
 }

@@ -28,4 +28,9 @@ public class CandidateServiceImpl implements CandidateService {
     public void reorderApplicantsOfApplication(Application application) {
         candidateDao.reorderApplicantsOfApplication(application);
     }
+
+    @Override
+    public void updateApplicantOfApplicationStage(Application application, Applicant applicant) {
+        candidateDao.updateApplicantOfApplicationStage(application, applicant);
+    }
 }
