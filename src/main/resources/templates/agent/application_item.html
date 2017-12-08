@@ -8,10 +8,11 @@
 <body>
 <div th:fragment="application">
     <a th:href="@{/agent/application/} + (${status.index} + 1)" th:text="${app.profession}" ></a>
+    <a th:href="@{/agent/application/} + (${status.index} + 1) + '/enterprise'" th:text="${app.enterpriseName}"></a>
     <p th:text="${app.agentNote}"></p>
     <a th:text="Edit" th:href="@{/agent/application/} + (${status.index} + 1) + '?edit'"></a>
     <ul th:id="'applicants' + (${status.index} + 1)">
-        <li th:each="candidate : ${app.applicants}">
+        <li th:each="candidate, candidateStatus : ${app.applicants}">
             <div th:replace="agent/candidate_item :: candidate"></div>
         </li>
     </ul>

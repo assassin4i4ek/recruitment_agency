@@ -75,7 +75,7 @@ public class AgentPageController {
             if (quantityError != null)
                 parameter.setEdit(true);
             model.addAttribute("param", parameter);
-
+            model.addAttribute("applicationIndex", index);
             return "/agent/application/index";
         }
         else {
@@ -154,12 +154,34 @@ public class AgentPageController {
 
     @GetMapping("/agent/application/{index}/enterprise")
     public String getEnterpriseOfApplication(@ModelAttribute(name="agent") Agent agent,
-                                 @PathVariable("index") int index, Model model) {
+                                             @PathVariable("index") int index, Model model) {
         index = index - 1;
         if (0 <= index && index < agent.getApplications().size()) {
             Enterprise enterprise = agentService.findEnterpriseOfApplication(agent.getApplications().get(index));
-            model.addAttribute(enterprise);
+            model.addAttribute("enterprise", enterprise);
             return "enterprise/index";
+        }
+        else
+            return "error/wrong-input";
+    }
+
+    @GetMapping("/agent/application/{index}/applicant/{applicantIndex}")
+    public String getApplicantOfApplication(@ModelAttribute(name="agent") Agent agent,
+                                            @PathVariable("index") int index,
+                                            @PathVariable("applicantIndex") int applicantIndex,
+                                            Model model) {
+        index = index - 1;
+        applicantIndex = applicantIndex - 1;
+
+        if (0 <= index && index < agent.getApplications().size()) {
+            Application application = agent.getApplications().get(index);
+            if (0 <= applicantIndex && applicantIndex < application.getApplicants().size()) {
+                Applicant applicant = application.getApplicants().get(applicantIndex);
+                model.addAttribute("candidate", applicant);
+                return "candidate/index";
+            }
+            else
+                return "error/wrong-input";
         }
         else
             return "error/wrong-input";

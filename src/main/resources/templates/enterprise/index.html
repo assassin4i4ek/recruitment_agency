@@ -7,7 +7,7 @@
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
-    <h1>This is a secured ENTERPRISE page!</h1>
+    <h1 th:text="${enterprise.name}"></h1>
     <p><a href="/" th:href="@{/}">Back to home page</a></p>
 </div>
 </body>

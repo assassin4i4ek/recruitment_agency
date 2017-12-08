@@ -13,8 +13,7 @@
             Invalid quantity.
         </div>
     </div>
-    <a href="#" th:text="${app.profession}"></a>
-    <a href="#" th:text="${enterprise.name}"></a>
+    <a th:href="@{/agent/application/} + (${applicationIndex} + 1) + '/enterprise'" th:text="${enterprise.name}"></a>
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" th:method="POST">
         <input type="text" th:name="profession" th:value="${app.profession}">
         <input type="text" th:name="quantity" th:value="${app.quantity}">
@@ -26,7 +25,7 @@
         <p th:text="${app.quantity}"></p>
         <p th:text="${app.agentNote}"></p>
         <ul class="#">
-            <li th:each="candidate : ${app.applicants}">
+            <li th:each="candidate, candidateStatus : ${app.applicants}">
                 <div th:replace="agent/candidate_item :: candidate"></div>
             </li>
         </ul>

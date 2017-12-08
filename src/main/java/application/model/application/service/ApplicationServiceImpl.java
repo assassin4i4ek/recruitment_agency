@@ -4,6 +4,7 @@ import application.model.application.Application;
 import application.model.application.dao.ApplicationDao;
 import application.model.candidate.Applicant;
 import application.model.candidate.service.CandidateService;
+import application.model.enterprise.serivice.EnterpriseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,15 @@ public class ApplicationServiceImpl implements ApplicationService{
     @Autowired
     private CandidateService candidateService;
 
+    @Autowired
+    private EnterpriseService enterpriseService;
+
     @Override
     public List<Application> findApplicationsByAgentId(int agentId) {
         List<Application> applications = applicationDao.findApplicationsByAgentId(agentId);
         for (Application application : applications) {
-            List<Applicant> applicants = candidateService.findApplicantsForApplication(application);
-            application.setApplicants(applicants);
+            application.setApplicants(candidateService.findApplicantsForApplication(application));
+            application.setEnterpriseName(enterpriseService.findEnterpriseNameById(application.getEnterpriseId()));
         }
         return applications;
     }

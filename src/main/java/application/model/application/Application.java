@@ -14,6 +14,7 @@ public class Application {
     private short quantity;
     private String agentNote;
     private List<Applicant> applicants;
+    private String enterpriseName;
 
     public int getId() {
         return id;
@@ -77,5 +78,13 @@ public class Application {
 
     public void setApplicants(List<Applicant> applicants) {
         this.applicants = applicants;
+    }
+
+    public String getEnterpriseName() {
+        return enterpriseName;
+    }
+
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
     }
 }

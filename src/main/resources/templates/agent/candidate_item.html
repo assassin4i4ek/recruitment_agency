@@ -7,7 +7,8 @@
 </head>
 <body>
 <div th:fragment="candidate">
-    <a href="#" th:text="${candidate.name}"></a>
+    <a th:if="${applicationIndex} != null" th:href="@{/agent/application/} + (${applicationIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
+    <a th:if="${applicationIndex} == null" th:href="@{/agent/application/} + (${status.index} + 1) + '/applicant/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
     <p th:text="${candidate.email}"></p>
     <form action="#">
         <select>

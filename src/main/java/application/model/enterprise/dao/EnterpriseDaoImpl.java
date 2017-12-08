@@ -26,6 +26,13 @@ public class EnterpriseDaoImpl implements EnterpriseDao {
         return enterprises != null ? enterprises.get(0) : null;
     }
 
+    @Override
+    public String findEnterpriseNameById(int enterpriseId) {
+        String sql = "SELECT name FROM enterprises_info WHERE user_id=" + enterpriseId;
+        List<String> name = jdbcTemplate.query(sql, (rs, i) -> rs.getString("name"));
+        return name != null ? name.get(0) : "";
+    }
+
     private class EnterpriseMapper implements RowMapper<Enterprise> {
         @Override
         public Enterprise mapRow(ResultSet resultSet, int i) throws SQLException {
