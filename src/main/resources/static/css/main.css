@@ -13,3 +13,7 @@ footer {
 footer p {
     padding: 15px;
 }
+
+ul li > div {
+    background-color: #FFFFFF;
+}
