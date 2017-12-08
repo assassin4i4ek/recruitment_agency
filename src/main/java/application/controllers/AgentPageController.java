@@ -154,4 +154,17 @@ public class AgentPageController {
             }
         }
     }
+
+    @GetMapping("/agent/application/{index}/enterprise")
+    public String getEnterpriseOfApplication(@ModelAttribute(name="applications") List<Application> applications,
+                                 @PathVariable("index") int index, Model model) {
+        index = index - 1;
+        if (0 <= index && index < applications.size()) {
+            Enterprise enterprise = enterpriseService.findEnterpriseById(applications.get(index).getEnterpriseId());
+            model.addAttribute(enterprise);
+            return "enterprise/index";
+        }
+        else
+            return "error/wrong-input";
+    }
 }
