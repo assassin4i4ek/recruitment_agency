@@ -14,7 +14,7 @@ public class WelcomeController {
     @GetMapping("/user")
     public String user(Authentication authentication) {
         String role = authentication.getAuthorities().toString();
-        String targetURL = "/";
+        String targetURL;
         if (role.contains("ROLE_AGENT"))
             targetURL = "/agent";
         else if (role.contains("ROLE_CANDIDATE"))
@@ -29,17 +29,6 @@ public class WelcomeController {
     @GetMapping("/login")
     public String login() {
         return "login";
-    }
-
-
-    @GetMapping("/candidate")
-    public String candidate() {
-        return "/candidate/index";
-    }
-
-    @GetMapping("/enterprise")
-    public String enterprise() {
-        return "/enterprise/index";
     }
 
     @GetMapping("/error/access-denied")

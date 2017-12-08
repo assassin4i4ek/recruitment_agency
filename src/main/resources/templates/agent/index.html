@@ -9,7 +9,7 @@
 <div layout:fragment="content" th:remove="tag">
     <h1>This is a secured AGENT page!</h1>
     <ul th:id="apps">
-        <li th:each="app,status : ${applications}">
+        <li th:each="app,status : ${agent.applications}">
             <th:block th:replace="agent/application_item :: application"></th:block>
         </li>
     </ul>

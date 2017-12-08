@@ -1,5 +1,7 @@
 package application.controllers;
 
+import application.model.agent.Agent;
+import application.model.agent.service.AgentService;
 import application.model.application.Application;
 import application.model.candidate.Applicant;
 import application.model.candidate.service.CandidateService;
@@ -18,21 +20,15 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-@SessionAttributes({"applications", "allApplicants"})
+@SessionAttributes("agent")
 public class AgentPageController {
     @Autowired
-    private ApplicationService applicationService;
+    private AgentService agentService;
 
-    @Autowired
-    private EnterpriseService enterpriseService;
-
-    @Autowired
-    private CandidateService candidateService;
-
-    @ModelAttribute("applications")
-    private List<Application> applications(Authentication authentication) {
+    @ModelAttribute("agent")
+    private Agent agent(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return applicationService.findApplicationsByAgentId(user.getId());
+        return agentService.findAgentById(user.getId());
     }
 
     @GetMapping("/agent")
@@ -42,13 +38,14 @@ public class AgentPageController {
 
     @PostMapping("/agent/reorderApplications")
     public void reorderApplications(HttpServletResponse response,
-                                    @ModelAttribute(name="applications") List<Application> applications,
+                                    @ModelAttribute(name="agent") Agent agent,
                                     @RequestParam(value="prevIndex") int prevIndex,
                                     @RequestParam(value="newIndex") int newIndex) {
-        if (0 <= prevIndex && prevIndex < applications.size() && 0 <= newIndex && newIndex < applications.size()) {
-            Application app1 = applications.remove(prevIndex);
-            applications.add(newIndex, app1);
-            applicationService.reorderApplicationsOfAgent(applications);
+        if (0 <= prevIndex && prevIndex < agent.getApplications().size() &&
+                0 <= newIndex && newIndex < agent.getApplications().size()) {
+            Application app1 = agent.getApplications().remove(prevIndex);
+            agent.getApplications().add(newIndex, app1);
+            agentService.reorderApplicationsOfAgent(agent);
         } else {
             try {
                 response.sendRedirect("/error/wrong-input");
@@ -59,16 +56,16 @@ public class AgentPageController {
     }
 
     @GetMapping("/agent/application/{index}")
-    public String getApplication(@ModelAttribute(name="applications") List<Application> applications,
+    public String getApplication(@ModelAttribute(name="agent") Agent agent,
                                  @PathVariable("index") int index,
                                  @RequestParam(name = "edit", required = false) String edit,
                                  @RequestParam(name = "quantityError", required = false) String quantityError,
                                  Model model) {
         index = index - 1;
 
-        if (0 <= index && index < applications.size()) {
-            Application application = applications.get(index);
-            Enterprise enterprise = enterpriseService.findEnterpriseById(application.getEnterpriseId());
+        if (0 <= index && index < agent.getApplications().size()) {
+            Application application = agent.getApplications().get(index);
+            Enterprise enterprise = agentService.findEnterpriseOfApplication(application);
             model.addAttribute("app", application);
             model.addAttribute("enterprise", enterprise);
 
@@ -87,14 +84,14 @@ public class AgentPageController {
     }
 
     @PostMapping("/agent/application/{index}")
-    public String saveApplication(@ModelAttribute(name="applications") List<Application> applications,
+    public String saveApplication(@ModelAttribute(name="agent") Agent agent,
                                   @PathVariable("index") int index,
                                   @RequestParam("save") String save,
                                   @RequestParam("profession") String profession,
                                   @RequestParam("quantity") String quantity,
                                   @RequestParam("agentNote") String agentNote) {
         index = index - 1;
-        Application application = applications.get(index);
+        Application application = agent.getApplications().get(index);
         application.setProfession(profession);
         String isError = "";
         try {
@@ -104,7 +101,7 @@ public class AgentPageController {
             isError = "?edit&quantityError";
         }
         application.setAgentNote(agentNote);
-        applicationService.updateApplicationInfo(application);
+        agentService.updateApplicationInfo(application);
         return "redirect:/agent/application/" + (index + 1) + isError;
     }
 
@@ -131,20 +128,20 @@ public class AgentPageController {
 
     @PostMapping("/agent/application/{index}/reorderApplicants")
     public void reorderApplicants(HttpServletResponse response,
-                                  @ModelAttribute(name = "applications") List<Application> applications,
+                                  @ModelAttribute(name = "agent") Agent agent,
                                   @PathVariable("index") int index,
                                   @RequestParam("prevIndex") int prevIndex,
                                   @RequestParam("newIndex") int newIndex) {
         index = index - 1;
-        if (0 <= index && index < applications.size() &&
-                0 <= prevIndex && prevIndex < applications.size() &&
-                0 <= newIndex && index < applications.size()) {
+        if (0 <= index && index < agent.getApplications().size() &&
+                0 <= prevIndex && prevIndex < agent.getApplications().size() &&
+                0 <= newIndex && index < agent.getApplications().size()) {
 
-            Application application = applications.get(index);
+            Application application = agent.getApplications().get(index);
             List<Applicant> applicants = application.getApplicants();
             Applicant applicant1 = applicants.remove(prevIndex);
             applicants.add(newIndex, applicant1);
-            applicationService.reorderApplicantsOfApplication(application);
+            agentService.reorderApplicantsOfApplication(application);
         }
         else {
             try {
@@ -156,11 +153,11 @@ public class AgentPageController {
     }
 
     @GetMapping("/agent/application/{index}/enterprise")
-    public String getEnterpriseOfApplication(@ModelAttribute(name="applications") List<Application> applications,
+    public String getEnterpriseOfApplication(@ModelAttribute(name="agent") Agent agent,
                                  @PathVariable("index") int index, Model model) {
         index = index - 1;
-        if (0 <= index && index < applications.size()) {
-            Enterprise enterprise = enterpriseService.findEnterpriseById(applications.get(index).getEnterpriseId());
+        if (0 <= index && index < agent.getApplications().size()) {
+            Enterprise enterprise = agentService.findEnterpriseOfApplication(agent.getApplications().get(index));
             model.addAttribute(enterprise);
             return "enterprise/index";
         }
