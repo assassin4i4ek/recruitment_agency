@@ -9,4 +9,5 @@ public interface ApplicationService {
     void reorderApplicationsOfAgent(List<Application> applications);
     void updateApplicationInfo(Application application);
     void reorderApplicantsOfApplication(Application application);
+    void updateApplicationCollapsed(Application application);
 }

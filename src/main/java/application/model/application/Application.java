@@ -15,6 +15,7 @@ public class Application {
     private String agentNote;
     private List<Applicant> applicants;
     private String enterpriseName;
+    private boolean agentCollapsed;
 
     public int getId() {
         return id;
@@ -86,5 +87,13 @@ public class Application {
 
     public void setEnterpriseName(String enterpriseName) {
         this.enterpriseName = enterpriseName;
+    }
+
+    public boolean isAgentCollapsed() {
+        return agentCollapsed;
+    }
+
+    public void setAgentCollapsed(boolean agentCollapsed) {
+        this.agentCollapsed = agentCollapsed;
     }
 }

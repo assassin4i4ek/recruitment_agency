@@ -46,4 +46,9 @@ public class ApplicationServiceImpl implements ApplicationService{
     public void reorderApplicantsOfApplication(Application application) {
         candidateService.reorderApplicantsOfApplication(application);
     }
+
+    @Override
+    public void updateApplicationCollapsed(Application application) {
+        applicationDao.updateApplicationCollapsed(application);
+    }
 }

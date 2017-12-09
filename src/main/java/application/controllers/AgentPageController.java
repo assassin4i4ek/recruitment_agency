@@ -227,4 +227,18 @@ public class AgentPageController {
                               int applicantIndex) {
         return 0 <= applicantIndex && applicantIndex < applicants.size();
     }
+
+    @PostMapping("/agent/application/{index}/agentCollapse")
+    public void collapseApplication(HttpServletResponse response,
+                                @ModelAttribute(name = "agent") Agent agent,
+                                @PathVariable("index") int applicationIndex,
+                                @RequestParam("collapsed") boolean collapsed) {
+        applicationIndex = applicationIndex - 1;
+
+        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+            Application application = agent.getApplications().get(applicationIndex);
+            application.setAgentCollapsed(collapsed);
+            agentService.updateApplicationCollapsed(application);
+        }
+    }
 }

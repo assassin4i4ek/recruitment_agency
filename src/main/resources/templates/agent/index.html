@@ -8,11 +8,18 @@
 <body>
 <div layout:fragment="content" th:remove="tag">
     <h1>This is a secured AGENT page!</h1>
-    <ul th:id="apps">
-        <li th:each="app,status : ${agent.applications}">
-            <th:block th:replace="agent/application_item :: application"></th:block>
-        </li>
-    </ul>
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" href="#apps-wrapper">Applications</a>
+        </h4>
+    </div>
+    <div id="apps-wrapper" aria-expanded="true" class="collapse in">
+        <ul th:id="apps">
+            <li th:each="app,status : ${agent.applications}">
+                <th:block th:replace="agent/application_item :: application"></th:block>
+            </li>
+        </ul>
+    </div>
     <script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js/}"></script>
     <script>
 		$(function() {

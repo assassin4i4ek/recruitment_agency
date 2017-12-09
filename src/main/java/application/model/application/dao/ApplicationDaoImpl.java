@@ -24,7 +24,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public List<Application> findApplicationsByAgentId(int agentId) {
-        String sql = "SELECT id, enterprise_id, agent_id, registration_timestamp, profession, quantity, agent_note" +
+        String sql = "SELECT id, enterprise_id, agent_id, registration_timestamp, profession, quantity, agent_note, agent_collapsed" +
                 " FROM applications WHERE agent_id=" + agentId +
                 " ORDER BY agent_order";
         return jdbcTemplate.query(sql, new ApplicationMapper());
@@ -48,6 +48,12 @@ public class ApplicationDaoImpl implements ApplicationDao {
                 application.getQuantity(),
                 application.getAgentNote(),
                 application.getId());
+    }
+
+    @Override
+    public void updateApplicationCollapsed(Application application) {
+        String sql = "UPDATE applications SET agent_collapsed=? WHERE id=?";
+        jdbcTemplate.update(sql, application.isAgentCollapsed(), application.getId());
     }
 
     private class ApplicationMapper implements RowMapper<Application> {
@@ -74,6 +80,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
                 throw new SQLException("Error reading notes");
             }
             application.setAgentNote(stringBuilder.toString());
+            application.setAgentCollapsed(resultSet.getBoolean("agent_collapsed"));
             return application;
         }
     }

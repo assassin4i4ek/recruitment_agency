@@ -8,4 +8,5 @@ public interface ApplicationDao {
     List<Application> findApplicationsByAgentId(int agentId);
     void reorderApplicationsOfAgent(List<Application> applications);
     void updateApplication(Application application);
+    void updateApplicationCollapsed(Application application);
 }

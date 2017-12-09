@@ -7,48 +7,77 @@
 </head>
 <body>
 <div th:fragment="application">
-    <a th:href="@{/agent/application/} + (${status.index} + 1)" th:text="${app.profession}" ></a>
-    <a th:href="@{/agent/application/} + (${status.index} + 1) + '/enterprise'" th:text="${app.enterpriseName}"></a>
-    <p th:text="${app.agentNote}"></p>
-    <a th:text="Edit" th:href="@{/agent/application/} + (${status.index} + 1) + '?edit'"></a>
-    <ul th:id="'applicants' + (${status.index} + 1)">
-        <li th:each="candidate, candidateStatus : ${app.applicants}">
-            <th:block th:replace="agent/candidate_item :: candidate"></th:block>
-        </li>
-    </ul>
-    <script th:inline="javascript">
-		$(function() {
-		    var listId = /*[['#applicants' + (${status.index} + 1)]]*/;
-		    var formId = /*[['#reorderApplicants' + (${status.index} + 1)]]*/;
-		    var prevIndexId = /*[['#prevIndex' + (${status.index} + 1)]]*/;
-		    var newIndexId = /*[['#newIndex' + (${status.index} + 1)]]*/;
-		    var mUrl = /*[['agent/application/' + (${status.index} + 1) + '/reorderApplicants']]*/
-		    $(listId).sortable({
-                update: function(event, ui) {
-                    $(newIndexId).val(ui.item.index());
-                    $(formId).submit();
-                },
-                start: function(event, ui) {
-                    $(prevIndexId).val(ui.item.index())
-                }
-		    });
-            $(listId).disableSelection();
-            $(formId).on('submit', function() {
-                        $.ajax({
-                            url: mUrl,
-                            type: "POST",
-                            data: $(formId).serialize()
+    <div class="panel-heading">
+        <a th:href="@{/agent/application/} + (${status.index} + 1)" th:text="${app.profession}" ></a>
+        <a th:href="@{/agent/application/} + (${status.index} + 1) + '/enterprise'" th:text="${app.enterpriseName}"></a>
+        <div class="panel-title">
+            <a data-toggle="collapse" th:href="'#applicants-wrapper-' + (${status.index} + 1)">collapse</a>
+        </div>
+    </div>
+    <div th:id="'applicants-wrapper-' + (${status.index} + 1)" th:aria-expanded="!${app.agentCollapsed}"
+                                                th:class="'collapse' + (${app.agentCollapsed} ? '' : ' in')">
+       <p th:text="${app.agentNote}"></p>
+        <a th:text="Edit" th:href="@{/agent/application/} + (${status.index} + 1) + '?edit'"></a>
+        <ul th:id="'applicants' + (${status.index} + 1)">
+            <li th:each="candidate, candidateStatus : ${app.applicants}">
+                <th:block th:replace="agent/candidate_item :: candidate"></th:block>
+            </li>
+        </ul>
+        <script th:inline="javascript">
+            $(function() {
+                var listId = /*[['#applicants' + (${status.index} + 1)]]*/;
+                var formId = /*[['#reorderApplicants' + (${status.index} + 1)]]*/;
+                var prevIndexId = /*[['#prevIndex' + (${status.index} + 1)]]*/;
+                var newIndexId = /*[['#newIndex' + (${status.index} + 1)]]*/;
+                var mUrl = /*[['agent/application/' + (${status.index} + 1) + '/reorderApplicants']]*/
+                $(listId).sortable({
+                    update: function(event, ui) {
+                        $(newIndexId).val(ui.item.index());
+                        $(formId).submit();
+                    },
+                    start: function(event, ui) {
+                        $(prevIndexId).val(ui.item.index())
+                    }
+                });
+                $(listId).disableSelection();
+                $(formId).on('submit', function() {
+                            $.ajax({
+                                url: mUrl,
+                                type: "POST",
+                                data: $(formId).serialize()
+                            });
+                            return false;
                         });
-                        return false;
+            });
+        </script>
+
+        <script th:inline="javascript">
+            $(function(){
+                var applicationId = /*[['#applicants-wrapper-' + (${status.index} + 1)]]*/;
+                var mUrl = /*[['agent/application/' + (${status.index} + 1) + '/agentCollapse']]*/;
+                $(applicationId).on('hidden.bs.collapse', function() {
+                    $.ajax({
+                        url: mUrl,
+                        type: "POST",
+                        data: "collapsed=1"
                     });
-        });
-    </script>
-    <form th:id="'reorderApplicants' + (${status.index} + 1)"
-          th:action="@{agent/application/} + (${status.index} + 1) + '/reorderApplicants'"
-          method="POST">
-        <input type="hidden" th:id="'prevIndex' + (${status.index} + 1)" name="prevIndex" value="0"/>
-        <input type="hidden" th:id="'newIndex' + (${status.index} + 1)" name="newIndex" value="0"/>
-    </form>
+                });
+                $(applicationId).on('shown.bs.collapse', function() {
+                    $.ajax({
+                        url: mUrl,
+                        type: "POST",
+                        data: "collapsed=0"
+                    });
+                });
+            });
+        </script>
+        <form th:id="'reorderApplicants' + (${status.index} + 1)"
+              th:action="@{agent/application/} + (${status.index} + 1) + '/reorderApplicants'"
+              method="POST">
+            <input type="hidden" th:id="'prevIndex' + (${status.index} + 1)" name="prevIndex" value="0"/>
+            <input type="hidden" th:id="'newIndex' + (${status.index} + 1)" name="newIndex" value="0"/>
+        </form>
+    </div>
 </div>
 </body>
 </html>

@@ -44,7 +44,8 @@ CREATE TABLE IF NOT EXISTS applications (
 							profession VARCHAR(100) NOT NULL,
 							quantity INT(3) DEFAULT 1,
 							agent_note TEXT,
-                            agent_order INT, 
+                            agent_order INT,
+                            agent_collapsed BOOLEAN DEFAULT TRUE,
 							PRIMARY KEY(id),
 							CONSTRAINT FK_applications_enterprise_id FOREIGN KEY(enterprise_id) REFERENCES enterprises_info(user_id),
                             CONSTRAINT FK_applications_agent_id FOREIGN KEY(agent_id) REFERENCES agents_info(user_id));
