@@ -11,10 +11,10 @@
         <a th:href="@{/agent/application/} + (${status.index} + 1)" th:text="${app.profession}" ></a>
         <a th:href="@{/agent/application/} + (${status.index} + 1) + '/enterprise'" th:text="${app.enterpriseName}"></a>
         <div class="panel-title">
-            <a data-toggle="collapse" th:href="'#applicants-wrapper-' + (${status.index} + 1)">collapse</a>
+            <a data-toggle="collapse" th:href="'#application-wrapper-' + (${status.index} + 1)">collapse</a>
         </div>
     </div>
-    <div th:id="'applicants-wrapper-' + (${status.index} + 1)" th:aria-expanded="!${app.agentCollapsed}"
+    <div th:id="'application-wrapper-' + (${status.index} + 1)" th:aria-expanded="!${app.agentCollapsed}"
                                                 th:class="'collapse' + (${app.agentCollapsed} ? '' : ' in')">
        <p th:text="${app.agentNote}"></p>
         <a th:text="Edit" th:href="@{/agent/application/} + (${status.index} + 1) + '?edit'"></a>
@@ -53,20 +53,22 @@
 
         <script th:inline="javascript">
             $(function(){
-                var applicationId = /*[['#applicants-wrapper-' + (${status.index} + 1)]]*/;
-                var mUrl = /*[['agent/application/' + (${status.index} + 1) + '/agentCollapse']]*/;
+                var applicationId = /*[['#application-wrapper-' + (${status.index} + 1)]]*/;
+                var mUrl = /*[['/agent/application/' + (${status.index} + 1) + '/agentCollapse']]*/;
                 $(applicationId).on('hidden.bs.collapse', function() {
                     $.ajax({
                         url: mUrl,
                         type: "POST",
-                        data: "collapsed=1"
+                        data: "collapsed=1",
+                        cache: true
                     });
                 });
                 $(applicationId).on('shown.bs.collapse', function() {
                     $.ajax({
                         url: mUrl,
                         type: "POST",
-                        data: "collapsed=0"
+                        data: "collapsed=0",
+                        cache: true
                     });
                 });
             });

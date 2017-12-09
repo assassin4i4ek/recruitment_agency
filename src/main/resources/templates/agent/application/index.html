@@ -24,11 +24,19 @@
         <p th:text="${app.profession}"></p>
         <p th:text="${app.quantity}"></p>
         <p th:text="${app.agentNote}"></p>
-        <ul th:id="'applicants' + (${applicationIndex} + 1)">
-            <li th:each="candidate, candidateStatus : ${app.applicants}">
-                <div th:replace="agent/candidate_item :: candidate"></div>
-            </li>
-        </ul>
+        <div class="panel-heading">
+            <div class="panel-title">
+                <a data-toggle="collapse" href="#applicants-wrapper">applicants</a>
+            </div>
+        </div>
+        <div id="applicants-wrapper" th:aria-expanded="!${app.agentCollapsedApplicants}"
+             th:class="'collapse' + (${app.agentCollapsedApplicants} ? '' : ' in')">
+            <ul th:id="'applicants' + (${applicationIndex} + 1)">
+                <li th:each="candidate, candidateStatus : ${app.applicants}">
+                    <div th:replace="agent/candidate_item :: candidate"></div>
+                </li>
+            </ul>
+        </div>
         <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
     </div>
     <p><a href="/" th:href="@{/}">Back to home page</a></p>
@@ -64,6 +72,26 @@
         <input type="hidden" id="prevIndex" name="prevIndex" value="0"/>
         <input type="hidden" id="newIndex" name="newIndex" value="0"/>
     </form>
+    <script th:inline="javascript">
+        $(function(){
+                var applicationId = '#applicants-wrapper';
+                var mUrl = /*[['/agent/application/' + (${applicationIndex} + 1) + '/agentCollapseApplicants']]*/;
+                $(applicationId).on('hidden.bs.collapse', function() {
+                    $.ajax({
+                        url: mUrl,
+                        type: "POST",
+                        data: "collapsed=1"
+                    });
+                });
+                $(applicationId).on('shown.bs.collapse', function() {
+                    $.ajax({
+                        url: mUrl,
+                        type: "POST",
+                        data: "collapsed=0"
+                    });
+                });
+            });
+    </script>
 </div>
 
 </body>

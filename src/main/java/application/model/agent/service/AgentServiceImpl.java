@@ -59,5 +59,10 @@ public class AgentServiceImpl implements AgentService {
         applicationService.updateApplicationCollapsed(application);
     }
 
+    @Override
+    public void updateApplicationCollapsedApplicants(Application application) {
+        applicationService.updateApplicationCollapsedApplicants(application);
+    }
+
 
 }

@@ -9,4 +9,5 @@ public interface ApplicationDao {
     void reorderApplicationsOfAgent(List<Application> applications);
     void updateApplication(Application application);
     void updateApplicationCollapsed(Application application);
+    void updateApplicationCollapsedApplicants(Application application);
 }

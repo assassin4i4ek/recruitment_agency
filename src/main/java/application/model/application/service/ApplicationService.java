@@ -10,4 +10,5 @@ public interface ApplicationService {
     void updateApplicationInfo(Application application);
     void reorderApplicantsOfApplication(Application application);
     void updateApplicationCollapsed(Application application);
+    void updateApplicationCollapsedApplicants(Application application);
 }

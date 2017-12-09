@@ -45,7 +45,8 @@ CREATE TABLE IF NOT EXISTS applications (
 							quantity INT(3) DEFAULT 1,
 							agent_note TEXT,
                             agent_order INT,
-                            agent_collapsed BOOLEAN DEFAULT TRUE,
+                            agent_collapsed BOOLEAN DEFAULT FALSE,
+                            agent_collapsed_applicants BOOLEAN DEFAULT FALSE,
 							PRIMARY KEY(id),
 							CONSTRAINT FK_applications_enterprise_id FOREIGN KEY(enterprise_id) REFERENCES enterprises_info(user_id),
                             CONSTRAINT FK_applications_agent_id FOREIGN KEY(agent_id) REFERENCES agents_info(user_id));

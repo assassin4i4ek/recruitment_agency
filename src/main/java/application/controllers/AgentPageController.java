@@ -240,5 +240,30 @@ public class AgentPageController {
             application.setAgentCollapsed(collapsed);
             agentService.updateApplicationCollapsed(application);
         }
+        else
+            try {
+                response.sendRedirect("/error/wrong-input");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
+
+    @PostMapping("/agent/application/{index}/agentCollapseApplicants")
+    public void collapseApplicants(HttpServletResponse response,
+                                    @ModelAttribute(name = "agent") Agent agent,
+                                    @PathVariable("index") int applicationIndex,
+                                    @RequestParam("collapsed") boolean collapsed) {
+        applicationIndex = applicationIndex - 1;
+        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+            Application application = agent.getApplications().get(applicationIndex);
+            application.setAgentCollapsedApplicants(collapsed);
+            agentService.updateApplicationCollapsedApplicants(application);
+        }
+        else
+            try {
+                response.sendRedirect("/error/wrong-input");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 }

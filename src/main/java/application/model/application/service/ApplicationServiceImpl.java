@@ -51,4 +51,9 @@ public class ApplicationServiceImpl implements ApplicationService{
     public void updateApplicationCollapsed(Application application) {
         applicationDao.updateApplicationCollapsed(application);
     }
+
+    @Override
+    public void updateApplicationCollapsedApplicants(Application application) {
+        applicationDao.updateApplicationCollapsedApplicants(application);
+    }
 }
