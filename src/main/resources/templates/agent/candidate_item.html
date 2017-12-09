@@ -9,18 +9,23 @@
 <div th:fragment="candidate" th:with="appIndex = ${(status == null ? applicationIndex : status.index)}">
     <a th:href="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
     <p th:text="${candidate.email}"></p>
-    <form th:action="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1) + '/newStage'"
-            th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStage'">
-        <select name="stage" th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStageSelect'">
-            <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_INVITED'"th:value="INTERNAL_INVITATION" th:text="'Invited to internal audition'"></option>
-            <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_PASSED'"th:value="INTERNAL_PASSED" th:text="'Passed internal audition'"></option>
-            <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_FAILED'" th:value="INTERNAL_FAILED" th:text="'Failed internal audition'"></option>
-            <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_INVITED'" th:value="EXTERNAL_INVITED" th:text="'Invited to external audition'"></option>
-            <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_PASSED'" th:value="EXTERNAL_PASSED" th:text="'Passed to internal audition'"></option>
-            <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_FAILED'" th:value="EXTERNAL_FAILED" th:text="'Failed to internal audition'"></option>
-            <option th:selected="${candidate.applicantStage.name()} == 'GOT_JOB'" th:value="GOT_JOB" th:text="'Got a job'"></option>
-        </select>
-    </form>
+    <div th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'formWrapper'">
+        <form th:action="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1) + '/newStage'"
+                th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStage'">
+            <button class="stageDenyButton" th:if="(${candidate.applicantStage.name().contains('INVITED')})" th:text="'Deny'"></button>
+            <select name="stage" th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStageSelect'">
+                <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_INVITED'"th:value="INTERNAL_INVITED" th:text="'Invited to internal audition'"></option>
+                <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_PASSED'"th:value="INTERNAL_PASSED" th:text="'Passed internal audition'"></option>
+                <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_FAILED'" th:value="INTERNAL_FAILED" th:text="'Failed internal audition'"></option>
+                <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_INVITED'" th:value="EXTERNAL_INVITED" th:text="'Invited to external audition'"></option>
+                <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_PASSED'" th:value="EXTERNAL_PASSED" th:text="'Passed external audition'"></option>
+                <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_FAILED'" th:value="EXTERNAL_FAILED" th:text="'Failed external audition'"></option>
+                <option th:selected="${candidate.applicantStage.name()} == 'GOT_JOB'" th:value="GOT_JOB" th:text="'Got a job'"></option>
+            </select>
+            <button class="stageNextButton" th:if="(${candidate.applicantStage.name().contains('PASSED')})" th:text="'Next stage'"></button>
+            <button class="stageAcceptButton" th:if="(${candidate.applicantStage.name().contains('INVITED')})" th:text="'Accept'"></button>
+        </form>
+    </div>
     <script th:inline="javascript">
         $(function() {
             var selectId = /*[['#application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStageSelect']]*/;
@@ -35,8 +40,52 @@
                         return false;
                     });
             $(selectId).change(function() {
+                var selectVal = $(selectId).val();
+                $(selectId + ' > option:selected').prop({select: false});
+                $(selectId + ' > option:contains(' + selectVal + ')').prop({selected: true});
+                $(formId + ' button').remove();
+                if (selectVal.indexOf('INVITED') >= 0) {
+                    $(formId).prepend('<button class=\'stageDenyButton\'>Deny</button>');
+                    $(formId).append('<button class=\'stageAcceptButton\'>Accept</button>');
+                    initStageAcceptButton();
+                    initStageDenyButton();
+                }
+                if (selectVal.indexOf('PASSED') >= 0) {
+                    $(formId).append('<button class=\'stageNextButton\'>Next stage</button>');
+                    initStageNextButton();
+                }
                 $(formId).submit();
             });
+            function initStageNextButton() {
+                $(formId + ' .stageNextButton').on('click', function() {
+                    $(selectId + ' > option:selected')
+                            .prop({selected: false})
+                            .next().next()
+                            .prop({selected: true});
+                    $(selectId).change();
+                });
+            }
+            function initStageAcceptButton() {
+                $(formId + ' .stageAcceptButton').on('click', function() {
+                    $(selectId + ' > option:selected')
+                            .prop({selected: false})
+                            .next()
+                            .prop({selected: true});
+                    $(selectId).change();
+                });
+            }
+            function initStageDenyButton() {
+                $(formId + ' .stageDenyButton').on('click', function() {
+                    $(selectId + ' > option:selected')
+                                .prop({selected: false})
+                                .next().next()
+                                .prop({selected: true});
+                    $(selectId).change();
+                });
+            }
+            initStageAcceptButton();
+            initStageDenyButton();
+            initStageNextButton();
         });
     </script>
 </div>
