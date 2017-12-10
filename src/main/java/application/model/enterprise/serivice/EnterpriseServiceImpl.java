@@ -1,7 +1,9 @@
 package application.model.enterprise.serivice;
 
 import application.model.enterprise.Enterprise;
+import application.model.enterprise.EnterpriseRegistrationForm;
 import application.model.enterprise.dao.EnterpriseDao;
+import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,5 +25,10 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     @Override
     public void updateEnterpriseInfo(Enterprise enterprise) {
         enterpriseDao.updateEnterpriseInfo(enterprise);
+    }
+
+    @Override
+    public void registerNewEnterprise(User user, EnterpriseRegistrationForm form) {
+        enterpriseDao.createNewEnterprise(user, form);
     }
 }

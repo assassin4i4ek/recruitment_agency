@@ -1,8 +1,11 @@
 package application.model.user.service;
 
+import application.model.application.ApplicationRegistrationForm;
+import application.model.application.service.ApplicationService;
 import application.model.candidate.CandidateRegistrationForm;
 import application.model.candidate.service.CandidateService;
 import application.model.enterprise.EnterpriseRegistrationForm;
+import application.model.enterprise.serivice.EnterpriseService;
 import application.model.user.UserRegistrationForm;
 import application.model.user.dao.UserDao;
 import application.model.user.User;
@@ -19,6 +22,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private CandidateService candidateService;
+
+    @Autowired
+    private EnterpriseService enterpriseService;
+
+    @Autowired
+    private ApplicationService applicationService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -51,6 +60,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public void registerNewUser(EnterpriseRegistrationForm form) {
         userDao.createNewUser(form);
+        User user = (User) loadUserByUsername(form.getUsername());
+        enterpriseService.registerNewEnterprise(user, form);
+    }
+
+    @Override
+    public boolean validateApplicationProfession(ApplicationRegistrationForm applicationRegistrationForm) {
+        return applicationRegistrationForm.getProfession().isEmpty() ||
+                !applicationRegistrationForm.getProfession().isEmpty();
     }
 
     @Override

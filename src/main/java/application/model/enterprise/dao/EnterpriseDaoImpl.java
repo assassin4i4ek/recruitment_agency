@@ -1,6 +1,8 @@
 package application.model.enterprise.dao;
 
 import application.model.enterprise.Enterprise;
+import application.model.enterprise.EnterpriseRegistrationForm;
+import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -37,6 +39,12 @@ public class EnterpriseDaoImpl implements EnterpriseDao {
     public void updateEnterpriseInfo(Enterprise enterprise) {
         String sql = "UPDATE enterprises_info SET name=?, email=? WHERE user_id=?";
         jdbcTemplate.update(sql, enterprise.getName(), enterprise.getEmail(), enterprise.getId());
+    }
+
+    @Override
+    public void createNewEnterprise(User user, EnterpriseRegistrationForm form) {
+        String sql = "INSERT INTO enterprises_info(user_id, name, email) VALUE (?,?,?)";
+        jdbcTemplate.update(sql, user.getId(), form.getName(), form.getEmail());
     }
 
     private class EnterpriseMapper implements RowMapper<Enterprise> {
