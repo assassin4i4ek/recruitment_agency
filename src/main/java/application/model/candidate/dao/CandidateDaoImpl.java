@@ -4,6 +4,8 @@ import application.model.application.Application;
 import application.model.candidate.Applicant;
 import application.model.candidate.ApplicantStage;
 import application.model.candidate.Candidate;
+import application.model.candidate.CandidateRegistrationForm;
+import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -69,6 +71,12 @@ public class CandidateDaoImpl implements CandidateDao {
     public void updateCandidateInfo(Candidate candidate) {
         String sql = "UPDATE candidates_info SET name=?, email=? WHERE user_id=?";
         jdbcTemplate.update(sql, candidate.getName(), candidate.getEmail(), candidate.getId());
+    }
+
+    @Override
+    public void createNewCandidate(User user, CandidateRegistrationForm form) {
+        String sql = "INSERT INTO candidates_info(user_id, name, email) VALUE (?,?,?)";
+        jdbcTemplate.update(sql, user.getId(), form.getName(), form.getEmail());
     }
 
     private class CandidateMapper implements RowMapper<Candidate> {

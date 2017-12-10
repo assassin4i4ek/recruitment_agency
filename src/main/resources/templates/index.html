@@ -8,9 +8,37 @@
 <body>
 <div layout:fragment="content" th:remove="tag">
     <p>This is an unsecured page, but you can access the secured pages after authenticating.</p>
-    <ul>
-        <li>Go to the <a href="/user" th:href="@{/user}">secured pages</a></li>
-    </ul>
+    <div th:if="${param1.usernameError}">
+        <div class="alert alert-danger">
+            This username is already taken.
+        </div>
+    </div>
+    <div th:if="${param1.emailError}">
+        <div class="alert alert-danger">
+            Wrong email entered.
+        </div>
+    </div>
+    <div th:if="${param1.passwordError}">
+        <div class="alert alert-danger">
+            Passwords don't match.
+        </div>
+    </div>
+    <div th:if="${param1.success}">
+        <div class="alert alert-info">
+            You successfully registered
+        </div>
+    </div>
+
+    <a href="/user" th:href="@{/user}">Enter</a>
+
+    <form action="/registerCandidate" method="POST">
+        <label>Username:<input type="text" name="username" th:value="${candidateRegistrationForm.username}"></label>
+        <label>Email:<input type="text" name="email" th:value="${candidateRegistrationForm.email}"></label>
+        <label>Name:<input type="text" name="name" th:value="${candidateRegistrationForm.name}"></label>
+        <label>Password:<input type="password" name="password" th:value="${candidateRegistrationForm.password}"></label>
+        <label>Confirm password:<input type="password" name="confirmPassword" th:value="${candidateRegistrationForm.confirmPassword}"></label>
+        <input type="submit" value="Register">
+    </form>
 </div>
 </body>
 </html>

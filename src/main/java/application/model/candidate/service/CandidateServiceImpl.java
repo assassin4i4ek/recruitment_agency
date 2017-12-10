@@ -3,7 +3,9 @@ package application.model.candidate.service;
 import application.model.application.Application;
 import application.model.candidate.Applicant;
 import application.model.candidate.Candidate;
+import application.model.candidate.CandidateRegistrationForm;
 import application.model.candidate.dao.CandidateDao;
+import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,5 +45,10 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     public void updateCandidateInfo(Candidate candidate) {
         candidateDao.updateCandidateInfo(candidate);
+    }
+
+    @Override
+    public void registerNewCandidate(User user, CandidateRegistrationForm form) {
+        candidateDao.createNewCandidate(user, form);
     }
 }
