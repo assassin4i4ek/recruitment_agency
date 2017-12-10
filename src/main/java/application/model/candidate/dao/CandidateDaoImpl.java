@@ -65,12 +65,19 @@ public class CandidateDaoImpl implements CandidateDao {
         jdbcTemplate.update(sql);
     }
 
+    @Override
+    public void updateCandidateInfo(Candidate candidate) {
+        String sql = "UPDATE candidates_info SET name=?, email=? WHERE user_id=?";
+        jdbcTemplate.update(sql, candidate.getName(), candidate.getEmail(), candidate.getId());
+    }
+
     private class CandidateMapper implements RowMapper<Candidate> {
         @Override
         public Candidate mapRow(ResultSet resultSet, int i) throws SQLException {
             Candidate candidate = new Candidate();
             candidate.setId(resultSet.getInt("user_id"));
             candidate.setName(resultSet.getString("name"));
+            candidate.setEmail(resultSet.getString("email"));
             return candidate;
         }
     }

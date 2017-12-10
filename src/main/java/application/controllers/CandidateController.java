@@ -1,14 +1,14 @@
 package application.controllers;
 
+import application.controllers.parameters.CandidateRequestParameter;
 import application.model.candidate.Candidate;
 import application.model.candidate.service.CandidateService;
 import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @SessionAttributes("candidate")
@@ -23,7 +23,24 @@ public class CandidateController {
     }
 
     @GetMapping("/candidate")
-    public String candidate() {
+    public String enterprise(@ModelAttribute("candidate") Candidate candidate,
+                             @RequestParam(name = "edit", required = false) String edit,
+                             Model model) {
+        CandidateRequestParameter parameter = new CandidateRequestParameter();
+        if (edit != null)
+            parameter.setEdit(true);
+        model.addAttribute("param", parameter);
         return "/candidate/index";
+    }
+
+    @PostMapping("/candidate")
+    public String saveEnterprise(@ModelAttribute("candidate") Candidate candidate,
+                                 @RequestParam("save") String save,
+                                 @RequestParam("name") String name,
+                                 @RequestParam("email") String email) {
+        candidate.setName(name);
+        candidate.setEmail(email);
+        candidateService.updateCandidateInfo(candidate);
+        return "redirect:/candidate";
     }
 }

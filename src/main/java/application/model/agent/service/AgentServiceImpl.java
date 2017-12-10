@@ -5,6 +5,7 @@ import application.model.application.Application;
 import application.model.application.service.ApplicationService;
 import application.model.candidate.Applicant;
 import application.model.candidate.ApplicantStage;
+import application.model.candidate.Candidate;
 import application.model.candidate.service.CandidateService;
 import application.model.enterprise.Enterprise;
 import application.model.enterprise.serivice.EnterpriseService;
@@ -78,6 +79,11 @@ public class AgentServiceImpl implements AgentService {
     @Override
     public void updateEnterpriseInfo(Enterprise enterprise) {
         enterpriseService.updateEnterpriseInfo(enterprise);
+    }
+
+    @Override
+    public void updateCandidateInfo(Candidate candidate) {
+        candidateService.updateCandidateInfo(candidate);
     }
 
 

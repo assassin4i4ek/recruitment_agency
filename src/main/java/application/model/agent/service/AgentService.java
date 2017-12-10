@@ -3,6 +3,7 @@ package application.model.agent.service;
 import application.model.agent.Agent;
 import application.model.application.Application;
 import application.model.candidate.Applicant;
+import application.model.candidate.Candidate;
 import application.model.enterprise.Enterprise;
 
 public interface AgentService {
@@ -15,6 +16,6 @@ public interface AgentService {
     void updateApplicationCollapsed(Application application);
     void updateApplicationCollapsedApplicants(Application application);
     boolean finalizeApplication(Application application);
-
     void updateEnterpriseInfo(Enterprise enterprise);
+    void updateCandidateInfo(Candidate candidate);
 }

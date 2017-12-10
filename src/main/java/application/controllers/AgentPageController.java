@@ -1,12 +1,14 @@
 package application.controllers;
 
 import application.controllers.parameters.ApplicationRequestParameter;
+import application.controllers.parameters.CandidateRequestParameter;
 import application.controllers.parameters.EnterpriseRequestParameter;
 import application.model.agent.Agent;
 import application.model.agent.service.AgentService;
 import application.model.application.Application;
 import application.model.candidate.Applicant;
 import application.model.candidate.ApplicantStage;
+import application.model.candidate.Candidate;
 import application.model.candidate.service.CandidateService;
 import application.model.enterprise.Enterprise;
 import application.model.enterprise.serivice.EnterpriseService;
@@ -181,6 +183,7 @@ public class AgentPageController {
     @GetMapping("/agent/application/{index}/applicant/{applicantIndex}")
     public String getApplicantOfApplication(@ModelAttribute(name = "agent") Agent agent,
                                             @PathVariable("index") int applicationIndex,
+                                            @RequestParam(name = "edit", required = false) String edit,
                                             @PathVariable("applicantIndex") int candidateIndex,
                                             Model model) {
         applicationIndex = applicationIndex - 1;
@@ -191,7 +194,36 @@ public class AgentPageController {
                         candidateIndex)) {
             Applicant applicant = agent.getApplications().get(applicationIndex).getApplicants().get(candidateIndex);
             model.addAttribute("candidate", applicant);
+
+            CandidateRequestParameter parameter = new CandidateRequestParameter();
+            if (edit != null)
+                parameter.setEdit(true);
+            model.addAttribute("param", parameter);
             return "candidate/index";
+        } else
+            return "error/wrong-input";
+    }
+
+    @PostMapping("/agent/application/{index}/applicant/{applicantIndex}")
+    public String saveApplicantOfApplication(@ModelAttribute(name = "agent") Agent agent,
+                                            @PathVariable("index") int applicationIndex,
+                                            @RequestParam("save") String save,
+                                            @RequestParam("name") String name,
+                                            @RequestParam("email") String email,
+                                            @PathVariable("applicantIndex") int candidateIndex,
+                                            Model model) {
+        applicationIndex = applicationIndex - 1;
+        candidateIndex = candidateIndex - 1;
+
+        if (validateApplicationIndexes(agent.getApplications(), applicationIndex) &&
+                validateApplicantsIndexes(agent.getApplications().get(applicationIndex).getApplicants(),
+                        candidateIndex)) {
+            Candidate candidate = agent.getApplications().get(applicationIndex).getApplicants().get(candidateIndex);
+            candidate.setName(name);
+            candidate.setEmail(email);
+            agentService.updateCandidateInfo(candidate);
+            model.addAttribute("candidate", candidate);
+            return "redirect:/agent/application/" + (applicationIndex + 1) + "/applicant/" + (candidateIndex + 1);
         } else
             return "error/wrong-input";
     }

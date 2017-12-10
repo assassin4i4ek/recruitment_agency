@@ -39,4 +39,9 @@ public class CandidateServiceImpl implements CandidateService {
         candidateDao.deleteApplicantsForApplication(application);
         return true;
     }
+
+    @Override
+    public void updateCandidateInfo(Candidate candidate) {
+        candidateDao.updateCandidateInfo(candidate);
+    }
 }
