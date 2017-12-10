@@ -54,6 +54,12 @@
                     $(formId).append('<button class=\'stageNextButton\'>Next stage</button>');
                     initStageNextButton();
                 }
+                if (selectVal.indexOf('FAILED') < 0) {
+                    var parentInDeniedList = $(selectId).parents('#denied-applicants-wrapper ul > li')
+                    if (parentInDeniedList.length) {
+                        $('#applicants-wrapper ul').prepend(parentInDeniedList);
+                    }
+                }
                 $(formId).submit();
             });
             function initStageNextButton() {

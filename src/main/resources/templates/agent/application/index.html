@@ -41,9 +41,16 @@
         </div>
         <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
         <div>
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <a data-toggle="collapse" href="#denied-applicants-wrapper">denied</a>
+                </div>
+            </div>
             <div id="denied-applicants-wrapper" aria-expanded="false" class="collapse">
-                <ul>
-
+                <ul th:class="'applicants' + (${applicationIndex} + 1)">
+                    <li th:each="candidate, candidateStatus : ${app.applicants}"  th:if="(${candidate.applicantStage.name().contains('FAILED')})">
+                        <div th:replace="agent/candidate_item :: candidate"></div>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -51,6 +58,7 @@
     <p><a href="/" th:href="@{/}">Back to home page</a></p>
     <script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js/}"></script>
     <script th:inline="javascript">
+        //reorder applicants of application
         $(function() {
 		    var listId = /*[['.applicants' + (${applicationIndex} + 1)]]*/;
 		    var formId = /*[['#reorderApplicants' + (${applicationIndex} + 1)]]*/;
@@ -82,6 +90,7 @@
         <input type="hidden" id="newIndex" name="newIndex" value="0"/>
     </form>
     <script th:inline="javascript">
+        //collapse applicants list
         $(function(){
                 var applicationId = '#applicants-wrapper';
                 var mUrl = /*[['/agent/application/' + (${applicationIndex} + 1) + '/agentCollapseApplicants']]*/;
