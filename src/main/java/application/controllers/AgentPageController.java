@@ -38,6 +38,7 @@ public class AgentPageController {
     }
 
     @PostMapping("/agent/reorderApplications")
+    @ResponseBody
     public void reorderApplications(HttpServletResponse response,
                                     @ModelAttribute(name = "agent") Agent agent,
                                     @RequestParam(value = "prevIndex") int prevIndex,
@@ -130,6 +131,7 @@ public class AgentPageController {
     }
 
     @PostMapping("/agent/application/{index}/reorderApplicants")
+    @ResponseBody
     public void reorderApplicants(HttpServletResponse response,
                                   @ModelAttribute(name = "agent") Agent agent,
                                   @PathVariable("index") int applicationIndex,
@@ -184,6 +186,7 @@ public class AgentPageController {
     }
 
     @PostMapping("agent/application/{index}/applicant/{applicantIndex}/newStage")
+    @ResponseBody
     public void changeApplicantStage(HttpServletResponse response,
                                      @ModelAttribute("agent") Agent agent,
                                      @PathVariable("index") int applicationIndex,
@@ -229,6 +232,7 @@ public class AgentPageController {
     }
 
     @PostMapping("/agent/application/{index}/agentCollapse")
+    @ResponseBody
     public void collapseApplication(HttpServletResponse response,
                                 @ModelAttribute(name = "agent") Agent agent,
                                 @PathVariable("index") int applicationIndex,
@@ -249,6 +253,7 @@ public class AgentPageController {
     }
 
     @PostMapping("/agent/application/{index}/agentCollapseApplicants")
+    @ResponseBody
     public void collapseApplicants(HttpServletResponse response,
                                     @ModelAttribute(name = "agent") Agent agent,
                                     @PathVariable("index") int applicationIndex,

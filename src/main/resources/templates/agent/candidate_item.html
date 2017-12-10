@@ -30,7 +30,7 @@
         $(function() {
             var selectId = /*[['#application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStageSelect']]*/;
             var formId = /*[['#application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStage']]*/;
-		    var mUrl = /*[['agent/application/' + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1) + '/newStage']]*/
+		    var mUrl = /*[['/agent/application/' + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1) + '/newStage']]*/
             $(formId).on('submit', function() {
                         $.ajax({
                             url: mUrl,

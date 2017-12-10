@@ -19,7 +19,7 @@
        <p th:text="${app.agentNote}"></p>
         <a th:text="Edit" th:href="@{/agent/application/} + (${status.index} + 1) + '?edit'"></a>
         <ul th:id="'applicants' + (${status.index} + 1)">
-            <li th:each="candidate, candidateStatus : ${app.applicants}">
+            <li th:each="candidate, candidateStatus : ${app.applicants}"  th:if="!(${candidate.applicantStage.name().contains('FAILED')})">
                 <th:block th:replace="agent/candidate_item :: candidate"></th:block>
             </li>
         </ul>
@@ -60,7 +60,6 @@
                         url: mUrl,
                         type: "POST",
                         data: "collapsed=1",
-                        cache: true
                     });
                 });
                 $(applicationId).on('shown.bs.collapse', function() {
@@ -68,7 +67,6 @@
                         url: mUrl,
                         type: "POST",
                         data: "collapsed=0",
-                        cache: true
                     });
                 });
             });

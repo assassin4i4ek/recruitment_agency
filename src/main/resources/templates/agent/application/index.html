@@ -24,26 +24,35 @@
         <p th:text="${app.profession}"></p>
         <p th:text="${app.quantity}"></p>
         <p th:text="${app.agentNote}"></p>
-        <div class="panel-heading">
-            <div class="panel-title">
-                <a data-toggle="collapse" href="#applicants-wrapper">applicants</a>
+        <div>
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <a data-toggle="collapse" href="#applicants-wrapper">applicants</a>
+                </div>
+            </div>
+            <div id="applicants-wrapper" th:aria-expanded="!${app.agentCollapsedApplicants}"
+                 th:class="'collapse' + (${app.agentCollapsedApplicants} ? '' : ' in')">
+                <ul th:class="'applicants' + (${applicationIndex} + 1)">
+                    <li th:each="candidate, candidateStatus : ${app.applicants}"  th:if="!(${candidate.applicantStage.name().contains('FAILED')})">
+                        <div th:replace="agent/candidate_item :: candidate"></div>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div id="applicants-wrapper" th:aria-expanded="!${app.agentCollapsedApplicants}"
-             th:class="'collapse' + (${app.agentCollapsedApplicants} ? '' : ' in')">
-            <ul th:id="'applicants' + (${applicationIndex} + 1)">
-                <li th:each="candidate, candidateStatus : ${app.applicants}">
-                    <div th:replace="agent/candidate_item :: candidate"></div>
-                </li>
-            </ul>
-        </div>
         <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
+        <div>
+            <div id="denied-applicants-wrapper" aria-expanded="false" class="collapse">
+                <ul>
+
+                </ul>
+            </div>
+        </div>
     </div>
     <p><a href="/" th:href="@{/}">Back to home page</a></p>
     <script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js/}"></script>
     <script th:inline="javascript">
         $(function() {
-		    var listId = /*[['#applicants' + (${applicationIndex} + 1)]]*/;
+		    var listId = /*[['.applicants' + (${applicationIndex} + 1)]]*/;
 		    var formId = /*[['#reorderApplicants' + (${applicationIndex} + 1)]]*/;
 		    var mUrl = /*[['/agent/application/' + (${applicationIndex} + 1) + '/reorderApplicants']]*/
 		    $(listId).sortable({
