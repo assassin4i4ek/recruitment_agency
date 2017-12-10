@@ -58,10 +58,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public void registerNewUser(EnterpriseRegistrationForm form) {
-        userDao.createNewUser(form);
-        User user = (User) loadUserByUsername(form.getUsername());
-        enterpriseService.registerNewEnterprise(user, form);
+    public void registerNewUser(EnterpriseRegistrationForm enterpriseRegistrationForm, ApplicationRegistrationForm applicationRegistrationForm) {
+        userDao.createNewUser(enterpriseRegistrationForm);
+        User user = (User) loadUserByUsername(enterpriseRegistrationForm.getUsername());
+        enterpriseService.registerNewEnterprise(user, enterpriseRegistrationForm);
+        if (!applicationRegistrationForm.getProfession().isEmpty()) {
+            applicationService.registerNewApplication(user, applicationRegistrationForm);
+        }
     }
 
     @Override
@@ -69,6 +72,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return applicationRegistrationForm.getProfession().isEmpty() ||
                 !applicationRegistrationForm.getProfession().isEmpty();
     }
+
+    @Override
+    public boolean validateApplicationQuantity(ApplicationRegistrationForm applicationRegistrationForm) {
+        try {
+            short quantity = Short.parseShort(applicationRegistrationForm.getQuantity());
+            return quantity > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 
     @Override
     public void registerNewUser(CandidateRegistrationForm form) {

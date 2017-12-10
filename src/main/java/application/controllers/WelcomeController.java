@@ -34,6 +34,7 @@ public class WelcomeController {
 
     @GetMapping("/")
     public String root(Model model) {
+        model.addAttribute("param1", new RegisterRequestParameter());
         return "/index";
     }
 
@@ -105,17 +106,29 @@ public class WelcomeController {
                                      @RequestParam("confirmPassword") String confirmPassword,
                                      @RequestParam("name") String name,
                                      @RequestParam("email") String email,
+                                     @RequestParam("profession") String profession,
+                                     @RequestParam("quantity") String quantity,
                                      Model model) {
         RegisterRequestParameter parameter = new RegisterRequestParameter();
         if (userService.validateUsername(enterpriseRegistrationForm)) {
             if (userService.validateEmail(enterpriseRegistrationForm)) {
                 if (userService.validatePassword(enterpriseRegistrationForm)) {
                     if (userService.validateApplicationProfession(applicationRegistrationForm)) {
-                        userService.registerNewUser(enterpriseRegistrationForm);
-                        enterpriseRegistrationForm.resetAll();
-                        parameter.setSuccess(true);
+                        if (applicationRegistrationForm.getProfession().isEmpty() ||
+                                userService.validateApplicationQuantity(applicationRegistrationForm)) {
+                            userService.registerNewUser(enterpriseRegistrationForm, applicationRegistrationForm);
+                            enterpriseRegistrationForm.resetAll();
+                            applicationRegistrationForm.resetAll();
+                            parameter.setSuccess(true);
+                        }
+                        else {
+                            parameter.setQuantityError(true);
+                        }
+
                     }
-                    else parameter.setProfessionError(true);
+                    else {
+                        parameter.setProfessionError(true);
+                    }
                 } else {
                     parameter.setPasswordError(true);
                 }

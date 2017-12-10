@@ -11,6 +11,7 @@ public interface UserService {
     void registerNewUser(CandidateRegistrationForm form);
     boolean validateEmail(CandidateRegistrationForm form);
     boolean validateEmail(EnterpriseRegistrationForm form);
-    void registerNewUser(EnterpriseRegistrationForm form);
+    void registerNewUser(EnterpriseRegistrationForm form, ApplicationRegistrationForm applicationRegistrationForm);
     boolean validateApplicationProfession(ApplicationRegistrationForm applicationRegistrationForm);
+    boolean validateApplicationQuantity(ApplicationRegistrationForm applicationRegistrationForm);
 }

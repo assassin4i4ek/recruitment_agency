@@ -1,15 +1,16 @@
 package application.model.application.service;
 
 import application.model.application.Application;
+import application.model.application.ApplicationRegistrationForm;
 import application.model.application.dao.ApplicationDao;
 import application.model.candidate.Applicant;
 import application.model.candidate.ApplicantStage;
 import application.model.candidate.service.CandidateService;
 import application.model.enterprise.serivice.EnterpriseService;
+import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -75,5 +76,10 @@ public class ApplicationServiceImpl implements ApplicationService{
         }
 
         return false;
+    }
+
+    @Override
+    public void registerNewApplication(User user, ApplicationRegistrationForm form) {
+        applicationDao.createNewApplication(user, form);
     }
 }

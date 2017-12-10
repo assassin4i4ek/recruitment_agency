@@ -23,6 +23,16 @@
             Passwords don't match.
         </div>
     </div>
+    <div th:if="${param1.professionError}">
+        <div class="alert alert-danger">
+            Profession wasn't found. You can leave it empty though.
+        </div>
+    </div>
+    <div th:if="${param1.quantityError}">
+        <div class="alert alert-danger">
+            Quantity value is wrong.
+        </div>
+    </div>
     <div th:if="${param1.success}">
         <div class="alert alert-info">
             You successfully registered
@@ -47,6 +57,8 @@
             <label>Name:<input type="text" name="name" th:value="${enterpriseRegistrationForm.name}"></label>
             <label>Password:<input type="password" name="password" th:value="${enterpriseRegistrationForm.password}"></label>
             <label>Confirm password:<input type="password" name="confirmPassword" th:value="${enterpriseRegistrationForm.confirmPassword}"></label>
+            <label>Profession:<input type="text" name="profession" th:value="${applicationRegistrationForm.profession}"></label>
+            <label>Quantity:<input type="text" name="quantity" th:value="${applicationRegistrationForm.quantity}"></label>
             <input type="submit" value="Register">
         </form>
     </div>

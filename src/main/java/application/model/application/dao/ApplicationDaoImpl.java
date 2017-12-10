@@ -1,6 +1,8 @@
 package application.model.application.dao;
 
 import application.model.application.Application;
+import application.model.application.ApplicationRegistrationForm;
+import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -64,8 +66,14 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public void deleteApplication(Application application) {
-        String sql1 = "DELETE FROM applications WHERE id=" + application.getId();
-        jdbcTemplate.update(sql1);
+        String sql = "DELETE FROM applications WHERE id=" + application.getId();
+        jdbcTemplate.update(sql);
+    }
+
+    @Override
+    public void createNewApplication(User user, ApplicationRegistrationForm applicationRegistrationForm) {
+        String sql = "INSERT INTO applications(enterprise_id, profession, quantity) VALUE (?,?,?)";
+        jdbcTemplate.update(sql, user.getId(), applicationRegistrationForm.getProfession(), applicationRegistrationForm.getQuantity());
     }
 
     private class ApplicationMapper implements RowMapper<Application> {

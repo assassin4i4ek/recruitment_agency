@@ -5,6 +5,24 @@ public class RegisterRequestParameter {
     private boolean emailError = false;
     private boolean passwordError = false;
     private boolean success = false;
+    private boolean professionError = false;
+    private boolean quantityError = false;
+
+    public boolean isQuantityError() {
+        return quantityError;
+    }
+
+    public void setQuantityError(boolean quantityError) {
+        this.quantityError = quantityError;
+    }
+
+    public boolean isProfessionError() {
+        return professionError;
+    }
+
+    public void setProfessionError(boolean professionError) {
+        this.professionError = professionError;
+    }
 
     public boolean isPasswordError() {
         return passwordError;

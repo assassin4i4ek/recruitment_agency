@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS enterprises_info (
 CREATE TABLE IF NOT EXISTS applications (
 							id INT NOT NULL AUTO_INCREMENT,
 							enterprise_id INT NOT NULL,
-                            agent_id INT NOT NULL,
+                            agent_id INT,
 							registration_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 							profession VARCHAR(100) NOT NULL,
 							quantity INT(3) DEFAULT 1,

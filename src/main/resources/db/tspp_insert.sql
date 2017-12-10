@@ -25,12 +25,11 @@ INSERT INTO `recruitment_agency`.`candidates_info`(`user_id`,`name`, `email`) VA
 
 SELECT * FROM candidates_info;
 
-INSERT INTO `recruitment_agency`.`applications`(`enterprise_id`,`agent_id`,`profession`,`quantity`,`agent_note`, `agent_order`)
-VALUES (4,2,'first',2,'this is a first test note of second agent.',1);
-INSERT INTO `recruitment_agency`.`applications`(`enterprise_id`,`agent_id`,`profession`,`quantity`,`agent_note`, `agent_order`)
-VALUES (4,2,'second',2,'this is a second test note of second agent.',2);
-INSERT INTO `recruitment_agency`.`applications`(`enterprise_id`,`agent_id`,`profession`,`quantity`,`agent_note`, `agent_order`)
-VALUES (4,2,'third',2,'this is a third test note of second agent.',3);
+INSERT INTO `recruitment_agency`.`applications`(`enterprise_id`,`agent_id`,`profession`,`quantity`,`agent_note`)
+VALUES 
+ (4,2,'first',2,'this is a first test note of second agent.'),
+ (4,2,'second',2,'this is a second test note of second agent.'),
+ (4,2,'third',2,'this is a third test note of second agent.');
 
 SELECT * FROM applications;
 
