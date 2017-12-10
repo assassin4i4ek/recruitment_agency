@@ -2,6 +2,8 @@ package application.model.user.service;
 
 import application.model.candidate.CandidateRegistrationForm;
 import application.model.candidate.service.CandidateService;
+import application.model.enterprise.EnterpriseRegistrationForm;
+import application.model.user.UserRegistrationForm;
 import application.model.user.dao.UserDao;
 import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +29,28 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public boolean validateUsername(CandidateRegistrationForm form) {
+    public boolean validateUsername(UserRegistrationForm form) {
         return userDao.findUserByUsername(form.getUsername()) == null;
     }
 
     @Override
-    public boolean validatePassword(CandidateRegistrationForm form) {
+    public boolean validatePassword(UserRegistrationForm form) {
         return !form.getPassword().isEmpty() && form.getPassword().equals(form.getConfirmPassword());
     }
 
     @Override
     public boolean validateEmail(CandidateRegistrationForm form) {
         return !form.getEmail().isEmpty();
+    }
+
+    @Override
+    public boolean validateEmail(EnterpriseRegistrationForm form) {
+        return !form.getEmail().isEmpty();
+    }
+
+    @Override
+    public void registerNewUser(EnterpriseRegistrationForm form) {
+        userDao.createNewUser(form);
     }
 
     @Override

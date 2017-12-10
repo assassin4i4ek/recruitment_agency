@@ -1,6 +1,7 @@
 package application.model.user.dao;
 
 import application.model.candidate.CandidateRegistrationForm;
+import application.model.enterprise.EnterpriseRegistrationForm;
 import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,6 +37,12 @@ public class UserDaoImpl implements UserDao {
     public void createNewUser(CandidateRegistrationForm form) {
         String sql = "INSERT INTO users(username, password, role) VALUE (?,?,?)";
         jdbcTemplate.update(sql, form.getUsername(), form.getPassword(), "ROLE_CANDIDATE");
+    }
+
+    @Override
+    public void createNewUser(EnterpriseRegistrationForm form) {
+        String sql = "INSERT INTO users(username, password, role) VALUE (?,?,?)";
+        jdbcTemplate.update(sql, form.getUsername(), form.getPassword(), "ROLE_ENTERPRISE");
     }
 
     public class UserMapper implements RowMapper<User> {

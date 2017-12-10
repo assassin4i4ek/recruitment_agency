@@ -2,6 +2,7 @@ package application.controllers;
 
 import application.controllers.parameters.RegisterRequestParameter;
 import application.model.candidate.CandidateRegistrationForm;
+import application.model.enterprise.EnterpriseRegistrationForm;
 import application.model.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -10,7 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@SessionAttributes("candidateRegistrationForm")
+@SessionAttributes({"candidateRegistrationForm", "enterpriseRegistrationForm"})
 public class WelcomeController {
     @Autowired
     private UserService userService;
@@ -18,6 +19,11 @@ public class WelcomeController {
     @ModelAttribute("candidateRegistrationForm")
     private CandidateRegistrationForm candidateRegistrationFrom() {
         return new CandidateRegistrationForm();
+    }
+
+    @ModelAttribute("enterpriseRegistrationForm")
+    private EnterpriseRegistrationForm enterpriseRegistrationForm() {
+        return new EnterpriseRegistrationForm();
     }
 
     @GetMapping("/")
@@ -69,6 +75,36 @@ public class WelcomeController {
                 if (userService.validatePassword(candidateRegistrationForm)) {
                     userService.registerNewUser(candidateRegistrationForm);
                     candidateRegistrationForm.resetAll();
+                    parameter.setSuccess(true);
+                } else {
+                    parameter.setPasswordError(true);
+                }
+            }
+            else {
+                parameter.setEmailError(true);
+            }
+        }
+        else {
+            parameter.setUsernameError(true);
+        }
+        model.addAttribute("param1", parameter);
+        return "/index";
+    }
+
+    @PostMapping("/registerEnterprise")
+    public String registerEnterprise(@ModelAttribute("enterpriseRegistrationForm") EnterpriseRegistrationForm enterpriseRegistrationForm,
+                                    @RequestParam("username") String username,
+                                    @RequestParam("password") String password,
+                                    @RequestParam("confirmPassword") String confirmPassword,
+                                    @RequestParam("name") String name,
+                                    @RequestParam("email") String email,
+                                    Model model) {
+        RegisterRequestParameter parameter = new RegisterRequestParameter();
+        if (userService.validateUsername(enterpriseRegistrationForm)) {
+            if (userService.validateEmail(enterpriseRegistrationForm)) {
+                if (userService.validatePassword(enterpriseRegistrationForm)) {
+                    userService.registerNewUser(enterpriseRegistrationForm);
+                    enterpriseRegistrationForm.resetAll();
                     parameter.setSuccess(true);
                 } else {
                     parameter.setPasswordError(true);
