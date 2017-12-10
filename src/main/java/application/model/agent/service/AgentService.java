@@ -14,4 +14,5 @@ public interface AgentService {
     void updateApplicantOfApplicationStage(Application application, Applicant applicant);
     void updateApplicationCollapsed(Application application);
     void updateApplicationCollapsedApplicants(Application application);
+    boolean finalizeApplication(Application application);
 }

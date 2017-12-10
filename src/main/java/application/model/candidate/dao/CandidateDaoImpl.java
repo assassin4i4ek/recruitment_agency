@@ -59,6 +59,12 @@ public class CandidateDaoImpl implements CandidateDao {
         jdbcTemplate.update(sql);
     }
 
+    @Override
+    public void deleteApplicantsForApplication(Application application) {
+        String sql = "DELETE FROM applicants_for_applications WHERE application_id=" + application.getId();
+        jdbcTemplate.update(sql);
+    }
+
     private class CandidateMapper implements RowMapper<Candidate> {
         @Override
         public Candidate mapRow(ResultSet resultSet, int i) throws SQLException {

@@ -61,6 +61,7 @@ public class AgentPageController {
                                  @PathVariable("index") int applicationIndex,
                                  @RequestParam(name = "edit", required = false) String edit,
                                  @RequestParam(name = "quantityError", required = false) String quantityError,
+                                 @RequestParam(name = "finalizeError", required = false) String finalizeError,
                                  Model model) {
         applicationIndex = applicationIndex - 1;
 
@@ -74,12 +75,14 @@ public class AgentPageController {
             if (edit != null)
                 parameter.setEdit(true);
             if (quantityError != null)
-                parameter.setEdit(true);
+                parameter.setQuantityError(true);
+            if (finalizeError != null)
+                parameter.setFinalizeError(true);
             model.addAttribute("param", parameter);
             model.addAttribute("applicationIndex", applicationIndex);
             return "/agent/application/index";
         } else {
-            return "/quantityError/wrong-input";
+            return "/error/wrong-input";
         }
     }
 
@@ -112,6 +115,7 @@ public class AgentPageController {
     private class ApplicationRequestParameter {
         private boolean edit = false;
         private boolean quantityError = false;
+        private boolean finalizeError = false;
 
         public boolean isEdit() {
             return edit;
@@ -127,6 +131,14 @@ public class AgentPageController {
 
         public void setQuantityError(boolean quantityError) {
             this.quantityError = quantityError;
+        }
+
+        public boolean isFinalizeError() {
+            return finalizeError;
+        }
+
+        public void setFinalizeError(boolean finalizeError) {
+            this.finalizeError = finalizeError;
         }
     }
 
@@ -270,5 +282,22 @@ public class AgentPageController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+    }
+
+    @PostMapping("/agent/application/{index}/finalizeApplication")
+    public String finalizeApplication(@ModelAttribute(name = "agent") Agent agent,
+                                      @PathVariable("index") int applicationIndex) {
+        applicationIndex = applicationIndex - 1;
+        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+            if (agentService.finalizeApplication(agent.getApplications().get(applicationIndex))) {
+                agent.getApplications().remove(applicationIndex);
+                return "redirect:/agent";
+            }
+            else {
+                return "redirect:/agent/application/" + (applicationIndex + 1) + "?finalizeError";
+            }
+        }
+        else
+            return "redirect:/error/wrong-input";
     }
 }

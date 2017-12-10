@@ -10,4 +10,5 @@ public interface ApplicationDao {
     void updateApplication(Application application);
     void updateApplicationCollapsed(Application application);
     void updateApplicationCollapsedApplicants(Application application);
+    void deleteApplication(Application application);
 }

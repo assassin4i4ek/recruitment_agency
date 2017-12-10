@@ -62,6 +62,12 @@ public class ApplicationDaoImpl implements ApplicationDao {
         jdbcTemplate.update(sql, application.isAgentCollapsedApplicants(), application.getId());
     }
 
+    @Override
+    public void deleteApplication(Application application) {
+        String sql1 = "DELETE FROM applications WHERE id=" + application.getId();
+        jdbcTemplate.update(sql1);
+    }
+
     private class ApplicationMapper implements RowMapper<Application> {
         @Override
         public Application mapRow(ResultSet resultSet, int i) throws SQLException {

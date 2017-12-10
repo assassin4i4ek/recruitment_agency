@@ -11,4 +11,5 @@ public interface CandidateService {
     List<Applicant> findApplicantsForApplication(Application application);
     void reorderApplicantsOfApplication(Application application);
     void updateApplicantOfApplicationStage(Application application, Applicant applicant);
+    boolean deleteApplicantsForApplication(Application application);
 }

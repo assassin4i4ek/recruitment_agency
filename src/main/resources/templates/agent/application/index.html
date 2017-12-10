@@ -8,10 +8,11 @@
 <body>
 <div layout:fragment="content" th:remove="tag">
     <h1>This is a secured Application page!</h1>
-    <div th:if="${param.quantityError}">
-        <div class="alert alert-danger">
-            Invalid quantity.
-        </div>
+    <div th:if="${param.quantityError}" class="alert alert-danger">
+        Invalid quantity.
+    </div>
+    <div th:if="${param.finalizeError}" class="alert alert-danger">
+        Application doesn't meet requirements.
     </div>
     <a th:href="@{/agent/application/} + (${applicationIndex} + 1) + '/enterprise'" th:text="${enterprise.name}"></a>
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" th:method="POST">
@@ -54,8 +55,17 @@
                 </ul>
             </div>
         </div>
+        <form th:action="@{/agent/application/} + (${applicationIndex} + 1) + '/finalizeApplication'" method="POST">
+            <input type="submit" value="Finalize">
+        </form>
     </div>
     <p><a href="/" th:href="@{/}">Back to home page</a></p>
+    <form th:id="'reorderApplicants' + (${applicationIndex} + 1)"
+          th:action="'agent/application/' + (${applicationIndex} + 1) + '/reorderApplicants'"
+          method="POST">
+        <input type="hidden" id="prevIndex" name="prevIndex" value="0"/>
+        <input type="hidden" id="newIndex" name="newIndex" value="0"/>
+    </form>
     <script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js/}"></script>
     <script th:inline="javascript">
         //reorder applicants of application
@@ -83,12 +93,6 @@
                     });
         });
     </script>
-    <form th:id="'reorderApplicants' + (${applicationIndex} + 1)"
-          th:action="'agent/application/' + (${applicationIndex} + 1) + '/reorderApplicants'"
-          method="POST">
-        <input type="hidden" id="prevIndex" name="prevIndex" value="0"/>
-        <input type="hidden" id="newIndex" name="newIndex" value="0"/>
-    </form>
     <script th:inline="javascript">
         //collapse applicants list
         $(function(){

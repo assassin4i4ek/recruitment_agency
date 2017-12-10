@@ -4,6 +4,7 @@ import application.model.agent.Agent;
 import application.model.application.Application;
 import application.model.application.service.ApplicationService;
 import application.model.candidate.Applicant;
+import application.model.candidate.ApplicantStage;
 import application.model.candidate.service.CandidateService;
 import application.model.enterprise.Enterprise;
 import application.model.enterprise.serivice.EnterpriseService;
@@ -62,6 +63,16 @@ public class AgentServiceImpl implements AgentService {
     @Override
     public void updateApplicationCollapsedApplicants(Application application) {
         applicationService.updateApplicationCollapsedApplicants(application);
+    }
+
+    @Override
+    public boolean finalizeApplication(Application application) {
+        if (applicationService.finalizeApplication(application)) {
+            //add score to agent
+
+            return true;
+        }
+        return false;
     }
 
 

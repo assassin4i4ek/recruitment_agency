@@ -11,4 +11,5 @@ public interface CandidateDao {
     List<Applicant> findApplicantsForApplication(Application application);
     void reorderApplicantsOfApplication(Application application);
     void updateApplicantOfApplicationStage(Application application, Applicant applicant);
+    void deleteApplicantsForApplication(Application application);
 }

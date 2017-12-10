@@ -11,4 +11,5 @@ public interface ApplicationService {
     void reorderApplicantsOfApplication(Application application);
     void updateApplicationCollapsed(Application application);
     void updateApplicationCollapsedApplicants(Application application);
+    boolean finalizeApplication(Application application);
 }

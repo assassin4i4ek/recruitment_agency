@@ -3,6 +3,7 @@ package application.model.application.service;
 import application.model.application.Application;
 import application.model.application.dao.ApplicationDao;
 import application.model.candidate.Applicant;
+import application.model.candidate.ApplicantStage;
 import application.model.candidate.service.CandidateService;
 import application.model.enterprise.serivice.EnterpriseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +56,24 @@ public class ApplicationServiceImpl implements ApplicationService{
     @Override
     public void updateApplicationCollapsedApplicants(Application application) {
         applicationDao.updateApplicationCollapsedApplicants(application);
+    }
+
+    @Override
+    public boolean finalizeApplication(Application application) {
+        int workersRequired = application.getQuantity();
+        int applicantsGotJobCounter = 0;
+        for (Applicant applicant : application.getApplicants()) {
+            if (applicant.getApplicantStage() == ApplicantStage.GOT_JOB) {
+                ++applicantsGotJobCounter;
+            }
+        }
+        if (applicantsGotJobCounter == workersRequired) {
+            if (candidateService.deleteApplicantsForApplication(application)) {
+                applicationDao.deleteApplication(application);
+                return true;
+            }
+        }
+
+        return false;
     }
 }
