@@ -1,5 +1,7 @@
 package application.controllers;
 
+import application.controllers.parameters.ApplicationRequestParameter;
+import application.controllers.parameters.EnterpriseRequestParameter;
 import application.model.agent.Agent;
 import application.model.agent.service.AgentService;
 import application.model.application.Application;
@@ -112,36 +114,6 @@ public class AgentPageController {
             return "/quantityError/wrong-input";
     }
 
-    private class ApplicationRequestParameter {
-        private boolean edit = false;
-        private boolean quantityError = false;
-        private boolean finalizeError = false;
-
-        public boolean isEdit() {
-            return edit;
-        }
-
-        public void setEdit(boolean edit) {
-            this.edit = edit;
-        }
-
-        public boolean isQuantityError() {
-            return quantityError;
-        }
-
-        public void setQuantityError(boolean quantityError) {
-            this.quantityError = quantityError;
-        }
-
-        public boolean isFinalizeError() {
-            return finalizeError;
-        }
-
-        public void setFinalizeError(boolean finalizeError) {
-            this.finalizeError = finalizeError;
-        }
-    }
-
     @PostMapping("/agent/application/{index}/reorderApplicants")
     @ResponseBody
     public void reorderApplicants(HttpServletResponse response,
@@ -169,12 +141,39 @@ public class AgentPageController {
 
     @GetMapping("/agent/application/{index}/enterprise")
     public String getEnterpriseOfApplication(@ModelAttribute(name = "agent") Agent agent,
-                                             @PathVariable("index") int index, Model model) {
-        index = index - 1;
-        if (validateApplicationIndexes(agent.getApplications(), index)) {
-            Enterprise enterprise = agentService.findEnterpriseOfApplication(agent.getApplications().get(index));
+                                             @PathVariable("index") int applicationIndex,
+                                             @RequestParam(name = "edit", required = false) String edit,
+                                             Model model) {
+        applicationIndex = applicationIndex - 1;
+        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+            Enterprise enterprise = agentService.findEnterpriseOfApplication(agent.getApplications().get(applicationIndex));
             model.addAttribute("enterprise", enterprise);
+
+            EnterpriseRequestParameter parameter = new EnterpriseRequestParameter();
+            if (edit != null) {
+                parameter.setEdit(true);
+            }
+            model.addAttribute("param", parameter);
             return "enterprise/index";
+        } else
+            return "error/wrong-input";
+    }
+
+    @PostMapping("/agent/application/{index}/enterprise")
+    public String saveEnterpriseOfApplication(@ModelAttribute(name = "agent") Agent agent,
+                                             @PathVariable("index") int applicationIndex,
+                                             @RequestParam("save") String save,
+                                             @RequestParam("name") String name,
+                                             @RequestParam("email") String email,
+                                             Model model) {
+        applicationIndex = applicationIndex - 1;
+        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+            Enterprise enterprise = agentService.findEnterpriseOfApplication(agent.getApplications().get(applicationIndex));
+            enterprise.setName(name);
+            enterprise.setEmail(email);
+            agentService.updateEnterpriseInfo(enterprise);
+            model.addAttribute("enterprise", enterprise);
+            return "redirect:/agent/application/" + (applicationIndex + 1) + "/enterprise";
         } else
             return "error/wrong-input";
     }

@@ -33,6 +33,12 @@ public class EnterpriseDaoImpl implements EnterpriseDao {
         return name != null ? name.get(0) : "";
     }
 
+    @Override
+    public void updateEnterpriseInfo(Enterprise enterprise) {
+        String sql = "UPDATE enterprises_info SET name=?, email=? WHERE user_id=?";
+        jdbcTemplate.update(sql, enterprise.getName(), enterprise.getEmail(), enterprise.getId());
+    }
+
     private class EnterpriseMapper implements RowMapper<Enterprise> {
         @Override
         public Enterprise mapRow(ResultSet resultSet, int i) throws SQLException {

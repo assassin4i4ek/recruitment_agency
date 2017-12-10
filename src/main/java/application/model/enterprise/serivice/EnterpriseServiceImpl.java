@@ -19,4 +19,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     public String findEnterpriseNameById(int enterpriseId) {
         return enterpriseDao.findEnterpriseNameById(enterpriseId);
     }
+
+    @Override
+    public void updateEnterpriseInfo(Enterprise enterprise) {
+        enterpriseDao.updateEnterpriseInfo(enterprise);
+    }
 }

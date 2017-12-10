@@ -8,6 +8,7 @@
 <body>
 <div layout:fragment="content" th:remove="tag">
     <h1 th:text="${candidate.name}"></h1>
+    <h2 th:text="${candidate.email}"></h2>
     <p><a href="/" th:href="@{/}">Back to home page</a></p>
 </div>
 </body>

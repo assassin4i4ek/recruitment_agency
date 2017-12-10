@@ -15,4 +15,6 @@ public interface AgentService {
     void updateApplicationCollapsed(Application application);
     void updateApplicationCollapsedApplicants(Application application);
     boolean finalizeApplication(Application application);
+
+    void updateEnterpriseInfo(Enterprise enterprise);
 }

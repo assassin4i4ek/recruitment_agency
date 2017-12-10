@@ -75,5 +75,10 @@ public class AgentServiceImpl implements AgentService {
         return false;
     }
 
+    @Override
+    public void updateEnterpriseInfo(Enterprise enterprise) {
+        enterpriseService.updateEnterpriseInfo(enterprise);
+    }
+
 
 }
