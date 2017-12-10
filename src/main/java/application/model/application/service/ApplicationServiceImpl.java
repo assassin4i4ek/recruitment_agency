@@ -1,5 +1,6 @@
 package application.model.application.service;
 
+import application.model.agent.service.AgentService;
 import application.model.application.Application;
 import application.model.application.ApplicationRegistrationForm;
 import application.model.application.dao.ApplicationDao;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ApplicationServiceImpl implements ApplicationService{
@@ -23,6 +25,9 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     @Autowired
     private EnterpriseService enterpriseService;
+
+    @Autowired
+    private AgentService agentService;
 
     @Override
     public List<Application> findApplicationsByAgentId(int agentId) {
@@ -80,6 +85,29 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     @Override
     public void registerNewApplication(User user, ApplicationRegistrationForm form) {
-        applicationDao.createNewApplication(user, form);
+        if (validateProfession(form) && validateQuantity(form)) {
+            int agentId = agentService.getAppropriateAgentIdForApplication(form);
+            applicationDao.createNewApplication(user, form, agentId);
+        }
+    }
+
+    @Override
+    public boolean validateProfession(ApplicationRegistrationForm applicationRegistrationForm) {
+        return applicationDao.validateProfession(applicationRegistrationForm.getProfession());
+    }
+
+    @Override
+    public Map<Integer, Long> listAgentIdsAndApplicationAmounts() {
+        return applicationDao.listAgentIdsAndApplicationAmounts();
+    }
+
+    @Override
+    public boolean validateQuantity(ApplicationRegistrationForm applicationRegistrationForm) {
+        try {
+            short quantity = Short.parseShort(applicationRegistrationForm.getQuantity());
+            return quantity > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

@@ -1,9 +1,11 @@
 package application.model.agent;
 
 import application.model.application.Application;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class Agent {
     private int id;
     private List<Application> applications;

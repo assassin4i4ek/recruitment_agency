@@ -1,11 +1,15 @@
 package application.services;
 
 import application.model.application.Application;
+import application.model.application.ApplicationRegistrationForm;
 import application.model.application.service.ApplicationService;
+import application.model.user.User;
+import application.model.user.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -20,6 +24,9 @@ public class ApplicationServiceTest {
     @Autowired
     private ApplicationService applicationService;
 
+    @Autowired
+    private UserDetailsService userService;
+
     @Test
     public void connected() {
         assertNotNull(applicationService);
@@ -30,13 +37,6 @@ public class ApplicationServiceTest {
         int agentId = 2;
         List<Application> applications = applicationService.findApplicationsByAgentId(agentId);
         assertTrue(applications.size() > 0);
-    }
-
-    @Test
-    public void emptyApplications() {
-        int agentId = 1;
-        List<Application> applications = applicationService.findApplicationsByAgentId(agentId);
-        assertTrue(applications.size() == 0);
     }
 
     @Test
@@ -51,5 +51,16 @@ public class ApplicationServiceTest {
         newApplications = applicationService.findApplicationsByAgentId(agentId);
         for (int i = 0; i < newApplications.size(); ++i)
             assertEquals(newApplications.get(i).getId(), oldApplications.get(i).getId());
+    }
+
+    @Test
+    public void registerNewApplicationTest() {
+        for (int i = 0; i < 3; ++i) {
+            ApplicationRegistrationForm form = new ApplicationRegistrationForm();
+            form.setProfession("System administrator");
+            form.setQuantity("1");
+            User user = (User) userService.loadUserByUsername("e1");
+            applicationService.registerNewApplication(user, form);
+        }
     }
 }

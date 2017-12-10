@@ -12,9 +12,12 @@ import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ApplicationDaoImpl implements ApplicationDao {
@@ -37,7 +40,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
         int agentId = applications.get(0).getAgentId();
         for (int i = 0; i < applications.size(); ++i) {
             String sql = "UPDATE applications SET agent_order=" + i
-                    + " WHERE agent_id=" + agentId;
+                    + " WHERE id=" + applications.get(i).getId();
             jdbcTemplate.update(sql);
         }
     }
@@ -71,9 +74,32 @@ public class ApplicationDaoImpl implements ApplicationDao {
     }
 
     @Override
-    public void createNewApplication(User user, ApplicationRegistrationForm applicationRegistrationForm) {
-        String sql = "INSERT INTO applications(enterprise_id, profession, quantity) VALUE (?,?,?)";
-        jdbcTemplate.update(sql, user.getId(), applicationRegistrationForm.getProfession(), applicationRegistrationForm.getQuantity());
+    public void createNewApplication(User user, ApplicationRegistrationForm form, int agentId) {
+        String sql = "INSERT INTO applications(agent_id, enterprise_id, profession, quantity) VALUE (?,?,?,?)";
+        jdbcTemplate.update(sql, agentId, user.getId(), form.getProfession(), form.getQuantity());
+    }
+
+    @Override
+    public boolean validateProfession(String profession) {
+        String sql = "SELECT profession FROM professions_and_spheres WHERE profession='" + profession + "'";
+        List<String> result = jdbcTemplate.query(sql, (rs, i) -> rs.getString("profession"));
+        return result != null && result.size() > 0;
+    }
+
+    @Override
+    public Map<Integer, Long> listAgentIdsAndApplicationAmounts() {
+        String sql = "SELECT agents_info.user_id AS agent_id, COUNT(applications.id) AS amount FROM agents_info" +
+                " LEFT JOIN applications ON applications.agent_id = agents_info.user_id" +
+                " GROUP BY agents_info.user_id";
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
+        Map<Integer, Long> amountsMap = new HashMap<>(maps.size());
+        for (Map<String, Object> map : maps) {
+            Integer agentId = (Integer) map.get("agent_id");
+            Long amount = (Long) map.get("amount");
+            amountsMap.put(agentId, amount);
+        }
+
+        return amountsMap;
     }
 
     private class ApplicationMapper implements RowMapper<Application> {
@@ -86,20 +112,23 @@ public class ApplicationDaoImpl implements ApplicationDao {
             application.setRegistrationTimestamp(resultSet.getTimestamp("registration_timestamp"));
             application.setProfession(resultSet.getString("profession"));
             application.setQuantity(resultSet.getShort("quantity"));
-            BufferedReader agentNoteReader = new BufferedReader(new InputStreamReader(
-                    resultSet.getBlob("agent_note").getBinaryStream()));
+            Blob agentNoteBlob = resultSet.getBlob("agent_note");
+            if (agentNoteBlob != null) {
+                BufferedReader agentNoteReader = new BufferedReader(new InputStreamReader(
+                        agentNoteBlob.getBinaryStream()));
 
-            StringBuilder stringBuilder = new StringBuilder();
-            try {
-                String line = agentNoteReader.readLine();
-                while (line != null) {
-                    stringBuilder.append(line);
-                    line = agentNoteReader.readLine();
+                StringBuilder stringBuilder = new StringBuilder();
+                try {
+                    String line = agentNoteReader.readLine();
+                    while (line != null) {
+                        stringBuilder.append(line);
+                        line = agentNoteReader.readLine();
+                    }
+                } catch (IOException e) {
+                    throw new SQLException("Error reading notes");
                 }
-            } catch (IOException e) {
-                throw new SQLException("Error reading notes");
+                application.setAgentNote(stringBuilder.toString());
             }
-            application.setAgentNote(stringBuilder.toString());
             application.setAgentCollapsed(resultSet.getBoolean("agent_collapsed"));
             application.setAgentCollapsedApplicants(resultSet.getBoolean("agent_collapsed_applicants"));
             return application;

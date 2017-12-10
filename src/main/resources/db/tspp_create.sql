@@ -14,8 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS agents_info (
 	user_id INT NOT NULL,
     PRIMARY KEY (user_id),
-    CONSTRAINT FK_user_id FOREIGN KEY (user_id)
-        REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS candidates_info (
@@ -23,8 +22,7 @@ CREATE TABLE IF NOT EXISTS candidates_info (
 	email VARCHAR(320) NOT NULL,
     name VARCHAR(256),
     PRIMARY KEY (user_id),
-    CONSTRAINT FK_candidate_id_user_id FOREIGN KEY (user_id)
-        REFERENCES users (id)
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
    
 CREATE TABLE IF NOT EXISTS enterprises_info (
@@ -32,9 +30,19 @@ CREATE TABLE IF NOT EXISTS enterprises_info (
 	email VARCHAR(320) NOT NULL,
     name VARCHAR(256),
     PRIMARY KEY (user_id),
-    CONSTRAINT FK_enterprise_id_user_id FOREIGN KEY (user_id)
-        REFERENCES users (id)
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
+
+CREATE TABLE IF NOT EXISTS spheres(
+                    name VARCHAR(100) NOT NULL,
+                    PRIMARY KEY(name)
+);
+
+CREATE TABLE IF NOT EXISTS professions_and_spheres (
+                                    profession VARCHAR(100) NOT NULL,
+                                    sphere VARCHAR(100) NOT NULL,
+                                    PRIMARY KEY(profession),
+                                    FOREIGN KEY(sphere) REFERENCES spheres(name));           
 
 CREATE TABLE IF NOT EXISTS applications (
 							id INT NOT NULL AUTO_INCREMENT,
@@ -48,8 +56,9 @@ CREATE TABLE IF NOT EXISTS applications (
                             agent_collapsed BOOLEAN DEFAULT FALSE,
                             agent_collapsed_applicants BOOLEAN DEFAULT FALSE,
 							PRIMARY KEY(id),
-							CONSTRAINT FK_applications_enterprise_id FOREIGN KEY(enterprise_id) REFERENCES enterprises_info(user_id),
-                            CONSTRAINT FK_applications_agent_id FOREIGN KEY(agent_id) REFERENCES agents_info(user_id));
+							FOREIGN KEY(enterprise_id) REFERENCES enterprises_info(user_id),
+                            FOREIGN KEY(agent_id) REFERENCES agents_info(user_id),
+                            FOREIGN KEY(profession) REFERENCES professions_and_spheres(profession));
                             
 CREATE TABLE IF NOT EXISTS applicants_for_applications (
 										  id INT NOT NULL AUTO_INCREMENT,
@@ -64,5 +73,56 @@ CREATE TABLE IF NOT EXISTS applicants_for_applications (
 													 'GOT_JOB') DEFAULT 'INTERNAL_INVITED',
                                           applicant_order INT,           
                                           PRIMARY KEY(id),
-                                          CONSTRAINT FK_application_id FOREIGN KEY(application_id) REFERENCES applications(id),
-                                          CONSTRAINT FK_candidate_id FOREIGN KEY(candidate_id) REFERENCES candidates_info(user_id));
+                                          FOREIGN KEY(application_id) REFERENCES applications(id),
+                                          FOREIGN KEY(candidate_id) REFERENCES candidates_info(user_id));
+			
+CREATE TABLE IF NOT EXISTS agents_skills (
+				id INT NOT NULL AUTO_INCREMENT,
+                agent_id INT NOT NULL,
+                sphere VARCHAR(100) NOT NULL,
+                level INT NOT NULL,
+                PRIMARY KEY(id),
+                FOREIGN KEY(agent_id) REFERENCES agents_info(user_id),
+                FOREIGN KEY(sphere) REFERENCES spheres(name));          
+     
+     
+DELIMITER $$
+CREATE TRIGGER init_agent_skills AFTER INSERT ON agents_info FOR EACH ROW
+BEGIN
+	DECLARE var_sphere VARCHAR(100);
+	DECLARE stop_loop INT DEFAULT 0;
+    DECLARE sphere_cursor CURSOR FOR SELECT name FROM spheres;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET stop_loop = 1; 
+    
+    OPEN sphere_cursor;
+    loop_spheres: LOOP
+		FETCH sphere_cursor INTO var_sphere;
+
+		IF stop_loop THEN
+			LEAVE loop_spheres;
+        END IF;
+        
+		INSERT INTO agents_skills(agent_id, sphere, level) VALUE (NEW.user_id, var_sphere, 0);
+    END LOOP;
+    CLOSE sphere_cursor;
+END$$                
+
+CREATE TRIGGER init_new_sphere AFTER INSERT ON spheres FOR EACH ROW
+BEGIN
+	DECLARE agent_id_var INT;
+	DECLARE stop_loop INT DEFAULT 0;
+    DECLARE agents_cursor CURSOR FOR SELECT user_id FROM agents_info;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET stop_loop = 1; 
+    
+    OPEN agents_cursor;
+    loop_spheres: LOOP
+		FETCH agents_cursor INTO agent_id_var;
+
+		IF stop_loop THEN
+			LEAVE loop_spheres;
+        END IF;
+        
+		INSERT INTO agents_skills(agent_id, sphere, level) VALUE (agent_id_var, NEW.name, 0);
+    END LOOP;
+    CLOSE agents_cursor;
+END$$      

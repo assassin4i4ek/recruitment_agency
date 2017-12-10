@@ -1,5 +1,21 @@
 USE recruitment_agency;
 
+INSERT INTO spheres VALUES
+('Information and communication'), 
+('Jurisprudence');
+
+INSERT INTO professions_and_spheres
+(`profession`,`sphere`) VALUES
+('System administrator','Information and communication'),
+('Database administrator','Information and communication'),
+('Software developer', 'Information and communication'),
+('Quality assurance', 'Information and communication'),
+('Lawyer','Jurisprudence'),
+('Secretary General','Jurisprudence'),
+('Detective','Jurisprudence'),
+('Policeman','Jurisprudence'),
+('Notary','Jurisprudence');
+
 INSERT INTO `recruitment_agency`.`users` (`username`, `password`, `role`) VALUES
 ('a1', 'a1', 'ROLE_AGENT'), 
 ('a2', 'a2', 'ROLE_AGENT'),
@@ -10,8 +26,7 @@ INSERT INTO `recruitment_agency`.`users` (`username`, `password`, `role`) VALUES
 
 SELECT * FROM users;
 
-INSERT INTO `recruitment_agency`.`agents_info`(`user_id`) VALUES (1);
-INSERT INTO `recruitment_agency`.`agents_info`(`user_id`) VALUES (2);
+INSERT INTO `recruitment_agency`.`agents_info`(`user_id`) VALUES (1),(2);
 
 SELECT * FROM agents_info;
 
@@ -27,14 +42,16 @@ SELECT * FROM candidates_info;
 
 INSERT INTO `recruitment_agency`.`applications`(`enterprise_id`,`agent_id`,`profession`,`quantity`,`agent_note`)
 VALUES 
- (4,2,'first',2,'this is a first test note of second agent.'),
- (4,2,'second',2,'this is a second test note of second agent.'),
- (4,2,'third',2,'this is a third test note of second agent.');
+ (4,2,'Lawyer',2,'this is a first test note of second agent.'),
+ (4,2,'Software developer',2,'this is a second test note of second agent.'),
+ (4,2,'Notary',2,'this is a third test note of second agent.');
 
 SELECT * FROM applications;
-
 
 INSERT INTO `recruitment_agency`.`applicants_for_applications` (`application_id`,`candidate_id`) 
 VALUES(2, 5), (2, 6), (3, 5), (3, 6);
 
 SELECT * FROM applicants_for_applications;
+
+SELECT * FROM agents_skills;
+

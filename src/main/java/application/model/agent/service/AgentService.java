@@ -2,6 +2,7 @@ package application.model.agent.service;
 
 import application.model.agent.Agent;
 import application.model.application.Application;
+import application.model.application.ApplicationRegistrationForm;
 import application.model.candidate.Applicant;
 import application.model.candidate.Candidate;
 import application.model.enterprise.Enterprise;
@@ -18,4 +19,5 @@ public interface AgentService {
     boolean finalizeApplication(Application application);
     void updateEnterpriseInfo(Enterprise enterprise);
     void updateCandidateInfo(Candidate candidate);
+    int getAppropriateAgentIdForApplication(ApplicationRegistrationForm form);
 }
