@@ -77,9 +77,7 @@ public class AgentController {
 
         if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
             Application application = agent.getApplications().get(applicationIndex);
-            Enterprise enterprise = agentService.findEnterpriseOfApplication(application);
             model.addAttribute("app", application);
-            model.addAttribute("enterprise", enterprise);
 
             ApplicationRequestParameter parameter = new ApplicationRequestParameter();
             if (edit != null)
@@ -161,7 +159,7 @@ public class AgentController {
                                              Model model) {
         applicationIndex = applicationIndex - 1;
         if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
-            Enterprise enterprise = agentService.findEnterpriseOfApplication(agent.getApplications().get(applicationIndex));
+            Enterprise enterprise = agent.getApplications().get(applicationIndex).getEnterprise();
             model.addAttribute("enterprise", enterprise);
 
             EnterpriseRequestParameter parameter = new EnterpriseRequestParameter();
@@ -180,14 +178,15 @@ public class AgentController {
                                              @RequestParam("save") String save,
                                              @RequestParam("name") String name,
                                              @RequestParam("email") String email,
+                                             @RequestParam("contactPersonName") String contactPersonName,
                                              Model model) {
         applicationIndex = applicationIndex - 1;
         if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
-            Enterprise enterprise = agentService.findEnterpriseOfApplication(agent.getApplications().get(applicationIndex));
+            Enterprise enterprise = agent.getApplications().get(applicationIndex).getEnterprise();
             enterprise.setName(name);
             enterprise.setEmail(email);
+            enterprise.setContactPersonName(contactPersonName);
             agentService.updateEnterpriseInfo(enterprise);
-            model.addAttribute("enterprise", enterprise);
             return "redirect:/agent/application/" + (applicationIndex + 1) + "/enterprise";
         } else
             return "error/wrong-input";
@@ -337,7 +336,6 @@ public class AgentController {
             model.addAttribute("possibleApplicants", possibleApplicants);
             model.addAttribute("app", application);
             model.addAttribute("applicationIndex", applicationIndex);
-            model.addAttribute("enterprise", agentService.findEnterpriseOfApplication(application));
             return "/agent/application/index";
         }
         else
