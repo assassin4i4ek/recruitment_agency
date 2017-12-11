@@ -51,4 +51,9 @@ public class CandidateServiceImpl implements CandidateService {
     public void registerNewCandidate(User user, CandidateRegistrationForm form) {
         candidateDao.createNewCandidate(user, form);
     }
+
+    @Override
+    public List<Applicant> getPossibleApplicants(Application application) {
+        return null;
+    }
 }

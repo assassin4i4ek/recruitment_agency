@@ -120,5 +120,10 @@ public class AgentServiceImpl implements AgentService {
         agent.setApplications(applicationService.findApplicationsByAgentId(agent.getId()));
     }
 
+    @Override
+    public List<Applicant> getPossibleApplicants(Application application) {
+        return candidateService.getPossibleApplicants(application);
+    }
+
 
 }

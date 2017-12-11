@@ -21,6 +21,12 @@ CREATE TABLE IF NOT EXISTS candidates_info (
     user_id INT NOT NULL,
 	email VARCHAR(320) NOT NULL,
     name VARCHAR(256),
+    
+    employment_type ENUM('NOT_IMPORTANT', 'FULL_TIME', 'PART_TIME') NOT NULL DEFAULT 'NOT_IMPORTANT',
+	required_sallary_cu_per_month INT,
+    experience TEXT,
+    skills TEXT,
+
     PRIMARY KEY (user_id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
@@ -29,6 +35,9 @@ CREATE TABLE IF NOT EXISTS enterprises_info (
     user_id INT NOT NULL,
 	email VARCHAR(320) NOT NULL,
     name VARCHAR(256),
+    
+    contact_person_name VARCHAR(100),
+    
     PRIMARY KEY (user_id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
@@ -49,8 +58,13 @@ CREATE TABLE IF NOT EXISTS applications (
 							enterprise_id INT NOT NULL,
                             agent_id INT,
 							registration_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-							profession VARCHAR(100) NOT NULL,
 							quantity INT(3) DEFAULT 1,
+                            
+                            profession VARCHAR(100) NOT NULL, /*сопостовлять с опытом кандидата*/
+                            employment_type ENUM('FULL_TIME', 'PART_TIME') NOT NULL, /*сопостовлять с указанной занятостью кандидата*/
+                            salary_cu_per_months INT, /*сопостовлять с желаемой зарплатой кандидата?*/
+                            demanded_skills TEXT, /*сопостовлять с указанными навыками кандидата*/
+                            
 							agent_note TEXT,
                             agent_order INT,
                             agent_collapsed BOOLEAN DEFAULT FALSE,

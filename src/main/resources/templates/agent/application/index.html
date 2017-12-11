@@ -58,6 +58,23 @@
                 </ul>
             </div>
         </div>
+        <div th:if="${possibleApplicants != null}">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <a data-toggle="collapse" href="#candidates-wrapper">possible applicants</a>
+                </div>
+            </div>
+            <div id="candidates-wrapper" aria-expanded="true" class="collapse in">
+                <ul>
+                    <li th:each="candidate, candidateStatus : ${possibleApplicants}">
+                        <div th:replace="agent/candidate_item :: candidate"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <form th:if="${possibleApplicants == null}" th:action="@{/agent/application/} + (${applicationIndex} + 1) + '/possibleApplicants'" method="GET">
+            <input type="submit" value="Get possible applicants">
+        </form>
         <form th:action="@{/agent/application/} + (${applicationIndex} + 1) + '/finalizeApplication'" method="POST">
             <input type="submit" value="Finalize">
         </form>

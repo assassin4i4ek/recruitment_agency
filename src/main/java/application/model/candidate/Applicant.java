@@ -1,7 +1,7 @@
 package application.model.candidate;
 
 public class Applicant extends Candidate {
-    private ApplicantStage applicantStage;
+    private ApplicantStage applicantStage = ApplicantStage.NOT_CONSIDERED;
 
     public ApplicantStage getApplicantStage() {
         return applicantStage;

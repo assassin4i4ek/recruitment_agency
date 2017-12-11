@@ -7,6 +7,8 @@ import application.model.candidate.Applicant;
 import application.model.candidate.Candidate;
 import application.model.enterprise.Enterprise;
 
+import java.util.List;
+
 public interface AgentService {
     Agent findAgentById(int agentId);
     void reorderApplicationsOfAgent(Agent agent);
@@ -22,4 +24,5 @@ public interface AgentService {
     int getAppropriateAgentIdForApplication(ApplicationRegistrationForm form);
     boolean validateProfession(String profession);
     void checkForUpdates(Agent agent);
+    List<Applicant> getPossibleApplicants(Application application);
 }

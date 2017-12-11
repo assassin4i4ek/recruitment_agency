@@ -22,11 +22,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @SessionAttributes("agent")
-public class AgentPageController {
+public class AgentController {
     @Autowired
     private AgentService agentService;
 
@@ -322,5 +323,24 @@ public class AgentPageController {
         }
         else
             return "redirect:/error/wrong-input";
+    }
+
+    @GetMapping("/agent/application/{index}/possibleApplicants")
+    public String getPossibleApplicants(@ModelAttribute("agent") Agent agent,
+                                        @PathVariable("index") int applicationIndex,
+                                        Model model) {
+        applicationIndex = applicationIndex - 1;
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+            Application application = agent.getApplications().get(applicationIndex);
+            List<Applicant> possibleApplicants = agentService.getPossibleApplicants(application);
+
+            model.addAttribute("possibleApplicants", possibleApplicants);
+            model.addAttribute("app", application);
+            model.addAttribute("applicationIndex", applicationIndex);
+            model.addAttribute("enterprise", agentService.findEnterpriseOfApplication(application));
+            return "/agent/application/index";
+        }
+        else
+            return "/error/wrong-input";
     }
 }
