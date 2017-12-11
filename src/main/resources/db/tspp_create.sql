@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS candidates_info (
    
 CREATE TABLE IF NOT EXISTS enterprises_info (
     user_id INT NOT NULL,
-	email VARCHAR(320) NOT NULL,
     name VARCHAR(256),
+	email VARCHAR(320) NOT NULL,
     
     contact_person_name VARCHAR(100),
     

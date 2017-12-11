@@ -17,7 +17,8 @@
     <div th:if="${param.finalizeError}" class="alert alert-danger">
         Application doesn't meet requirements.
     </div>
-    <a th:href="@{/agent/application/} + (${applicationIndex} + 1) + '/enterprise'" th:text="${enterprise.name}"></a>
+    <a th:href="@{/agent/application/} + (${applicationIndex} + 1) + '/enterprise'" th:text="${app.enterprise.name}"></a>
+    <p th:text="${app.enterprise.contactPersonName}"></p>
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" th:method="POST">
         <input type="text" th:name="profession" th:value="${app.profession}">
         <input type="text" th:name="quantity" th:value="${app.quantity}">
@@ -100,9 +101,9 @@
                 },
                 start: function(event, ui) {
                     $("#prevIndex").val(ui.item.index())
-                }
+                },
+                handle: '.sortable handle'
 		    });
-            $(listId).disableSelection();
             $(formId).on('submit', function() {
                         $.ajax({
                             url: mUrl,

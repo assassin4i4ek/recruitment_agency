@@ -7,16 +7,19 @@
 </head>
 <body>
 <div th:fragment="application">
+    <span class="sortable-handle">:::::::::::::::::::::::::::::::::::::::::</span>
     <div class="panel-heading">
         <a th:href="@{/agent/application/} + (${status.index} + 1)" th:text="${app.profession} + '(' + ${app.quantity} + ')'" ></a>
-        <a th:href="@{/agent/application/} + (${status.index} + 1) + '/enterprise'" th:text="${app.enterpriseName}"></a>
+        <a th:href="@{/agent/application/} + (${status.index} + 1) + '/enterprise'" th:text="${app.enterprise.name}"></a>
         <div class="panel-title">
             <a data-toggle="collapse" th:href="'#application-wrapper-' + (${status.index} + 1)">hide</a>
         </div>
     </div>
     <div th:id="'application-wrapper-' + (${status.index} + 1)" th:aria-expanded="!${app.agentCollapsed}"
                                                 th:class="'collapse' + (${app.agentCollapsed} ? '' : ' in')">
-       <p th:text="${app.agentNote}"></p>
+        <p th:text="${app.enterprise.email}"></p>
+        <p th:text="${app.enterprise.contactPersonName}"></p>
+        <p th:text="${app.agentNote}"></p>
         <a th:text="Edit" th:href="@{/agent/application/} + (${status.index} + 1) + '?edit'"></a>
         <ul th:id="'applicants' + (${status.index} + 1)">
             <li th:each="candidate, candidateStatus : ${app.applicants}"  th:if="!(${candidate.applicantStage.name().contains('FAILED')})">
@@ -46,9 +49,9 @@
                     },
                     start: function(event, ui) {
                         $(prevIndexId).val(ui.item.index())
-                    }
+                    },
+                    handle: '.sortable-handle'
                 });
-                $(listId).disableSelection();
                 $(formId).on('submit', function() {
                             $.ajax({
                                 url: mUrl,

@@ -34,9 +34,10 @@
                 },
                 start: function(event, ui) {
                     $('#prevIndex').val(ui.item.index())
-                }
+                },
+                handle: ' .sortable-handle'
             });
-            $( "#apps" ).disableSelection();
+
             $('#reorderApplications').on('submit', function() {
                         $.ajax({
                             url: "/agent/reorderApplications",

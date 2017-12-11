@@ -167,7 +167,7 @@ public class AgentController {
                 parameter.setEdit(true);
             }
             model.addAttribute("param", parameter);
-            return "enterprise/index";
+            return "agent/enterprise/index";
         } else
             return "error/wrong-input";
     }

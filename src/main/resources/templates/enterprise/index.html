@@ -9,7 +9,7 @@
 <div layout:fragment="content" th:remove="tag">
     <div th:if="!${param.edit}">
         <h1 th:text="${enterprise.name}"></h1>
-        <h2 th:text="${enterprise.email}"></h2>
+        <h2 th:text="${enterprise.contactPersonName}"></h2>
         <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
         <a th:href="@{/enterprise/newApplication}">New Application</a>
         <div class="panel-heading">
@@ -17,7 +17,7 @@
                 <a data-toggle="collapse" href="#apps-wrapper">Applications</a>
             </h4>
         </div>
-        <div id="apps-wrapper" aria-expanded="true" class="collapse in">
+        <div th:if="${param.showApplications}" id="apps-wrapper" aria-expanded="true" class="collapse in">
             <ul th:id="apps">
                 <li th:each="app,status : ${enterprise.applications}">
                     <th:block th:replace="enterprise/application_item :: application"></th:block>
@@ -37,9 +37,9 @@
                     },
                     start: function(event, ui) {
                         $('#prevIndex').val(ui.item.index())
-                    }
+                    },
+                    handle: '.sortable-handle'
                 });
-                $( "#apps" ).disableSelection();
                 $('#reorderApplications').on('submit', function() {
                             $.ajax({
                                 url: "/enterprise/reorderApplications",
@@ -54,6 +54,7 @@
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" method="POST">
         <input type="text" th:name="name" th:value="${enterprise.name}">
         <input type="text" th:name="email" th:value="${enterprise.email}">
+        <input type="text" th:name="contactPersonName" th:value="${enterprise.contactPersonName}">
         <input type="submit" value="Save">
     </form>
     <p><a href="/" th:href="@{/}">Back to home page</a></p>
