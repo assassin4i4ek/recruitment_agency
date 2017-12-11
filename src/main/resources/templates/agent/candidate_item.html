@@ -7,6 +7,7 @@
 </head>
 <body>
 <div th:fragment="candidate" th:with="appIndex = ${(status == null ? applicationIndex : status.index)}">
+    <span class="sortable-handle">:::::::::::::::::::::::::::::::::::::::::</span>
     <a th:href="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
     <p th:text="${candidate.email}"></p>
     <div th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'formWrapper'">

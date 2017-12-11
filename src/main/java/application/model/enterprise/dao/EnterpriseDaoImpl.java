@@ -30,14 +30,14 @@ public class EnterpriseDaoImpl implements EnterpriseDao {
 
     @Override
     public void updateEnterpriseInfo(Enterprise enterprise) {
-        String sql = "UPDATE enterprises_info SET name=?, email=? WHERE user_id=?";
-        jdbcTemplate.update(sql, enterprise.getName(), enterprise.getEmail(), enterprise.getId());
+        String sql = "UPDATE enterprises_info SET name=?, email=?, contact_person_name=? WHERE user_id=?";
+        jdbcTemplate.update(sql, enterprise.getName(), enterprise.getEmail(), enterprise.getContactPersonName(), enterprise.getId());
     }
 
     @Override
     public void createNewEnterprise(User user, EnterpriseRegistrationForm form) {
-        String sql = "INSERT INTO enterprises_info(user_id, name, email) VALUE (?,?,?)";
-        jdbcTemplate.update(sql, user.getId(), form.getName(), form.getEmail());
+        String sql = "INSERT INTO enterprises_info(user_id, name, email, contact_person_name) VALUE (?,?,?,?)";
+        jdbcTemplate.update(sql, user.getId(), form.getName(), form.getEmail(), form.getContactPersonName());
     }
 
     private class EnterpriseMapper implements RowMapper<Enterprise> {

@@ -1,9 +1,15 @@
 package application.model.candidate;
 
+import application.model.application.EmploymentType;
+
 public class Candidate {
     private int id;
     private String name;
     private String email;
+    private int requiredSalaryCuPerMonth;
+    private EmploymentType employmentType;
+    private String experience;
+    private String skills;
 
     public int getId() {
         return id;
@@ -27,5 +33,37 @@ public class Candidate {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getRequiredSalaryCuPerMonth() {
+        return requiredSalaryCuPerMonth;
+    }
+
+    public void setRequiredSalaryCuPerMonth(int requiredSalaryCuPerMonth) {
+        this.requiredSalaryCuPerMonth = requiredSalaryCuPerMonth;
+    }
+
+    public EmploymentType getEmploymentType() {
+        return employmentType;
+    }
+
+    public void setEmploymentType(EmploymentType employmentType) {
+        this.employmentType = employmentType;
+    }
+
+    public String getExperience() {
+        return experience;
+    }
+
+    public void setExperience(String experience) {
+        this.experience = experience;
+    }
+
+    public String getSkills() {
+        return skills;
+    }
+
+    public void setSkills(String skills) {
+        this.skills = skills;
     }
 }

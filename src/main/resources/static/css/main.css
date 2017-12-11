@@ -13,6 +13,10 @@ footer p {
     padding: 15px;
 }
 
+ul {
+  list-style-type: none;
+}
+
 ul li {
     background-color: #FFFFFF;
 }
