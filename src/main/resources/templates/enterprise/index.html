@@ -11,6 +11,44 @@
         <h1 th:text="${enterprise.name}"></h1>
         <h2 th:text="${enterprise.email}"></h2>
         <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" href="#apps-wrapper">Applications</a>
+            </h4>
+        </div>
+        <div id="apps-wrapper" aria-expanded="true" class="collapse in">
+            <ul th:id="apps">
+                <li th:each="app,status : ${enterprise.applications}">
+                    <th:block th:replace="enterprise/application_item :: application"></th:block>
+                </li>
+            </ul>
+        </div>
+        <form id="reorderApplications" action="/enterprise/reorderApplications" method="POST">
+            <input type="hidden" id="prevIndex" name="prevIndex" value="0"/>
+            <input type="hidden" id="newIndex" name="newIndex" value="0"/>
+        </form>
+        <script>
+            $(function() {
+                $( "#apps" ).sortable({
+                    update: function(event, ui) {
+                        $('#newIndex').val(ui.item.index());
+                        $('#reorderApplications').submit();
+                    },
+                    start: function(event, ui) {
+                        $('#prevIndex').val(ui.item.index())
+                    }
+                });
+                $( "#apps" ).disableSelection();
+                $('#reorderApplications').on('submit', function() {
+                            $.ajax({
+                                url: "/enterprise/reorderApplications",
+                                type: "POST",
+                                data: $('#reorderApplications').serialize()
+                            });
+                            return false;
+                        });
+            });
+        </script>
     </div>
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" method="POST">
         <input type="text" th:name="name" th:value="${enterprise.name}">

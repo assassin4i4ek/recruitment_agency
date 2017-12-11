@@ -11,6 +11,9 @@
     <div th:if="${param.quantityError}" class="alert alert-danger">
         Invalid quantity.
     </div>
+    <div th:if="${param.professionError}" class="alert alert-danger">
+        Invalid profession.
+    </div>
     <div th:if="${param.finalizeError}" class="alert alert-danger">
         Application doesn't meet requirements.
     </div>

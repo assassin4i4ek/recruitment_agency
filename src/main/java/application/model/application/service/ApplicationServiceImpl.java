@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ApplicationServiceImpl implements ApplicationService{
+public class ApplicationServiceImpl implements ApplicationService {
     @Autowired
     private ApplicationDao applicationDao;
 
@@ -45,8 +45,8 @@ public class ApplicationServiceImpl implements ApplicationService{
     }
 
     @Override
-    public void updateApplicationInfo(Application application) {
-        applicationDao.updateApplication(application);
+    public void updateAgentApplicationInfo(Application application) {
+        applicationDao.updateAgentApplication(application);
     }
 
     @Override
@@ -55,8 +55,8 @@ public class ApplicationServiceImpl implements ApplicationService{
     }
 
     @Override
-    public void updateApplicationCollapsed(Application application) {
-        applicationDao.updateApplicationCollapsed(application);
+    public void updateApplicationAgentCollapsed(Application application) {
+        applicationDao.updateApplicationAgentCollapsed(application);
     }
 
     @Override
@@ -85,15 +85,35 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     @Override
     public void registerNewApplication(User user, ApplicationRegistrationForm form) {
-        if (validateProfession(form) && validateQuantity(form)) {
+        if (validateProfession(form.getProfession()) && validateQuantity(form.getQuantity())) {
             int agentId = agentService.getAppropriateAgentIdForApplication(form);
             applicationDao.createNewApplication(user, form, agentId);
         }
     }
 
     @Override
-    public boolean validateProfession(ApplicationRegistrationForm applicationRegistrationForm) {
-        return applicationDao.validateProfession(applicationRegistrationForm.getProfession());
+    public boolean validateProfession(String profession) {
+        return applicationDao.validateProfession(profession);
+    }
+
+    @Override
+    public List<Application> findApplicationsByEnterpriseId(int enterpriseId) {
+        return applicationDao.findApplicationsByEnterpriseId(enterpriseId);
+    }
+
+    @Override
+    public void reorderApplicationsOfEnterprise(List<Application> applications) {
+        applicationDao.reorderApplicationsOfEnterprise(applications);
+    }
+
+    @Override
+    public void updateEnterpriseApplicationInfo(Application application) {
+        applicationDao.updateEnterpriseApplication(application);
+    }
+
+    @Override
+    public void updateApplicationEnterpriseCollapsed(Application application) {
+        applicationDao.updateApplicationEnterpriseCollapsed(application);
     }
 
     @Override
@@ -102,10 +122,10 @@ public class ApplicationServiceImpl implements ApplicationService{
     }
 
     @Override
-    public boolean validateQuantity(ApplicationRegistrationForm applicationRegistrationForm) {
+    public boolean validateQuantity(String quantity) {
         try {
-            short quantity = Short.parseShort(applicationRegistrationForm.getQuantity());
-            return quantity > 0;
+            short quantityVal = Short.parseShort(quantity);
+            return quantityVal > 0;
         } catch (NumberFormatException e) {
             return false;
         }

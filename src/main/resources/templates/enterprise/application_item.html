@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Secured</title>
+</head>
+<body>
+<div th:fragment="application">
+    <div class="panel-heading">
+        <p th:text="${app.profession} + '(' + ${app.quantity} + ')'" ></p>
+        <div class="panel-title">
+            <a data-toggle="collapse" th:href="'#application-wrapper-' + (${status.index} + 1)">hide</a>
+        </div>
+    </div>
+    <div th:id="'application-wrapper-' + (${status.index} + 1)" th:aria-expanded="!${app.enterpriseCollapsed}"
+                                                th:class="'collapse' + (${app.enterpriseCollapsed} ? '' : ' in')">
+        <a th:text="Edit" th:href="@{/enterprise/application/} + (${status.index} + 1) + '?edit'"></a>
+        <script th:inline="javascript">
+            $(function(){
+                var applicationId = /*[['#application-wrapper-' + (${status.index} + 1)]]*/;
+                var mUrl = /*[['/enterprise/application/' + (${status.index} + 1) + '/enterpriseCollapse']]*/;
+                $(applicationId).on('hidden.bs.collapse', function() {
+                    $.ajax({
+                        url: mUrl,
+                        type: "POST",
+                        data: "collapsed=1",
+                    });
+                });
+                $(applicationId).on('shown.bs.collapse', function() {
+                    $.ajax({
+                        url: mUrl,
+                        type: "POST",
+                        data: "collapsed=0",
+                    });
+                });
+            });
+        </script>
+    </div>
+</div>
+</body>
+</html>

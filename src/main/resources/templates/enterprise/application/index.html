@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Secured</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <h1>This is a secured Application page!</h1>
+    <div th:if="${param.quantityError}" class="alert alert-danger">
+        Invalid quantity.
+    </div>
+    <div th:if="${param.professionError}" class="alert alert-danger">
+        Invalid profession.
+    </div>
+    <div th:if="${param.finalizeError}" class="alert alert-danger">
+        Application doesn't meet requirements.
+    </div>
+    <form th:action="@{__${#httpServletRequest.requestURI}__?save}" th:method="POST">
+        <input type="text" th:name="profession" th:value="${app.profession}">
+        <input type="text" th:name="quantity" th:value="${app.quantity}">
+        <input type="submit" value="Save">
+    </form>
+    </div>
+    <p><a href="/" th:href="@{/}">Back to home page</a></p>
+</div>
+
+</body>
+</html>

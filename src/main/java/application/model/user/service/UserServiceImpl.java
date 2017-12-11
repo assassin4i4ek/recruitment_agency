@@ -70,12 +70,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public boolean validateApplicationProfession(ApplicationRegistrationForm applicationRegistrationForm) {
         return applicationRegistrationForm.getProfession().isEmpty() ||
-                applicationService.validateProfession(applicationRegistrationForm);
+                applicationService.validateProfession(applicationRegistrationForm.getProfession());
     }
 
     @Override
     public boolean validateApplicationQuantity(ApplicationRegistrationForm applicationRegistrationForm) {
-        return applicationService.validateQuantity(applicationRegistrationForm);
+        return applicationService.validateQuantity(applicationRegistrationForm.getQuantity());
     }
 
 

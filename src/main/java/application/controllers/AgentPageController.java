@@ -30,6 +30,9 @@ public class AgentPageController {
     @Autowired
     private AgentService agentService;
 
+    @Autowired
+    private IndexValidator indexValidator;
+
     @ModelAttribute("agent")
     private Agent agent(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -37,7 +40,8 @@ public class AgentPageController {
     }
 
     @GetMapping("/agent")
-    public String agent() {
+    public String agent(@ModelAttribute(name = "agent") Agent agent) {
+        agentService.checkForUpdates(agent);
         return "/agent/index";
     }
 
@@ -47,7 +51,7 @@ public class AgentPageController {
                                     @ModelAttribute(name = "agent") Agent agent,
                                     @RequestParam(value = "prevIndex") int prevIndex,
                                     @RequestParam(value = "newIndex") int newIndex) {
-        if (validateApplicationIndexes(agent.getApplications(), prevIndex, newIndex)) {
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), prevIndex, newIndex)) {
             Application app1 = agent.getApplications().remove(prevIndex);
             agent.getApplications().add(newIndex, app1);
             agentService.reorderApplicationsOfAgent(agent);
@@ -65,11 +69,12 @@ public class AgentPageController {
                                  @PathVariable("index") int applicationIndex,
                                  @RequestParam(name = "edit", required = false) String edit,
                                  @RequestParam(name = "quantityError", required = false) String quantityError,
+                                 @RequestParam(name = "professionError", required = false) String professionError,
                                  @RequestParam(name = "finalizeError", required = false) String finalizeError,
                                  Model model) {
         applicationIndex = applicationIndex - 1;
 
-        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
             Application application = agent.getApplications().get(applicationIndex);
             Enterprise enterprise = agentService.findEnterpriseOfApplication(application);
             model.addAttribute("app", application);
@@ -82,6 +87,8 @@ public class AgentPageController {
                 parameter.setQuantityError(true);
             if (finalizeError != null)
                 parameter.setFinalizeError(true);
+            if (professionError != null)
+                parameter.setProfessionError(true);
             model.addAttribute("param", parameter);
             model.addAttribute("applicationIndex", applicationIndex);
             return "/agent/application/index";
@@ -98,9 +105,8 @@ public class AgentPageController {
                                   @RequestParam("quantity") String quantity,
                                   @RequestParam("agentNote") String agentNote) {
         applicationIndex = applicationIndex - 1;
-        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
             Application application = agent.getApplications().get(applicationIndex);
-            application.setProfession(profession);
             String isError = "";
             try {
                 short shortQuantity = Short.parseShort(quantity);
@@ -108,12 +114,18 @@ public class AgentPageController {
             } catch (NumberFormatException e) {
                 isError = "?edit&quantityError";
             }
+            if (agentService.validateProfession(profession)) {
+                application.setProfession(profession);
+            }
+            else {
+                isError += "&professionError";
+            }
             application.setAgentNote(agentNote);
             agentService.updateApplicationInfo(application);
             return "redirect:/agent/application/" + (applicationIndex + 1) + isError;
         }
         else
-            return "/quantityError/wrong-input";
+            return "/error/wrong-input";
     }
 
     @PostMapping("/agent/application/{index}/reorderApplicants")
@@ -124,8 +136,8 @@ public class AgentPageController {
                                   @RequestParam("prevIndex") int prevCandidateIndex,
                                   @RequestParam("newIndex") int newCandidateIndex) {
         applicationIndex = applicationIndex - 1;
-        if (validateApplicationIndexes(agent.getApplications(), applicationIndex) &&
-                validateApplicantsIndexes(agent.getApplications().get(applicationIndex).getApplicants(),
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex) &&
+                indexValidator.validateApplicantsIndexes(agent.getApplications().get(applicationIndex).getApplicants(),
                         prevCandidateIndex, newCandidateIndex)) {
             Application application = agent.getApplications().get(applicationIndex);
             List<Applicant> applicants = application.getApplicants();
@@ -147,7 +159,7 @@ public class AgentPageController {
                                              @RequestParam(name = "edit", required = false) String edit,
                                              Model model) {
         applicationIndex = applicationIndex - 1;
-        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
             Enterprise enterprise = agentService.findEnterpriseOfApplication(agent.getApplications().get(applicationIndex));
             model.addAttribute("enterprise", enterprise);
 
@@ -169,7 +181,7 @@ public class AgentPageController {
                                              @RequestParam("email") String email,
                                              Model model) {
         applicationIndex = applicationIndex - 1;
-        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
             Enterprise enterprise = agentService.findEnterpriseOfApplication(agent.getApplications().get(applicationIndex));
             enterprise.setName(name);
             enterprise.setEmail(email);
@@ -189,8 +201,8 @@ public class AgentPageController {
         applicationIndex = applicationIndex - 1;
         candidateIndex = candidateIndex - 1;
 
-        if (validateApplicationIndexes(agent.getApplications(), applicationIndex) &&
-                validateApplicantsIndexes(agent.getApplications().get(applicationIndex).getApplicants(),
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex) &&
+                indexValidator.validateApplicantsIndexes(agent.getApplications().get(applicationIndex).getApplicants(),
                         candidateIndex)) {
             Applicant applicant = agent.getApplications().get(applicationIndex).getApplicants().get(candidateIndex);
             model.addAttribute("candidate", applicant);
@@ -215,8 +227,8 @@ public class AgentPageController {
         applicationIndex = applicationIndex - 1;
         candidateIndex = candidateIndex - 1;
 
-        if (validateApplicationIndexes(agent.getApplications(), applicationIndex) &&
-                validateApplicantsIndexes(agent.getApplications().get(applicationIndex).getApplicants(),
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex) &&
+                indexValidator.validateApplicantsIndexes(agent.getApplications().get(applicationIndex).getApplicants(),
                         candidateIndex)) {
             Candidate candidate = agent.getApplications().get(applicationIndex).getApplicants().get(candidateIndex);
             candidate.setName(name);
@@ -238,8 +250,8 @@ public class AgentPageController {
         applicationIndex = applicationIndex - 1;
         candidateIndex = candidateIndex - 1;
 
-        if (validateApplicationIndexes(agent.getApplications(), applicationIndex) &&
-                validateApplicantsIndexes(agent.getApplications().get(applicationIndex).getApplicants(),
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex) &&
+                indexValidator.validateApplicantsIndexes(agent.getApplications().get(applicationIndex).getApplicants(),
                         candidateIndex)) {
             Application application = agent.getApplications().get(applicationIndex);
             Applicant applicant = application.getApplicants().get(candidateIndex);
@@ -254,26 +266,6 @@ public class AgentPageController {
             }
     }
 
-    private boolean validateApplicationIndexes(List<Application> applications, int appIndex) {
-        return 0 <= appIndex && appIndex < applications.size();
-    }
-
-    private boolean validateApplicationIndexes(List<Application> applications, int prevAppIndex, int newAppIndex) {
-        return 0 <= prevAppIndex && prevAppIndex < applications.size() &&
-                0 <= newAppIndex && newAppIndex < applications.size();
-    }
-
-    private boolean validateApplicantsIndexes(List<Applicant> applicants,
-                                    int prevApplicantIndex, int newApplicantIndex) {
-        return 0 <= prevApplicantIndex && prevApplicantIndex < applicants.size() &&
-                0 <= newApplicantIndex && newApplicantIndex < applicants.size();
-    }
-
-    private boolean validateApplicantsIndexes(List<Applicant> applicants,
-                              int applicantIndex) {
-        return 0 <= applicantIndex && applicantIndex < applicants.size();
-    }
-
     @PostMapping("/agent/application/{index}/agentCollapse")
     @ResponseBody
     public void collapseApplication(HttpServletResponse response,
@@ -282,7 +274,7 @@ public class AgentPageController {
                                 @RequestParam("collapsed") boolean collapsed) {
         applicationIndex = applicationIndex - 1;
 
-        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
             Application application = agent.getApplications().get(applicationIndex);
             application.setAgentCollapsed(collapsed);
             agentService.updateApplicationCollapsed(application);
@@ -302,7 +294,7 @@ public class AgentPageController {
                                     @PathVariable("index") int applicationIndex,
                                     @RequestParam("collapsed") boolean collapsed) {
         applicationIndex = applicationIndex - 1;
-        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
             Application application = agent.getApplications().get(applicationIndex);
             application.setAgentCollapsedApplicants(collapsed);
             agentService.updateApplicationCollapsedApplicants(application);
@@ -319,7 +311,7 @@ public class AgentPageController {
     public String finalizeApplication(@ModelAttribute(name = "agent") Agent agent,
                                       @PathVariable("index") int applicationIndex) {
         applicationIndex = applicationIndex - 1;
-        if (validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
             if (agentService.finalizeApplication(agent.getApplications().get(applicationIndex))) {
                 agent.getApplications().remove(applicationIndex);
                 return "redirect:/agent";

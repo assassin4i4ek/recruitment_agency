@@ -10,11 +10,15 @@ import java.util.Map;
 public interface ApplicationDao {
     List<Application> findApplicationsByAgentId(int agentId);
     void reorderApplicationsOfAgent(List<Application> applications);
-    void updateApplication(Application application);
-    void updateApplicationCollapsed(Application application);
+    void updateAgentApplication(Application application);
+    void updateApplicationAgentCollapsed(Application application);
     void updateApplicationCollapsedApplicants(Application application);
     void deleteApplication(Application application);
     void createNewApplication(User user, ApplicationRegistrationForm form, int agentId);
     boolean validateProfession(String profession);
     Map<Integer, Long> listAgentIdsAndApplicationAmounts();
+    List<Application> findApplicationsByEnterpriseId(int enterpriseId);
+    void updateApplicationEnterpriseCollapsed(Application application);
+    void reorderApplicationsOfEnterprise(List<Application> applications);
+    void updateEnterpriseApplication(Application application);
 }

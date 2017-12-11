@@ -20,4 +20,6 @@ public interface AgentService {
     void updateEnterpriseInfo(Enterprise enterprise);
     void updateCandidateInfo(Candidate candidate);
     int getAppropriateAgentIdForApplication(ApplicationRegistrationForm form);
+    boolean validateProfession(String profession);
+    void checkForUpdates(Agent agent);
 }

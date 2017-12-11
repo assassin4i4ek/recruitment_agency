@@ -50,7 +50,7 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     public void updateApplicationInfo(Application application) {
-        applicationService.updateApplicationInfo(application);
+        applicationService.updateAgentApplicationInfo(application);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class AgentServiceImpl implements AgentService {
 
     @Override
     public void updateApplicationCollapsed(Application application) {
-        applicationService.updateApplicationCollapsed(application);
+        applicationService.updateApplicationAgentCollapsed(application);
     }
 
     @Override
@@ -108,6 +108,16 @@ public class AgentServiceImpl implements AgentService {
         }
 
         return agentIdWithMinCongestion;
+    }
+
+    @Override
+    public boolean validateProfession(String profession) {
+        return applicationService.validateProfession(profession);
+    }
+
+    @Override
+    public void checkForUpdates(Agent agent) {
+        agent.setApplications(applicationService.findApplicationsByAgentId(agent.getId()));
     }
 
 

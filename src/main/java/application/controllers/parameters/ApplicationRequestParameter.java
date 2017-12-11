@@ -4,6 +4,7 @@ package application.controllers.parameters;
 public class ApplicationRequestParameter {
     private boolean edit = false;
     private boolean quantityError = false;
+    private boolean professionError = false;
     private boolean finalizeError = false;
 
     public boolean isEdit() {
@@ -28,5 +29,13 @@ public class ApplicationRequestParameter {
 
     public void setFinalizeError(boolean finalizeError) {
         this.finalizeError = finalizeError;
+    }
+
+    public boolean isProfessionError() {
+        return professionError;
+    }
+
+    public void setProfessionError(boolean professionError) {
+        this.professionError = professionError;
     }
 }

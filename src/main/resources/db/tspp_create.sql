@@ -55,6 +55,8 @@ CREATE TABLE IF NOT EXISTS applications (
                             agent_order INT,
                             agent_collapsed BOOLEAN DEFAULT FALSE,
                             agent_collapsed_applicants BOOLEAN DEFAULT FALSE,
+                            enterprise_order INT,
+                            enterprise_collapsed BOOLEAN DEFAULT FALSE,
 							PRIMARY KEY(id),
 							FOREIGN KEY(enterprise_id) REFERENCES enterprises_info(user_id),
                             FOREIGN KEY(agent_id) REFERENCES agents_info(user_id),

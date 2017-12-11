@@ -1,10 +1,13 @@
 package application.model.enterprise;
+import application.model.application.Application;
 
+import java.util.List;
 
 public class Enterprise {
     private int id;
     private String name;
     private String email;
+    private List<Application> applications;
 
     public int getId() {
         return id;
@@ -28,5 +31,13 @@ public class Enterprise {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Application> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<Application> applications) {
+        this.applications = applications;
     }
 }

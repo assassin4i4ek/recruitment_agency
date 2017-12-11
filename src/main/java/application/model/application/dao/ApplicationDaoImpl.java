@@ -32,12 +32,11 @@ public class ApplicationDaoImpl implements ApplicationDao {
         String sql = "SELECT id, enterprise_id, agent_id, registration_timestamp, profession, quantity, agent_note, agent_collapsed, agent_collapsed_applicants" +
                 " FROM applications WHERE agent_id=" + agentId +
                 " ORDER BY agent_order";
-        return jdbcTemplate.query(sql, new ApplicationMapper());
+        return jdbcTemplate.query(sql, new AgentApplicationMapper());
     }
 
     @Override
     public void reorderApplicationsOfAgent(List<Application> applications) {
-        int agentId = applications.get(0).getAgentId();
         for (int i = 0; i < applications.size(); ++i) {
             String sql = "UPDATE applications SET agent_order=" + i
                     + " WHERE id=" + applications.get(i).getId();
@@ -46,7 +45,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
     }
 
     @Override
-    public void updateApplication(Application application) {
+    public void updateAgentApplication(Application application) {
         String sql = "UPDATE applications SET profession=?, quantity=?, agent_note=? WHERE id=?";
         jdbcTemplate.update(sql,
                 application.getProfession(),
@@ -56,7 +55,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
     }
 
     @Override
-    public void updateApplicationCollapsed(Application application) {
+    public void updateApplicationAgentCollapsed(Application application) {
         String sql = "UPDATE applications SET agent_collapsed=? WHERE id=?";
         jdbcTemplate.update(sql, application.isAgentCollapsed(), application.getId());
     }
@@ -102,7 +101,47 @@ public class ApplicationDaoImpl implements ApplicationDao {
         return amountsMap;
     }
 
-    private class ApplicationMapper implements RowMapper<Application> {
+    @Override
+    public List<Application> findApplicationsByEnterpriseId(int enterpriseId) {
+        String sql = "SELECT id, registration_timestamp, profession, quantity, enterprise_collapsed" +
+                " FROM applications WHERE enterprise_id=" + enterpriseId + " ORDER BY enterprise_order";
+        return jdbcTemplate.query(sql, (rs, i) -> {
+            Application application = new Application();
+            application.setId(rs.getInt("id"));
+            application.setEnterpriseId(enterpriseId);
+            application.setRegistrationTimestamp(rs.getTimestamp("registration_timestamp"));
+            application.setProfession(rs.getString("profession"));
+            application.setQuantity(rs.getShort("quantity"));
+            application.setEnterpriseCollapsed(rs.getBoolean("enterprise_collapsed"));
+            return application;
+        });
+    }
+
+    @Override
+    public void updateApplicationEnterpriseCollapsed(Application application) {
+        String sql = "UPDATE applications SET enterprise_collapsed=? WHERE id=?";
+        jdbcTemplate.update(sql, application.isEnterpriseCollapsed(), application.getId());
+    }
+
+    @Override
+    public void reorderApplicationsOfEnterprise(List<Application> applications) {
+        for (int i = 0; i < applications.size(); ++i) {
+            String sql = "UPDATE applications SET enterprise_order=" + i
+                    + " WHERE id=" + applications.get(i).getId();
+            jdbcTemplate.update(sql);
+        }
+    }
+
+    @Override
+    public void updateEnterpriseApplication(Application application) {
+        String sql = "UPDATE applications SET profession=?, quantity=? WHERE id=?";
+        jdbcTemplate.update(sql,
+                application.getProfession(),
+                application.getQuantity(),
+                application.getId());
+    }
+
+    private class AgentApplicationMapper implements RowMapper<Application> {
         @Override
         public Application mapRow(ResultSet resultSet, int i) throws SQLException {
             Application application = new Application();

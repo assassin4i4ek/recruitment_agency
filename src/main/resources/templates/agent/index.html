@@ -20,7 +20,11 @@
             </li>
         </ul>
     </div>
-    <script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js/}"></script>
+    <form id="reorderApplications" action="/agent/reorderApplications" method="POST">
+        <input type="hidden" id="prevIndex" name="prevIndex" value="0"/>
+        <input type="hidden" id="newIndex" name="newIndex" value="0"/>
+    </form>
+    <p><a href="/" th:href="@{/}">Back to home page</a></p>
     <script>
 		$(function() {
             $( "#apps" ).sortable({
@@ -43,11 +47,6 @@
                     });
         });
     </script>
-    <form id="reorderApplications" action="/agent/reorderApplications" method="POST">
-        <input type="hidden" id="prevIndex" name="prevIndex" value="0"/>
-        <input type="hidden" id="newIndex" name="newIndex" value="0"/>
-    </form>
-    <p><a href="/" th:href="@{/}">Back to home page</a></p>
 </div>
 </body>
 </html>
