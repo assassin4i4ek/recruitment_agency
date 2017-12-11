@@ -16,7 +16,7 @@ public interface ApplicationService {
     void updateApplicationCollapsedApplicants(Application application);
     boolean finalizeApplication(Application application);
     void registerNewApplication(User user, ApplicationRegistrationForm form);
-    boolean validateProfession(ApplicationRegistrationForm applicationRegistrationForm);
     Map<Integer, Long> listAgentIdsAndApplicationAmounts();
     boolean validateQuantity(ApplicationRegistrationForm applicationRegistrationForm);
+    boolean validateProfession(ApplicationRegistrationForm applicationRegistrationForm);
 }

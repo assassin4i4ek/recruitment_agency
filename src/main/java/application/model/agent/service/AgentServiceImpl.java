@@ -76,8 +76,7 @@ public class AgentServiceImpl implements AgentService {
     @Override
     public boolean finalizeApplication(Application application) {
         if (applicationService.finalizeApplication(application)) {
-            //add score to agent
-
+            agentDao.increaseAgentsLevel(application);
             return true;
         }
         return false;
