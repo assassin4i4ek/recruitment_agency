@@ -1,6 +1,7 @@
 package application.model.candidate.dao;
 
 import application.model.application.Application;
+import application.model.application.EmploymentType;
 import application.model.candidate.Applicant;
 import application.model.candidate.ApplicantStage;
 import application.model.candidate.Candidate;
@@ -12,6 +13,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,14 +32,16 @@ public class CandidateDaoImpl implements CandidateDao {
 
     @Override
     public Candidate findCandidateById(int candidateId) {
-        String sql = "SELECT user_id, name, email FROM candidates_info WHERE user_id=" + candidateId;
+        String sql = "SELECT user_id, email, name, employment_type, required_salary_cu_per_month, experience, skills" +
+                " FROM candidates_info WHERE user_id=" + candidateId;
         List<Candidate> candidates = jdbcTemplate.query(sql, new CandidateMapper());
         return candidates != null ? candidates.get(0) : null;
     }
 
     @Override
     public List<Applicant> findApplicantsForApplication(Application application) {
-        String  sql = "SELECT user_id, name, email, stage FROM candidates_info" +
+        String  sql = "SELECT user_id, email, name, employment_type, required_salary_cu_per_month, experience," +
+                " skills, stage FROM candidates_info" +
                 " INNER JOIN applicants_for_applications ON candidates_info.user_id=applicants_for_applications.candidate_id" +
                 " WHERE applicants_for_applications.application_id=" + application.getId() +
                 " ORDER BY applicant_order";
@@ -69,14 +76,19 @@ public class CandidateDaoImpl implements CandidateDao {
 
     @Override
     public void updateCandidateInfo(Candidate candidate) {
-        String sql = "UPDATE candidates_info SET name=?, email=? WHERE user_id=?";
-        jdbcTemplate.update(sql, candidate.getName(), candidate.getEmail(), candidate.getId());
+        String sql = "UPDATE candidates_info SET name=?, email=?, employment_type=?, required_salary_cu_per_month=?," +
+                " experience=?, skills=? WHERE user_id=?";
+        jdbcTemplate.update(sql, candidate.getName(), candidate.getEmail(), candidate.getEmploymentType().name(),
+                candidate.getRequiredSalaryCuPerMonth(), candidate.getExperience(), candidate.getSkills(),
+                candidate.getId());
     }
 
     @Override
     public void createNewCandidate(User user, CandidateRegistrationForm form) {
-        String sql = "INSERT INTO candidates_info(user_id, name, email) VALUE (?,?,?)";
-        jdbcTemplate.update(sql, user.getId(), form.getName(), form.getEmail());
+        String sql = "INSERT INTO candidates_info(user_id,email,name,employment_type,required_salary_cu_per_month," +
+                "experience,skills) VALUE (?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, user.getId(), form.getEmail(), form.getName(), form.getEmploymentType(),
+                form.getRequiredSalaryCuPerMonth(), form.getExperience(), form.getSkills());
     }
 
     private class CandidateMapper implements RowMapper<Candidate> {
@@ -86,6 +98,42 @@ public class CandidateDaoImpl implements CandidateDao {
             candidate.setId(resultSet.getInt("user_id"));
             candidate.setName(resultSet.getString("name"));
             candidate.setEmail(resultSet.getString("email"));
+            candidate.setEmploymentType(EmploymentType.valueOf(resultSet.getString("employment_type")));
+            candidate.setRequiredSalaryCuPerMonth(resultSet.getInt("required_salary_cu_per_month"));
+            Blob experienceBlob = resultSet.getBlob("experience");
+            if (experienceBlob != null) {
+                BufferedReader agentNoteReader = new BufferedReader(new InputStreamReader(
+                        experienceBlob.getBinaryStream()));
+
+                StringBuilder stringBuilder = new StringBuilder();
+                try {
+                    String line = agentNoteReader.readLine();
+                    while (line != null) {
+                        stringBuilder.append(line);
+                        line = agentNoteReader.readLine();
+                    }
+                } catch (IOException e) {
+                    throw new SQLException("Error reading notes");
+                }
+                candidate.setExperience(stringBuilder.toString());
+            }
+            Blob skillsBlob = resultSet.getBlob("skills");
+            if (skillsBlob != null) {
+                BufferedReader agentNoteReader = new BufferedReader(new InputStreamReader(
+                        skillsBlob.getBinaryStream()));
+
+                StringBuilder stringBuilder = new StringBuilder();
+                try {
+                    String line = agentNoteReader.readLine();
+                    while (line != null) {
+                        stringBuilder.append(line);
+                        line = agentNoteReader.readLine();
+                    }
+                } catch (IOException e) {
+                    throw new SQLException("Error reading notes");
+                }
+                candidate.setSkills(stringBuilder.toString());
+            }
             return candidate;
         }
     }
@@ -97,6 +145,42 @@ public class CandidateDaoImpl implements CandidateDao {
             applicant.setId(resultSet.getInt("user_id"));
             applicant.setName(resultSet.getString("name"));
             applicant.setEmail(resultSet.getString("email"));
+            applicant.setEmploymentType(EmploymentType.valueOf(resultSet.getString("employment_type")));
+            applicant.setRequiredSalaryCuPerMonth(resultSet.getInt("required_salary_cu_per_month"));
+            Blob experienceBlob = resultSet.getBlob("experience");
+            if (experienceBlob != null) {
+                BufferedReader agentNoteReader = new BufferedReader(new InputStreamReader(
+                        experienceBlob.getBinaryStream()));
+
+                StringBuilder stringBuilder = new StringBuilder();
+                try {
+                    String line = agentNoteReader.readLine();
+                    while (line != null) {
+                        stringBuilder.append(line);
+                        line = agentNoteReader.readLine();
+                    }
+                } catch (IOException e) {
+                    throw new SQLException("Error reading notes");
+                }
+                applicant.setExperience(stringBuilder.toString());
+            }
+            Blob skillsBlob = resultSet.getBlob("skills");
+            if (skillsBlob != null) {
+                BufferedReader agentNoteReader = new BufferedReader(new InputStreamReader(
+                        skillsBlob.getBinaryStream()));
+
+                StringBuilder stringBuilder = new StringBuilder();
+                try {
+                    String line = agentNoteReader.readLine();
+                    while (line != null) {
+                        stringBuilder.append(line);
+                        line = agentNoteReader.readLine();
+                    }
+                } catch (IOException e) {
+                    throw new SQLException("Error reading notes");
+                }
+                applicant.setSkills(stringBuilder.toString());
+            }
             applicant.setApplicantStage(ApplicantStage.valueOf(resultSet.getString("stage")));
             return applicant;
         }

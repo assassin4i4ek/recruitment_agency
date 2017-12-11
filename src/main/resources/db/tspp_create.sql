@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS candidates_info (
     name VARCHAR(256),
     
     employment_type ENUM('NOT_IMPORTANT', 'FULL_TIME', 'PART_TIME') NOT NULL DEFAULT 'NOT_IMPORTANT',
-	required_sallary_cu_per_month INT,
+	required_salary_cu_per_month INT,
     experience TEXT,
     skills TEXT,
 
