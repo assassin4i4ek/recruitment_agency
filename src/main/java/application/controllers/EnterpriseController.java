@@ -4,6 +4,7 @@ import application.controllers.parameters.ApplicationRequestParameter;
 import application.controllers.parameters.EnterpriseRequestParameter;
 import application.model.agent.Agent;
 import application.model.application.Application;
+import application.model.application.ApplicationRegistrationForm;
 import application.model.enterprise.Enterprise;
 import application.model.enterprise.serivice.EnterpriseService;
 import application.model.user.User;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
-@SessionAttributes("enterprise")
+@SessionAttributes({"enterprise","app"})
 public class EnterpriseController {
     @Autowired
     private EnterpriseService enterpriseService;
@@ -29,6 +30,11 @@ public class EnterpriseController {
     private Enterprise enterprise(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return enterpriseService.findEnterpriseById(user.getId());
+    }
+
+    @ModelAttribute("app")
+    private ApplicationRegistrationForm app() {
+        return new ApplicationRegistrationForm();
     }
 
     @GetMapping("/enterprise")
@@ -137,7 +143,7 @@ public class EnterpriseController {
             return "/error/wrong-input";
     }
 
-    @PostMapping("enterprise/application/{index}/enterpriseCollapse")
+    @PostMapping("/enterprise/application/{index}/enterpriseCollapse")
     @ResponseBody
     public void collapseApplication(HttpServletResponse response,
                                     @ModelAttribute(name = "enterprise") Enterprise enterprise,
@@ -156,5 +162,45 @@ public class EnterpriseController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+    }
+
+    @GetMapping("/enterprise/newApplication")
+    public String newApplication(@RequestParam(name = "edit", required = false) String edit,
+                                 @RequestParam(name = "quantityError", required = false) String quantityError,
+                                 @RequestParam(name = "professionError", required = false) String professionError,
+                                 Model model) {
+        ApplicationRequestParameter parameter = new ApplicationRequestParameter();
+        parameter.setEdit(true);
+        if (quantityError != null)
+            parameter.setQuantityError(true);
+        if (professionError != null)
+            parameter.setProfessionError(true);
+        model.addAttribute("param", parameter);
+
+        return "/enterprise/application/index";
+    }
+
+    @PostMapping("/enterprise/newApplication")
+    public String saveNewApplication(Authentication authentication,
+                                     @ModelAttribute("app") ApplicationRegistrationForm form,
+                                     @RequestParam("save") String save,
+                                     @RequestParam("profession") String profession,
+                                     @RequestParam("quantity") String quantity,
+                                     Model model) {
+        String isError = "";
+        if (enterpriseService.validateQuantity(quantity)) {
+            if (enterpriseService.validateProfession(profession)) {
+                enterpriseService.registerNewApplication((User) authentication.getPrincipal(), form);
+                form.resetAll();
+                return "redirect:/enterprise";
+            }
+            else {
+                isError = "?edit&professionError";
+            }
+        }
+        else {
+            isError = "?edit&quantityError";
+        }
+        return "redirect:/enterprise/newApplication" + isError;
     }
 }

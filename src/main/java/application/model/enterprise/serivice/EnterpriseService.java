@@ -1,6 +1,7 @@
 package application.model.enterprise.serivice;
 
 import application.model.application.Application;
+import application.model.application.ApplicationRegistrationForm;
 import application.model.enterprise.Enterprise;
 import application.model.enterprise.EnterpriseRegistrationForm;
 import application.model.user.User;
@@ -16,4 +17,5 @@ public interface EnterpriseService {
     void updateEnterpriseApplicationInfo(Application application);
     void updateApplicationCollapsed(Application application);
     void checkForUpdates(Enterprise enterprise);
+    void registerNewApplication(User user, ApplicationRegistrationForm form);
 }

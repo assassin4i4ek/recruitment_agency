@@ -1,12 +1,15 @@
 package application.model.enterprise.serivice;
 
 import application.model.application.Application;
+import application.model.application.ApplicationRegistrationForm;
 import application.model.application.service.ApplicationService;
 import application.model.enterprise.Enterprise;
 import application.model.enterprise.EnterpriseRegistrationForm;
 import application.model.enterprise.dao.EnterpriseDao;
 import application.model.user.User;
+import application.model.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +19,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     @Autowired
     private ApplicationService applicationService;
+
+    @Autowired
+    private UserDetailsService userService;
 
     @Override
     public Enterprise findEnterpriseById(int enterpriseId) {
@@ -70,5 +76,10 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         enterprise.setName(modernEnterprise.getName());
         enterprise.setEmail(modernEnterprise.getEmail());
         enterprise.setApplications(modernEnterprise.getApplications());
+    }
+
+    @Override
+    public void registerNewApplication(User user, ApplicationRegistrationForm form) {
+        applicationService.registerNewApplication(user, form);
     }
 }
