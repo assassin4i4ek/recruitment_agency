@@ -23,16 +23,9 @@ public class EnterpriseDaoImpl implements EnterpriseDao {
 
     @Override
     public Enterprise findEnterpriseById(int enterpriseId) {
-        String sql = "SELECT user_id, name, email FROM enterprises_info WHERE user_id=" + enterpriseId;
+        String sql = "SELECT user_id, name, email, contact_person_name FROM enterprises_info WHERE user_id=" + enterpriseId;
         List<Enterprise> enterprises = jdbcTemplate.query(sql, new EnterpriseMapper());
         return enterprises != null ? enterprises.get(0) : null;
-    }
-
-    @Override
-    public String findEnterpriseNameById(int enterpriseId) {
-        String sql = "SELECT name FROM enterprises_info WHERE user_id=" + enterpriseId;
-        List<String> name = jdbcTemplate.query(sql, (rs, i) -> rs.getString("name"));
-        return name != null ? name.get(0) : "";
     }
 
     @Override
@@ -54,6 +47,7 @@ public class EnterpriseDaoImpl implements EnterpriseDao {
             enterprise.setId(resultSet.getInt("user_id"));
             enterprise.setName(resultSet.getString("name"));
             enterprise.setEmail(resultSet.getString("email"));
+            enterprise.setContactPersonName(resultSet.getString("contact_person_name"));
             return enterprise;
         }
     }

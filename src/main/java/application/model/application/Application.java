@@ -1,23 +1,24 @@
 package application.model.application;
 
 import application.model.candidate.Applicant;
+import application.model.enterprise.Enterprise;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 public class Application {
     private int id;
-    private int enterpriseId;
     private int agentId;
+    private int enterpriseId;
     private Timestamp registrationTimestamp;
     private String profession;
     private short quantity;
     private String agentNote;
     private List<Applicant> applicants;
-    private String enterpriseName;
     private boolean agentCollapsed;
     private boolean agentCollapsedApplicants;
     private boolean enterpriseCollapsed;
+    private Enterprise enterprise;
 
     public int getId() {
         return id;
@@ -25,14 +26,6 @@ public class Application {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getEnterpriseId() {
-        return enterpriseId;
-    }
-
-    public void setEnterpriseId(int enterpriseId) {
-        this.enterpriseId = enterpriseId;
     }
 
     public int getAgentId() {
@@ -83,14 +76,6 @@ public class Application {
         this.applicants = applicants;
     }
 
-    public String getEnterpriseName() {
-        return enterpriseName;
-    }
-
-    public void setEnterpriseName(String enterpriseName) {
-        this.enterpriseName = enterpriseName;
-    }
-
     public boolean isAgentCollapsed() {
         return agentCollapsed;
     }
@@ -113,5 +98,21 @@ public class Application {
 
     public void setEnterpriseCollapsed(boolean enterpriseCollapsed) {
         this.enterpriseCollapsed = enterpriseCollapsed;
+    }
+
+    public Enterprise getEnterprise() {
+        return enterprise;
+    }
+
+    public void setEnterprise(Enterprise enterprise) {
+        this.enterprise = enterprise;
+    }
+
+    public int getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(int enterpriseId) {
+        this.enterpriseId = enterpriseId;
     }
 }

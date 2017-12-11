@@ -34,7 +34,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         List<Application> applications = applicationDao.findApplicationsByAgentId(agentId);
         for (Application application : applications) {
             application.setApplicants(candidateService.findApplicantsForApplication(application));
-            application.setEnterpriseName(enterpriseService.findEnterpriseNameById(application.getEnterpriseId()));
+            application.setEnterprise(enterpriseService.findEnterpriseById(application.getEnterpriseId()));
         }
         return applications;
     }

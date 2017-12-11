@@ -6,7 +6,6 @@ import application.model.user.User;
 
 public interface EnterpriseDao {
     Enterprise findEnterpriseById(int enterpriseId);
-    String findEnterpriseNameById(int enterpriseId);
     void updateEnterpriseInfo(Enterprise enterprise);
     void createNewEnterprise(User user, EnterpriseRegistrationForm form);
 }

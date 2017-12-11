@@ -7,6 +7,7 @@ public class Enterprise {
     private int id;
     private String name;
     private String email;
+    private String contactPersonName;
     private List<Application> applications;
 
     public int getId() {
@@ -39,5 +40,13 @@ public class Enterprise {
 
     public void setApplications(List<Application> applications) {
         this.applications = applications;
+    }
+
+    public String getContactPersonName() {
+        return contactPersonName;
+    }
+
+    public void setContactPersonName(String contactPersonName) {
+        this.contactPersonName = contactPersonName;
     }
 }

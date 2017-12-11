@@ -5,6 +5,7 @@ import application.model.user.UserRegistrationForm;
 public class EnterpriseRegistrationForm extends UserRegistrationForm{
     private String name;
     private String email;
+    private String contactPersonName;
 
     public String getName() {
         return name;
@@ -20,6 +21,14 @@ public class EnterpriseRegistrationForm extends UserRegistrationForm{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getContactPersonName() {
+        return contactPersonName;
+    }
+
+    public void setContactPersonName(String contactPersonName) {
+        this.contactPersonName = contactPersonName;
     }
 
     @Override

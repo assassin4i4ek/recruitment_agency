@@ -7,7 +7,6 @@ import application.model.enterprise.Enterprise;
 import application.model.enterprise.EnterpriseRegistrationForm;
 import application.model.enterprise.dao.EnterpriseDao;
 import application.model.user.User;
-import application.model.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -28,11 +27,6 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         Enterprise enterprise = enterpriseDao.findEnterpriseById(enterpriseId);
         enterprise.setApplications(applicationService.findApplicationsByEnterpriseId(enterpriseId));
         return enterprise;
-    }
-
-    @Override
-    public String findEnterpriseNameById(int enterpriseId) {
-        return enterpriseDao.findEnterpriseNameById(enterpriseId);
     }
 
     @Override
