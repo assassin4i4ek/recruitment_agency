@@ -31,21 +31,6 @@
             <input type="submit" value="Invite for internal interview">
         </form>
     </div>
-    <!--<script th:inline="javascript">
-        $(function(){
-            var formId = /*[['#possibleCandidate' + (${candidateStatus.index} + 1) + 'form']]*/;
-            var mUrl = /*[[@{/agent/application/} + (${appIndex} + 1) + '/possibleApplicants/' + (${candidateStatus.index} + 1) + '/addToApplicants']]*/;
-            $(formId).on('submit', function() {
-                $.ajax({
-                    url: mUrl,
-                    type: "POST"
-                });
-                var possibleApplicantLi = $(formId).parents('#possible-applicants-wrapper ul > li');
-                possibleApplicantLi.remove();
-                return false;
-            });
-        });
-    </script>-->
 </div>
 </body>
 </html>

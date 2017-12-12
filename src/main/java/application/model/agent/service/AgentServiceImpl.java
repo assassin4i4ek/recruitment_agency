@@ -130,5 +130,10 @@ public class AgentServiceImpl implements AgentService {
         return applicationService.validateSalary(salaryCuPerMonth);
     }
 
+    @Override
+    public List<String> getAvailableProfessionsList() {
+        return applicationService.getAvailableProfessionsList();
+    }
+
 
 }

@@ -11,9 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
-@SessionAttributes({"candidateRegistrationForm", "enterpriseRegistrationForm", "applicationRegistrationForm"})
-public class WelcomeController {
+@SessionAttributes({"candidateRegistrationForm", "enterpriseRegistrationForm", "applicationRegistrationForm", "availableProfessions"})
+public class UserController {
     @Autowired
     private UserService userService;
 
@@ -30,6 +32,11 @@ public class WelcomeController {
     @ModelAttribute("applicationRegistrationForm")
     private ApplicationRegistrationForm applicationRegistrationForm() {
         return new ApplicationRegistrationForm();
+    }
+
+    @ModelAttribute("availableProfessions")
+    private List<String> availableProfessions() {
+        return userService.getAvailableProfessionsList();
     }
 
     @GetMapping("/")

@@ -1,8 +1,8 @@
 USE recruitment_agency;
 
-INSERT INTO spheres VALUES
-('Information and communication'), 
-('Jurisprudence');
+INSERT INTO spheres(name, rank) VALUES
+('Information and communication', 1), 
+('Jurisprudence', 2);
 
 INSERT INTO professions_and_spheres
 (`profession`,`sphere`) VALUES

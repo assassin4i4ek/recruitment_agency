@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
-@SessionAttributes("candidate")
+@SessionAttributes({"candidate","availableProfessions"})
 public class CandidateController {
     @Autowired
     private CandidateService candidateService;
@@ -20,6 +22,11 @@ public class CandidateController {
     private Candidate candidate(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return candidateService.findCandidateById(user.getId());
+    }
+
+    @ModelAttribute("availableProfessions")
+    private List<String> availableProfessions() {
+        return candidateService.getAvailableProfessionsList();
     }
 
     @GetMapping("/candidate")

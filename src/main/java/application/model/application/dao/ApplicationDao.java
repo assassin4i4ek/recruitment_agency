@@ -21,4 +21,5 @@ public interface ApplicationDao {
     void updateApplicationEnterpriseCollapsed(Application application);
     void reorderApplicationsOfEnterprise(List<Application> applications);
     void updateEnterpriseApplication(Application application);
+    List<String> getAvailableProfessionsList();
 }

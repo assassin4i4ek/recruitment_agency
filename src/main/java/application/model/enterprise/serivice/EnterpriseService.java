@@ -6,6 +6,8 @@ import application.model.enterprise.Enterprise;
 import application.model.enterprise.EnterpriseRegistrationForm;
 import application.model.user.User;
 
+import java.util.List;
+
 public interface EnterpriseService {
     Enterprise findEnterpriseById(int enterpriseId);
     void updateEnterpriseInfo(Enterprise enterprise);
@@ -18,4 +20,5 @@ public interface EnterpriseService {
     void checkForUpdates(Enterprise enterprise);
     void registerNewApplication(User user, ApplicationRegistrationForm form);
     boolean validateSalary(String salaryCuPerMonth);
+    List<String> getAvailableProfessionsList();
 }

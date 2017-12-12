@@ -1,6 +1,7 @@
 package application.model.candidate.service;
 
 import application.model.application.Application;
+import application.model.application.service.ApplicationService;
 import application.model.candidate.Applicant;
 import application.model.candidate.Candidate;
 import application.model.candidate.CandidateRegistrationForm;
@@ -17,6 +18,9 @@ import java.util.*;
 public class CandidateServiceImpl implements CandidateService {
     @Autowired
     private CandidateDao candidateDao;
+
+    @Autowired
+    private ApplicationService applicationService;
 
     @Override
     public Candidate findCandidateById(int candidateId) {
@@ -77,5 +81,10 @@ public class CandidateServiceImpl implements CandidateService {
 
         candidates.sort(Comparator.comparingInt(a -> resultMap.get(a.getId())));
         return candidates;
+    }
+
+    @Override
+    public List<String> getAvailableProfessionsList() {
+        return applicationService.getAvailableProfessionsList();
     }
 }

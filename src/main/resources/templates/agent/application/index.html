@@ -20,7 +20,12 @@
     <a th:href="@{/agent/application/} + (${applicationIndex} + 1) + '/enterprise'" th:text="${app.enterprise.name}"></a>
     <p th:text="${app.enterprise.contactPersonName}"></p>
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" th:method="POST">
-        <label>Profession:<input type="text" name="profession" th:value="${app.profession}"></label>
+        <label>Profession:
+            <input type="text" name="profession" list="profession" th:value="${app.profession}">
+            <datalist id="profession" type="text" name="profession">
+                <option th:each="profession : ${availableProfessions}" th:value="${profession}"></option>
+            </datalist>
+        </label>
         <label>Quantity:<input type="text" name="quantity" th:value="${app.quantity}"></label>
         <label>Notes:<textarea th:name="agentNote" th:text="${app.agentNote}"></textarea></label>
 

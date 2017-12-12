@@ -17,4 +17,5 @@ public interface CandidateService {
     void updateCandidateInfo(Candidate candidate);
     void registerNewCandidate(User user, CandidateRegistrationForm form);
     List<Applicant> getPossibleApplicants(Application application);
+    List<String> getAvailableProfessionsList();
 }

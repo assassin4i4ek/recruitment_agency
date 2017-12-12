@@ -5,6 +5,7 @@ USE recruitment_agency;
 
 CREATE TABLE IF NOT EXISTS spheres(
                     name VARCHAR(100) NOT NULL,
+                    rank INT,
                     PRIMARY KEY(name)
 );
 
@@ -66,7 +67,7 @@ CREATE TABLE IF NOT EXISTS applications (
                             profession VARCHAR(100) NOT NULL, /*сопостовлять с опытом кандидата*/
 							quantity INT(3) DEFAULT 1,
                             employment_type ENUM('FULL_TIME', 'PART_TIME') NOT NULL, /*сопостовлять с указанной занятостью кандидата*/
-                            salary_cu_per_months INT, /*сопостовлять с желаемой зарплатой кандидата?*/
+                            salary_cu_per_month INT, /*сопостовлять с желаемой зарплатой кандидата?*/
                             demanded_skills TEXT, /*сопостовлять с указанными навыками кандидата*/
                             
 							agent_note TEXT,

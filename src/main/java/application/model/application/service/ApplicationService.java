@@ -25,4 +25,5 @@ public interface ApplicationService {
     void updateEnterpriseApplicationInfo(Application application);
     void updateApplicationEnterpriseCollapsed(Application application);
     boolean validateSalary(String requiredSalaryCuPerMonth);
+    List<String> getAvailableProfessionsList();
 }

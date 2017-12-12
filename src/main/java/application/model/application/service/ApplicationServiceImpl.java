@@ -127,6 +127,11 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public List<String> getAvailableProfessionsList() {
+        return applicationDao.getAvailableProfessionsList();
+    }
+
+    @Override
     public Map<Integer, Long> listAgentIdsAndApplicationAmounts() {
         return applicationDao.listAgentIdsAndApplicationAmounts();
     }

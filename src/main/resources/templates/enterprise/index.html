@@ -52,9 +52,9 @@
         </script>
     </div>
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" method="POST">
-        <input type="text" th:name="name" th:value="${enterprise.name}">
-        <input type="text" th:name="email" th:value="${enterprise.email}">
-        <input type="text" th:name="contactPersonName" th:value="${enterprise.contactPersonName}">
+        <label>Name: <input type="text" th:name="name" th:value="${enterprise.name}"></label>
+        <label>Email: <input type="text" th:name="email" th:value="${enterprise.email}"></label>
+        <label>Contact person name: <input type="text" th:name="contactPersonName" th:value="${enterprise.contactPersonName}"></label>
         <input type="submit" value="Save">
     </form>
     <p><a href="/" th:href="@{/}">Back to home page</a></p>

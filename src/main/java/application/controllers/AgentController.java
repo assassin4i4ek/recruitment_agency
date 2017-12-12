@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@SessionAttributes("agent")
+@SessionAttributes({"agent","availableProfessions"})
 public class AgentController {
     @Autowired
     private AgentService agentService;
@@ -40,6 +40,11 @@ public class AgentController {
     private Agent agent(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return agentService.findAgentById(user.getId());
+    }
+
+    @ModelAttribute("availableProfessions")
+    private List<String> availableProfessions() {
+        return agentService.getAvailableProfessionsList();
     }
 
     @GetMapping("/agent")

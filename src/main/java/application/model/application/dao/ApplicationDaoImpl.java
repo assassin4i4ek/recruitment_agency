@@ -31,7 +31,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
     @Override
     public List<Application> findApplicationsByAgentId(int agentId) {
         String sql = "SELECT id, enterprise_id, agent_id, registration_timestamp, profession, quantity, employment_type," +
-                " salary_cu_per_months, demanded_skills, agent_note, agent_collapsed, agent_collapsed_applicants" +
+                " salary_cu_per_month, demanded_skills, agent_note, agent_collapsed, agent_collapsed_applicants" +
                 " FROM applications WHERE agent_id=" + agentId +
                 " ORDER BY agent_order";
         return jdbcTemplate.query(sql, new AgentApplicationMapper());
@@ -48,7 +48,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public void updateAgentApplication(Application application) {
-        String sql = "UPDATE applications SET profession=?, quantity=?, employment_type=?, salary_cu_per_months=?, demanded_skills=?, agent_note=? WHERE id=?";
+        String sql = "UPDATE applications SET profession=?, quantity=?, employment_type=?, salary_cu_per_month=?, demanded_skills=?, agent_note=? WHERE id=?";
         jdbcTemplate.update(sql,
                 application.getProfession(),
                 application.getQuantity(),
@@ -80,7 +80,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
     @Override
     public void createNewApplication(User user, ApplicationRegistrationForm form, int agentId) {
         String sql = "INSERT INTO applications(agent_id, enterprise_id, profession, quantity, employment_type," +
-                " salary_cu_per_months, demanded_skills) VALUE (?,?,?,?,?,?,?)";
+                " salary_cu_per_month, demanded_skills) VALUE (?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, agentId, user.getId(), form.getProfession(), form.getQuantity(), form.getEmploymentType(),
                 form.getSalaryCuPerMonth(), form.getDemandedSkills());
     }
@@ -110,7 +110,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public List<Application> findApplicationsByEnterpriseId(int enterpriseId) {
-        String sql = "SELECT id, registration_timestamp, profession, quantity, employment_type, salary_cu_per_months," +
+        String sql = "SELECT id, registration_timestamp, profession, quantity, employment_type, salary_cu_per_month," +
                 " demanded_skills, enterprise_collapsed" +
                 " FROM applications WHERE enterprise_id=" + enterpriseId + " ORDER BY enterprise_order";
         return jdbcTemplate.query(sql, (rs, i) -> {
@@ -121,7 +121,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
             application.setProfession(rs.getString("profession"));
             application.setQuantity(rs.getShort("quantity"));
             application.setEmploymentType(EmploymentType.valueOf(rs.getString("employment_type")));
-            application.setSalaryCuPerMonth(rs.getInt("salary_cu_per_months"));
+            application.setSalaryCuPerMonth(rs.getInt("salary_cu_per_month"));
             application.setEnterpriseCollapsed(rs.getBoolean("enterprise_collapsed"));
             Blob demandedSkillsBlob = rs.getBlob("demanded_skills");
             if (demandedSkillsBlob != null) {
@@ -168,6 +168,13 @@ public class ApplicationDaoImpl implements ApplicationDao {
                 application.getSalaryCuPerMonth(), application.getDemandedSkills(), application.getId());
     }
 
+    @Override
+    public List<String> getAvailableProfessionsList() {
+        String sql = "SELECT profession FROM professions_and_spheres INNER JOIN spheres" +
+                " ON professions_and_spheres.sphere = spheres.name ORDER BY rank";
+        return jdbcTemplate.query(sql, (rs,i) -> rs.getString("profession"));
+    }
+
     private class AgentApplicationMapper implements RowMapper<Application> {
         @Override
         public Application mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -179,7 +186,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
             application.setProfession(resultSet.getString("profession"));
             application.setQuantity(resultSet.getShort("quantity"));
             application.setEmploymentType(EmploymentType.valueOf(resultSet.getString("employment_type")));
-            application.setSalaryCuPerMonth(resultSet.getInt("salary_cu_per_months"));
+            application.setSalaryCuPerMonth(resultSet.getInt("salary_cu_per_month"));
 
             Blob demandedSkillsBlob = resultSet.getBlob("demanded_skills");
             if (demandedSkillsBlob != null) {

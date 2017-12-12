@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EnterpriseServiceImpl implements EnterpriseService {
     @Autowired
@@ -80,5 +82,10 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     @Override
     public boolean validateSalary(String salaryCuPerMonth) {
         return applicationService.validateSalary(salaryCuPerMonth);
+    }
+
+    @Override
+    public List<String> getAvailableProfessionsList() {
+        return applicationService.getAvailableProfessionsList();
     }
 }

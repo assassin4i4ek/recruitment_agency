@@ -18,7 +18,12 @@
         Application doesn't meet requirements.
     </div>
     <form th:action="@{__${#httpServletRequest.requestURI}__?save}" th:method="POST">
-        <label>Profession:<input type="text" name="profession" th:value="${app.profession}"></label>
+        <label>Profession:
+            <input type="text" list="profession" name="profession" th:value="${app.profession}">
+            <datalist id="profession" type="text" name="profession">
+                <option th:each="profession : ${availableProfessions}" th:value="${profession}"></option>
+            </datalist>
+        </label>
         <label>Quantity:<input type="text" name="quantity" th:value="${app.quantity}"></label>
 
         <label>Employment type:
@@ -29,7 +34,7 @@
         </label>
         <label>Salary per month:<input type="text" name="salaryCuPerMonth" th:value="${app.salaryCuPerMonth}"></label>
         <label>Demanded skills:<textarea name="demandedSkills" th:value="${app.demandedSkills}"></textarea></label>
-        <input type="submit" value="Save">
+        <input type="submit" value="Create">
     </form>
     </div>
     <p><a href="/" th:href="@{/}">Back to home page</a></p>

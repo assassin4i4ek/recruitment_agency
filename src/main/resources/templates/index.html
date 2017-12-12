@@ -52,7 +52,12 @@
             <label>Name:<input type="text" name="name" th:value="${candidateRegistrationForm.name}"></label>
             <label>Password:<input type="password" name="password" th:value="${candidateRegistrationForm.password}"></label>
             <label>Confirm password:<input type="password" name="confirmPassword" th:value="${candidateRegistrationForm.confirmPassword}"></label>
-            <label>Profession:<input type="text" name="profession" th:value="${candidateRegistrationForm.profession}"></label>
+            <label>Profession:
+                <input type="text" list="candidateProfession" name="profession" th:value="${candidateRegistrationForm.profession}">
+                <datalist id="candidateProfession" type="text" name="profession">
+                    <option th:each="profession : ${availableProfessions}" th:value="${profession}"></option>
+                </datalist>
+            </label>
             <label>Employment type:
                 <label><input type="radio" name="employmentType" th:value="'NOT_IMPORTANT'"
                                            th:checked="${candidateRegistrationForm.employmentType} == 'NOT_IMPORTANT'">not important</label>
@@ -76,7 +81,12 @@
             <label>Contact name:<input type="text" name="contactPersonName" th:value="${enterpriseRegistrationForm.contactPersonName}"></label>
             <label>Password:<input type="password" name="password" th:value="${enterpriseRegistrationForm.password}"></label>
             <label>Confirm password:<input type="password" name="confirmPassword" th:value="${enterpriseRegistrationForm.confirmPassword}"></label>
-            <label>Profession:<input type="text" name="profession" th:value="${applicationRegistrationForm.profession}"></label>
+            <label>Profession:
+                <input type="text" list="enterpriseProfession" name="profession" th:value="${applicationRegistrationForm.profession}">
+                <datalist id="enterpriseProfession" type="text" name="profession">
+                    <option th:each="profession : ${availableProfessions}" th:value="${profession}"></option>
+                </datalist>
+            </label>
             <label>Quantity:<input type="text" name="quantity" th:value="${applicationRegistrationForm.quantity}"></label>
 
             <label>Employment type:

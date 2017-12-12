@@ -10,7 +10,7 @@
     <div th:if="!${param.edit}">
         <h1 th:text="${candidate.name}"></h1>
         <h2 th:text="${candidate.email}"></h2>
-        <p th:text="'Profession: ' + ${candidate.profession.isEmpty() ? 'not important' : candidate.profession}"></p>
+        <p th:text="'Profession: ' + ${candidate.profession == null ? 'not important' : candidate.profession}"></p>
         <p th:text="'Employment type: ' + (${candidate.employmentType.name() == 'NOT_IMPORTANT' ? 'not important' :
                                              candidate.employmentType.name() == 'FULL_TIME' ? 'full-time' : 'part-time'})"></p>
         <p th:text="'Required salary: ' + ${candidate.requiredSalaryCuPerMonth}"></p>
@@ -21,7 +21,12 @@
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" method="POST">
         <label>Email:<input type="text" name="email" th:value="${candidate.email}"></label>
         <label>Name:<input type="text" name="name" th:value="${candidate.name}"></label>
-        <label>Profession:<input type="text" name="profession" th:value="${candidate.profession}"></label>
+        <label>Profession:
+            <input type="text" list="profession" name="profession" th:value="${candidate.profession}">
+            <datalist id="profession" type="text" name="profession">
+                <option th:each="profession : ${availableProfessions}" th:value="${profession}"></option>
+            </datalist>
+        </label>
         <label>Employment type:
             <label><input type="radio" name="employmentType" th:value="'NOT_IMPORTANT'"
                           th:checked="${candidate.employmentType.name()} == 'NOT_IMPORTANT'">not important</label>

@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
@@ -86,6 +88,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public boolean validateSalary(String requiredSalaryCuPerMonth) {
         return applicationService.validateSalary(requiredSalaryCuPerMonth);
+    }
+
+    @Override
+    public List<String> getAvailableProfessionsList() {
+        return applicationService.getAvailableProfessionsList();
     }
 
     @Override

@@ -26,4 +26,5 @@ public interface AgentService {
     void checkForUpdates(Agent agent);
     List<Applicant> getPossibleApplicants(Application application);
     boolean validateSalary(String salaryCuPerMonth);
+    List<String> getAvailableProfessionsList();
 }

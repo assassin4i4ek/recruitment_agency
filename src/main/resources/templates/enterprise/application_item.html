@@ -10,7 +10,6 @@
     <span class="sortable-handle">::::::::::::::::::::::::::::::::::::::::::</span>
     <div class="panel-heading">
         <p th:text="${app.profession} + '(' + ${app.quantity} + ')'" ></p>
-        <a th:text="Edit" th:href="@{/enterprise/application/} + (${status.index} + 1) + '?edit'"></a>
         <div class="panel-title">
             <a data-toggle="collapse" th:href="'#application-wrapper-' + (${status.index} + 1)">details</a>
         </div>
@@ -20,6 +19,7 @@
         <p th:text="'Employment type: ' + ${app.employmentType.name() == 'FULL_TIME' ? 'Full-time' : 'Part-time'}"></p>
         <p th:text="'Salary per month: ' + ${app.salaryCuPerMonth}"></p>
         <p th:text="'Demanded skills: ' + ${app.demandedSkills}"></p>
+        <a th:text="Edit" th:href="@{/enterprise/application/} + (${status.index} + 1) + '?edit'"></a>
         <script th:inline="javascript">
             $(function(){
                 var applicationId = /*[['#application-wrapper-' + (${status.index} + 1)]]*/;

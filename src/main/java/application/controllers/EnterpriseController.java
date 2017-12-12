@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
-@SessionAttributes({"enterprise","app"})
+@SessionAttributes({"enterprise","app","availableProfessions"})
 public class EnterpriseController {
     @Autowired
     private EnterpriseService enterpriseService;
@@ -36,6 +37,11 @@ public class EnterpriseController {
     @ModelAttribute("app")
     private ApplicationRegistrationForm app() {
         return new ApplicationRegistrationForm();
+    }
+
+    @ModelAttribute("availableProfessions")
+    private List<String> availableProfessions() {
+        return enterpriseService.getAvailableProfessionsList();
     }
 
     @GetMapping("/enterprise")
