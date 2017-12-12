@@ -2,6 +2,19 @@ CREATE SCHEMA IF NOT EXISTS recruitment_agency;
 
 USE recruitment_agency;
 
+
+CREATE TABLE IF NOT EXISTS spheres(
+                    name VARCHAR(100) NOT NULL,
+                    PRIMARY KEY(name)
+);
+
+CREATE TABLE IF NOT EXISTS professions_and_spheres (
+                                    profession VARCHAR(100) NOT NULL,
+                                    sphere VARCHAR(100) NOT NULL,
+                                    PRIMARY KEY(profession),
+                                    FOREIGN KEY(sphere) REFERENCES spheres(name));           
+
+
 CREATE TABLE IF NOT EXISTS users (
 	id INT NOT NULL AUTO_INCREMENT,
 	username VARCHAR(255) NOT NULL UNIQUE,
@@ -22,13 +35,15 @@ CREATE TABLE IF NOT EXISTS candidates_info (
 	email VARCHAR(320) NOT NULL,
     name VARCHAR(256),
     
+    profession VARCHAR(256),
     employment_type ENUM('NOT_IMPORTANT', 'FULL_TIME', 'PART_TIME') NOT NULL DEFAULT 'NOT_IMPORTANT',
 	required_salary_cu_per_month INT,
     experience TEXT,
     skills TEXT,
 
     PRIMARY KEY (user_id),
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (profession) REFERENCES professions_and_spheres(profession)
 );
    
 CREATE TABLE IF NOT EXISTS enterprises_info (
@@ -41,17 +56,6 @@ CREATE TABLE IF NOT EXISTS enterprises_info (
     PRIMARY KEY (user_id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
-
-CREATE TABLE IF NOT EXISTS spheres(
-                    name VARCHAR(100) NOT NULL,
-                    PRIMARY KEY(name)
-);
-
-CREATE TABLE IF NOT EXISTS professions_and_spheres (
-                                    profession VARCHAR(100) NOT NULL,
-                                    sphere VARCHAR(100) NOT NULL,
-                                    PRIMARY KEY(profession),
-                                    FOREIGN KEY(sphere) REFERENCES spheres(name));           
 
 CREATE TABLE IF NOT EXISTS applications (
 							id INT NOT NULL AUTO_INCREMENT,

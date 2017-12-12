@@ -75,14 +75,29 @@ public class WelcomeController {
                                     @RequestParam("confirmPassword") String confirmPassword,
                                     @RequestParam("name") String name,
                                     @RequestParam("email") String email,
+                                    @RequestParam("profession") String profession,
+                                    @RequestParam("employmentType") String employmentType,
+                                    @RequestParam("requiredSalaryCuPerMonth") String requiredSalaryCuPerMonth,
+                                    @RequestParam("experience") String experience,
+                                    @RequestParam("skills") String skills,
                                     Model model) {
         RegisterRequestParameter parameter = new RegisterRequestParameter();
         if (userService.validateUsername(candidateRegistrationForm)) {
             if (userService.validateEmail(candidateRegistrationForm)) {
                 if (userService.validatePassword(candidateRegistrationForm)) {
-                    userService.registerNewUser(candidateRegistrationForm);
-                    candidateRegistrationForm.resetAll();
-                    parameter.setSuccess(true);
+                    if (userService.validateProfession(profession)) {
+                        if (userService.validateSalary(requiredSalaryCuPerMonth)) {
+                            userService.registerNewUser(candidateRegistrationForm);
+                            candidateRegistrationForm.resetAll();
+                            parameter.setSuccess(true);
+                        }
+                        else {
+                            parameter.setSalaryError(true);
+                        }
+                    }
+                    else {
+                        parameter.setProfessionError(true);
+                    }
                 } else {
                     parameter.setPasswordError(true);
                 }
@@ -106,6 +121,7 @@ public class WelcomeController {
                                      @RequestParam("confirmPassword") String confirmPassword,
                                      @RequestParam("name") String name,
                                      @RequestParam("email") String email,
+                                     @RequestParam("contactPersonName") String contactPersonName,
                                      @RequestParam("profession") String profession,
                                      @RequestParam("quantity") String quantity,
                                      Model model) {
@@ -116,15 +132,14 @@ public class WelcomeController {
                     if (userService.validateApplicationProfession(applicationRegistrationForm)) {
                         if (applicationRegistrationForm.getProfession().isEmpty() ||
                                 userService.validateApplicationQuantity(applicationRegistrationForm)) {
-                            userService.registerNewUser(enterpriseRegistrationForm, applicationRegistrationForm);
-                            enterpriseRegistrationForm.resetAll();
-                            applicationRegistrationForm.resetAll();
-                            parameter.setSuccess(true);
+                                userService.registerNewUser(enterpriseRegistrationForm, applicationRegistrationForm);
+                                enterpriseRegistrationForm.resetAll();
+                                applicationRegistrationForm.resetAll();
+                                parameter.setSuccess(true);
                         }
                         else {
                             parameter.setQuantityError(true);
                         }
-
                     }
                     else {
                         parameter.setProfessionError(true);

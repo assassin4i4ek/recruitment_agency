@@ -211,7 +211,7 @@ public class AgentController {
             if (edit != null)
                 parameter.setEdit(true);
             model.addAttribute("param", parameter);
-            return "candidate/index";
+            return "agent/candidate/index";
         } else
             return "error/wrong-input";
     }
@@ -234,7 +234,6 @@ public class AgentController {
             candidate.setName(name);
             candidate.setEmail(email);
             agentService.updateCandidateInfo(candidate);
-            model.addAttribute("candidate", candidate);
             return "redirect:/agent/application/" + (applicationIndex + 1) + "/applicant/" + (candidateIndex + 1);
         } else
             return "error/wrong-input";

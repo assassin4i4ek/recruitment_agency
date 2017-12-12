@@ -24,4 +24,5 @@ public interface ApplicationService {
     void reorderApplicationsOfEnterprise(List<Application> applications);
     void updateEnterpriseApplicationInfo(Application application);
     void updateApplicationEnterpriseCollapsed(Application application);
+    boolean validateSalary(String requiredSalaryCuPerMonth);
 }

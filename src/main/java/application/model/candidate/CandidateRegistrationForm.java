@@ -28,7 +28,7 @@ public class CandidateRegistrationForm extends UserRegistrationForm {
 
     public void resetAll() {
         super.resetAll();
-        name = email = "";
+        name = email = employmentType = requiredSalaryCuPerMonth = experience = skills = "";
     }
 
     public String getEmploymentType() {

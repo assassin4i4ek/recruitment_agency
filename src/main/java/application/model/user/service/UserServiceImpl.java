@@ -78,6 +78,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return applicationService.validateQuantity(applicationRegistrationForm.getQuantity());
     }
 
+    @Override
+    public boolean validateProfession(String profession) {
+        return applicationService.validateProfession(profession);
+    }
+
+    @Override
+    public boolean validateSalary(String requiredSalaryCuPerMonth) {
+        return applicationService.validateSalary(requiredSalaryCuPerMonth);
+    }
 
     @Override
     public void registerNewUser(CandidateRegistrationForm form) {

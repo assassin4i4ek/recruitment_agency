@@ -36,9 +36,9 @@ INSERT INTO `recruitment_agency`.`enterprises_info`(`user_id`,`name`, `email`, `
 SELECT * FROM enterprises_info;
 
 INSERT INTO `recruitment_agency`.`candidates_info`
-(`user_id`,`email`,`name`,`employment_type`,`required_salary_cu_per_month`,`experience`,`skills`) VALUES
-(5, 'c1@gmail.com', 'Candidate1', 'FULL_TIME', 4000, 'lawyer, notary, secretary', 'i don\'t know'),
-(6, 'c2@gmail.com', 'Candidate2', 'NOT_IMPORTANT', 2000, 'policeman, detective', 'criminal, military, shooting...');
+(`user_id`,`email`,`name`,`profession`,`employment_type`,`required_salary_cu_per_month`,`experience`,`skills`) VALUES
+(5, 'c1@gmail.com', 'Candidate1', 'Lawyer','FULL_TIME', 4000, 'lawyer, notary, secretary', 'i don\'t know'),
+(6, 'c2@gmail.com', 'Candidate2', null, 'NOT_IMPORTANT', 2000, 'policeman, detective', 'criminal, military, shooting...');
 
 SELECT * FROM candidates_info;
 
@@ -52,8 +52,8 @@ VALUES
 
 SELECT * FROM applications;
 
-/*INSERT INTO `recruitment_agency`.`applicants_for_applications` (`application_id`,`candidate_id`) 
-VALUES(2, 5), (2, 6), (3, 5), (3, 6);*/
+INSERT INTO `recruitment_agency`.`applicants_for_applications` (`application_id`,`candidate_id`) 
+VALUES(2, 5), (2, 6);/*, (3, 5), (3, 6);*/
 
 SELECT * FROM applicants_for_applications;
 

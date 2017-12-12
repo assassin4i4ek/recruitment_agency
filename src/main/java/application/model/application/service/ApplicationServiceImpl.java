@@ -117,6 +117,16 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public boolean validateSalary(String requiredSalaryCuPerMonth) {
+        try {
+            int salary = Integer.parseInt(requiredSalaryCuPerMonth);
+            return salary > 0;
+        } catch (NumberFormatException e){
+            return false;
+        }
+    }
+
+    @Override
     public Map<Integer, Long> listAgentIdsAndApplicationAmounts() {
         return applicationDao.listAgentIdsAndApplicationAmounts();
     }

@@ -14,4 +14,6 @@ public interface UserService {
     void registerNewUser(EnterpriseRegistrationForm form, ApplicationRegistrationForm applicationRegistrationForm);
     boolean validateApplicationProfession(ApplicationRegistrationForm applicationRegistrationForm);
     boolean validateApplicationQuantity(ApplicationRegistrationForm applicationRegistrationForm);
+    boolean validateProfession(String profession);
+    boolean validateSalary(String requiredSalaryCuPerMonth);
 }

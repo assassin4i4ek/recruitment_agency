@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Secured</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div th:if="!${param.edit}">
+        <h1 th:text="${candidate.name}"></h1>
+        <h2 th:text="${candidate.email}"></h2>
+        <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
+    </div>
+    <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" method="POST">
+        <input type="text" th:name="name" th:value="${candidate.name}">
+        <input type="text" th:name="email" th:value="${candidate.email}">
+        <input type="submit" value="Save">
+    </form>
+    <p><a href="/" th:href="@{/}">Back to home page</a></p>
+</div>
+</body>
+</html>

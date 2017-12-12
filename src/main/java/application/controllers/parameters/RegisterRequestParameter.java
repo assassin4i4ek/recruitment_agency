@@ -7,6 +7,7 @@ public class RegisterRequestParameter {
     private boolean success = false;
     private boolean professionError = false;
     private boolean quantityError = false;
+    private boolean salaryError;
 
     public boolean isQuantityError() {
         return quantityError;
@@ -54,5 +55,13 @@ public class RegisterRequestParameter {
 
     public void setEmailError(boolean emailError) {
         this.emailError = emailError;
+    }
+
+    public void setSalaryError(boolean salaryError) {
+        this.salaryError = salaryError;
+    }
+
+    public boolean isSalaryError() {
+        return salaryError;
     }
 }

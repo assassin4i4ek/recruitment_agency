@@ -34,6 +34,6 @@ public class EnterpriseRegistrationForm extends UserRegistrationForm{
     @Override
     public void resetAll() {
         super.resetAll();
-        email = name = "";
+        email = name = contactPersonName = "";
     }
 }
