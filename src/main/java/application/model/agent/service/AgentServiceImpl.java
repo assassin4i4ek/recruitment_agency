@@ -125,5 +125,10 @@ public class AgentServiceImpl implements AgentService {
         return candidateService.getPossibleApplicants(application);
     }
 
+    @Override
+    public boolean validateSalary(String salaryCuPerMonth) {
+        return applicationService.validateSalary(salaryCuPerMonth);
+    }
+
 
 }

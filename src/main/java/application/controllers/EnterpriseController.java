@@ -5,6 +5,7 @@ import application.controllers.parameters.EnterpriseRequestParameter;
 import application.model.agent.Agent;
 import application.model.application.Application;
 import application.model.application.ApplicationRegistrationForm;
+import application.model.application.EmploymentType;
 import application.model.enterprise.Enterprise;
 import application.model.enterprise.serivice.EnterpriseService;
 import application.model.user.User;
@@ -85,6 +86,7 @@ public class EnterpriseController {
                                  @RequestParam("edit") String edit,
                                  @RequestParam(name = "quantityError", required = false) String quantityError,
                                  @RequestParam(name = "professionError", required = false) String professionError,
+                                 @RequestParam(name = "salaryError", required = false) String salaryError,
                                  Model model) {
         applicationIndex = applicationIndex - 1;
 
@@ -113,11 +115,16 @@ public class EnterpriseController {
                                   @PathVariable("index") int applicationIndex,
                                   @RequestParam("save") String save,
                                   @RequestParam("profession") String profession,
-                                  @RequestParam("quantity") String quantity) {
+                                  @RequestParam("quantity") String quantity,
+                                  @RequestParam("employmentType") String employmentType,
+                                  @RequestParam("salaryCuPerMonth") String salaryCuPerMonth,
+                                  @RequestParam("demandedSkills") String demandedSkills) {
         applicationIndex = applicationIndex - 1;
         if (indexValidator.validateApplicationIndexes(enterprise.getApplications(), applicationIndex)) {
             Application application = enterprise.getApplications().get(applicationIndex);
             String isError = "";
+            application.setEmploymentType(EmploymentType.valueOf(employmentType));
+            application.setDemandedSkills(demandedSkills);
             if (enterpriseService.validateQuantity(quantity)) {
                 application.setQuantity(Short.parseShort(quantity));
             }
@@ -129,6 +136,12 @@ public class EnterpriseController {
             }
             else {
                 isError += "&professionError";
+            }
+            if (enterpriseService.validateSalary(salaryCuPerMonth)) {
+                application.setSalaryCuPerMonth(Integer.parseInt(salaryCuPerMonth));
+            }
+            else {
+                isError += "&salaryError";
             }
             if (isError.isEmpty()) {
                 enterpriseService.updateEnterpriseApplicationInfo(application);

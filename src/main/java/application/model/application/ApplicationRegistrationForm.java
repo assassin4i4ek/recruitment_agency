@@ -3,7 +3,7 @@ package application.model.application;
 public class ApplicationRegistrationForm {
     private String profession;
     private String quantity;
-    private EmploymentType employmentType;
+    private EmploymentType employmentType = EmploymentType.FULL_TIME;
     private String salaryCuPerMonth;
     private String demandedSkills;
 
@@ -48,6 +48,7 @@ public class ApplicationRegistrationForm {
     }
 
     public void resetAll() {
-        quantity = profession = "";
+        employmentType = EmploymentType.FULL_TIME;
+        quantity = profession = salaryCuPerMonth = demandedSkills = "";
     }
 }

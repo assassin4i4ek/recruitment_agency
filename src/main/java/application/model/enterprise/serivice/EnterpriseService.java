@@ -17,4 +17,5 @@ public interface EnterpriseService {
     void updateApplicationCollapsed(Application application);
     void checkForUpdates(Enterprise enterprise);
     void registerNewApplication(User user, ApplicationRegistrationForm form);
+    boolean validateSalary(String salaryCuPerMonth);
 }

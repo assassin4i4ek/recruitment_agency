@@ -76,4 +76,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     public void registerNewApplication(User user, ApplicationRegistrationForm form) {
         applicationService.registerNewApplication(user, form);
     }
+
+    @Override
+    public boolean validateSalary(String salaryCuPerMonth) {
+        return applicationService.validateSalary(salaryCuPerMonth);
+    }
 }

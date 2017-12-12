@@ -6,6 +6,7 @@ public class ApplicationRequestParameter {
     private boolean quantityError = false;
     private boolean professionError = false;
     private boolean finalizeError = false;
+    private boolean salaryError = false;
 
     public boolean isEdit() {
         return edit;
@@ -37,5 +38,13 @@ public class ApplicationRequestParameter {
 
     public void setProfessionError(boolean professionError) {
         this.professionError = professionError;
+    }
+
+    public void setSalaryError(boolean salaryError) {
+        this.salaryError = salaryError;
+    }
+
+    public boolean isSalaryError() {
+        return salaryError;
     }
 }

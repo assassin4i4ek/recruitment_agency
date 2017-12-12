@@ -17,7 +17,7 @@
                 <a data-toggle="collapse" href="#apps-wrapper">Applications</a>
             </h4>
         </div>
-        <div th:if="${param.showApplications}" id="apps-wrapper" aria-expanded="true" class="collapse in">
+        <div id="apps-wrapper" aria-expanded="true" class="collapse in">
             <ul th:id="apps">
                 <li th:each="app,status : ${enterprise.applications}">
                     <th:block th:replace="enterprise/application_item :: application"></th:block>

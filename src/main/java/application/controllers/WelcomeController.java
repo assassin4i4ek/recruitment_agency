@@ -124,21 +124,28 @@ public class WelcomeController {
                                      @RequestParam("contactPersonName") String contactPersonName,
                                      @RequestParam("profession") String profession,
                                      @RequestParam("quantity") String quantity,
+                                     @RequestParam("employmentType") String employmentType,
+                                     @RequestParam("salaryCuPerMonth") String salaryCuPerMonth,
+                                     @RequestParam("demandedSkills") String demandedSkills,
                                      Model model) {
         RegisterRequestParameter parameter = new RegisterRequestParameter();
         if (userService.validateUsername(enterpriseRegistrationForm)) {
             if (userService.validateEmail(enterpriseRegistrationForm)) {
                 if (userService.validatePassword(enterpriseRegistrationForm)) {
                     if (userService.validateApplicationProfession(applicationRegistrationForm)) {
-                        if (applicationRegistrationForm.getProfession().isEmpty() ||
-                                userService.validateApplicationQuantity(applicationRegistrationForm)) {
+                        if (salaryCuPerMonth.isEmpty() || userService.validateSalary(salaryCuPerMonth)) {
+                            if (applicationRegistrationForm.getProfession().isEmpty() ||
+                                    userService.validateApplicationQuantity(applicationRegistrationForm)) {
                                 userService.registerNewUser(enterpriseRegistrationForm, applicationRegistrationForm);
                                 enterpriseRegistrationForm.resetAll();
                                 applicationRegistrationForm.resetAll();
                                 parameter.setSuccess(true);
+                            } else {
+                                parameter.setQuantityError(true);
+                            }
                         }
                         else {
-                            parameter.setQuantityError(true);
+                            parameter.setSalaryError(true);
                         }
                     }
                     else {

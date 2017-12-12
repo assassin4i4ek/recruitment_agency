@@ -78,7 +78,8 @@ public class CandidateDaoImpl implements CandidateDao {
     public void updateCandidateInfo(Candidate candidate) {
         String sql = "UPDATE candidates_info SET name=?, email=?, profession=?, employment_type=?, required_salary_cu_per_month=?," +
                 " experience=?, skills=? WHERE user_id=?";
-        jdbcTemplate.update(sql, candidate.getName(), candidate.getEmail(), candidate.getProfession(),
+        jdbcTemplate.update(sql, candidate.getName(), candidate.getEmail(),
+                candidate.getProfession().isEmpty() ? null : candidate.getProfession(),
                 candidate.getEmploymentType().name(), candidate.getRequiredSalaryCuPerMonth(),
                 candidate.getExperience(), candidate.getSkills(), candidate.getId());
     }

@@ -7,7 +7,7 @@ public class RegisterRequestParameter {
     private boolean success = false;
     private boolean professionError = false;
     private boolean quantityError = false;
-    private boolean salaryError;
+    private boolean salaryError = false;
 
     public boolean isQuantityError() {
         return quantityError;

@@ -161,11 +161,11 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public void updateEnterpriseApplication(Application application) {
-        String sql = "UPDATE applications SET profession=?, quantity=? WHERE id=?";
+        String sql = "UPDATE applications SET profession=?, quantity=?, employment_type=?, salary_cu_per_month=?," +
+                " demanded_skills=? WHERE id=?";
         jdbcTemplate.update(sql,
-                application.getProfession(),
-                application.getQuantity(),
-                application.getId());
+                application.getProfession(), application.getQuantity(), application.getEmploymentType().name(),
+                application.getSalaryCuPerMonth(), application.getDemandedSkills(), application.getId());
     }
 
     private class AgentApplicationMapper implements RowMapper<Application> {

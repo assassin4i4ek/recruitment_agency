@@ -62,9 +62,9 @@ CREATE TABLE IF NOT EXISTS applications (
 							enterprise_id INT NOT NULL,
                             agent_id INT,
 							registration_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-							quantity INT(3) DEFAULT 1,
                             
                             profession VARCHAR(100) NOT NULL, /*сопостовлять с опытом кандидата*/
+							quantity INT(3) DEFAULT 1,
                             employment_type ENUM('FULL_TIME', 'PART_TIME') NOT NULL, /*сопостовлять с указанной занятостью кандидата*/
                             salary_cu_per_months INT, /*сопостовлять с желаемой зарплатой кандидата?*/
                             demanded_skills TEXT, /*сопостовлять с указанными навыками кандидата*/

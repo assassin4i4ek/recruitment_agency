@@ -10,13 +10,16 @@
     <span class="sortable-handle">::::::::::::::::::::::::::::::::::::::::::</span>
     <div class="panel-heading">
         <p th:text="${app.profession} + '(' + ${app.quantity} + ')'" ></p>
+        <a th:text="Edit" th:href="@{/enterprise/application/} + (${status.index} + 1) + '?edit'"></a>
         <div class="panel-title">
-            <a data-toggle="collapse" th:href="'#application-wrapper-' + (${status.index} + 1)">hide</a>
+            <a data-toggle="collapse" th:href="'#application-wrapper-' + (${status.index} + 1)">details</a>
         </div>
     </div>
     <div th:id="'application-wrapper-' + (${status.index} + 1)" th:aria-expanded="!${app.enterpriseCollapsed}"
                                                 th:class="'collapse' + (${app.enterpriseCollapsed} ? '' : ' in')">
-        <a th:text="Edit" th:href="@{/enterprise/application/} + (${status.index} + 1) + '?edit'"></a>
+        <p th:text="'Employment type: ' + ${app.employmentType.name() == 'FULL_TIME' ? 'Full-time' : 'Part-time'}"></p>
+        <p th:text="'Salary per month: ' + ${app.salaryCuPerMonth}"></p>
+        <p th:text="'Demanded skills: ' + ${app.demandedSkills}"></p>
         <script th:inline="javascript">
             $(function(){
                 var applicationId = /*[['#application-wrapper-' + (${status.index} + 1)]]*/;

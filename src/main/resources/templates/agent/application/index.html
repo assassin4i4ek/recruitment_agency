@@ -20,15 +20,28 @@
     <a th:href="@{/agent/application/} + (${applicationIndex} + 1) + '/enterprise'" th:text="${app.enterprise.name}"></a>
     <p th:text="${app.enterprise.contactPersonName}"></p>
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" th:method="POST">
-        <input type="text" th:name="profession" th:value="${app.profession}">
-        <input type="text" th:name="quantity" th:value="${app.quantity}">
-        <textarea th:name="agentNote" th:text="${app.agentNote}"></textarea>
+        <label>Profession:<input type="text" name="profession" th:value="${app.profession}"></label>
+        <label>Quantity:<input type="text" name="quantity" th:value="${app.quantity}"></label>
+        <label>Notes:<textarea th:name="agentNote" th:text="${app.agentNote}"></textarea></label>
+
+        <label>Employment type:
+            <label><input type="radio" name="employmentType" th:value="'FULL_TIME'"
+                          th:checked="${app.employmentType.name()} == 'FULL_TIME'">full-time</label>
+            <label><input type="radio" name="employmentType" th:value="'PART_TIME'"
+                          th:checked="${app.employmentType.name()} == 'PART_TIME'">part-time</label>
+        </label>
+        <label>Salary per month:<input type="text" name="salaryCuPerMonth" th:value="${app.salaryCuPerMonth}"></label>
+        <label>Demanded skills:<textarea name="demandedSkills" th:value="${app.demandedSkills}"></textarea></label>
         <input type="submit" value="Save">
     </form>
     <div th:if="!${param.edit}">
         <p th:text="${app.profession}"></p>
         <p th:text="${app.quantity}"></p>
-        <p th:text="${app.agentNote}"></p>
+        <p th:text="'Notes: ' + ${app.agentNote}"></p>
+        <p th:text="'Employment type: ' + ${app.employmentType.name() == 'FULL_TIME' ? 'Full-time' : 'Part-time'}"></p>
+        <p th:text="'Salary per month: ' + ${app.salaryCuPerMonth}"></p>
+        <p th:text="'Demanded skills: ' + ${app.demandedSkills}"></p>
+        <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
         <div>
             <div class="panel-heading">
                 <div class="panel-title">
@@ -44,7 +57,6 @@
                 </ul>
             </div>
         </div>
-        <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
         <div>
             <div class="panel-heading">
                 <div class="panel-title">

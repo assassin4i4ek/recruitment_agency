@@ -6,6 +6,7 @@ import application.controllers.parameters.EnterpriseRequestParameter;
 import application.model.agent.Agent;
 import application.model.agent.service.AgentService;
 import application.model.application.Application;
+import application.model.application.EmploymentType;
 import application.model.candidate.Applicant;
 import application.model.candidate.ApplicantStage;
 import application.model.candidate.Candidate;
@@ -71,6 +72,7 @@ public class AgentController {
                                  @RequestParam(name = "edit", required = false) String edit,
                                  @RequestParam(name = "quantityError", required = false) String quantityError,
                                  @RequestParam(name = "professionError", required = false) String professionError,
+                                 @RequestParam(name = "salaryError", required = false) String salaryError,
                                  @RequestParam(name = "finalizeError", required = false) String finalizeError,
                                  Model model) {
         applicationIndex = applicationIndex - 1;
@@ -88,6 +90,8 @@ public class AgentController {
                 parameter.setFinalizeError(true);
             if (professionError != null)
                 parameter.setProfessionError(true);
+            if (salaryError != null)
+                parameter.setSalaryError(true);
             model.addAttribute("param", parameter);
             model.addAttribute("applicationIndex", applicationIndex);
             return "/agent/application/index";
@@ -102,7 +106,10 @@ public class AgentController {
                                   @RequestParam("save") String save,
                                   @RequestParam("profession") String profession,
                                   @RequestParam("quantity") String quantity,
-                                  @RequestParam("agentNote") String agentNote) {
+                                  @RequestParam("agentNote") String agentNote,
+                                  @RequestParam("employmentType") String employmentType,
+                                  @RequestParam("salaryCuPerMonth") String salaryCuPerMonth,
+                                  @RequestParam("demandedSkills") String demandedSkills) {
         applicationIndex = applicationIndex - 1;
         if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
             Application application = agent.getApplications().get(applicationIndex);
@@ -111,7 +118,7 @@ public class AgentController {
                 short shortQuantity = Short.parseShort(quantity);
                 application.setQuantity(shortQuantity);
             } catch (NumberFormatException e) {
-                isError = "?edit&quantityError";
+                isError += "&quantityError";
             }
             if (agentService.validateProfession(profession)) {
                 application.setProfession(profession);
@@ -119,8 +126,18 @@ public class AgentController {
             else {
                 isError += "&professionError";
             }
+            if (agentService.validateSalary(salaryCuPerMonth)) {
+                application.setSalaryCuPerMonth(Integer.parseInt(salaryCuPerMonth));
+            }
+            else {
+                isError += "&salaryError";
+            }
             application.setAgentNote(agentNote);
+            application.setEmploymentType(EmploymentType.valueOf(employmentType));
+            application.setDemandedSkills(demandedSkills);
             agentService.updateApplicationInfo(application);
+            if (!isError.isEmpty())
+                isError = "?edit" + isError;
             return "redirect:/agent/application/" + (applicationIndex + 1) + isError;
         }
         else
@@ -196,6 +213,8 @@ public class AgentController {
     public String getApplicantOfApplication(@ModelAttribute(name = "agent") Agent agent,
                                             @PathVariable("index") int applicationIndex,
                                             @RequestParam(name = "edit", required = false) String edit,
+                                            @RequestParam(name = "professionError", required = false) String professionError,
+                                            @RequestParam(name = "salaryError", required = false) String salaryError,
                                             @PathVariable("applicantIndex") int candidateIndex,
                                             Model model) {
         applicationIndex = applicationIndex - 1;
@@ -210,6 +229,10 @@ public class AgentController {
             CandidateRequestParameter parameter = new CandidateRequestParameter();
             if (edit != null)
                 parameter.setEdit(true);
+            if (professionError != null)
+                parameter.setProfessionError(true);
+            if (salaryError != null)
+                parameter.setSalaryError(true);
             model.addAttribute("param", parameter);
             return "agent/candidate/index";
         } else
@@ -222,6 +245,11 @@ public class AgentController {
                                             @RequestParam("save") String save,
                                             @RequestParam("name") String name,
                                             @RequestParam("email") String email,
+                                             @RequestParam("profession") String profession,
+                                             @RequestParam("employmentType") String employmentType,
+                                             @RequestParam("requiredSalaryCuPerMonth") String requiredSalaryCuPerMonth,
+                                             @RequestParam("experience") String experience,
+                                             @RequestParam("skills") String skills,
                                             @PathVariable("applicantIndex") int candidateIndex,
                                             Model model) {
         applicationIndex = applicationIndex - 1;
@@ -231,10 +259,28 @@ public class AgentController {
                 indexValidator.validateApplicantsIndexes(agent.getApplications().get(applicationIndex).getApplicants(),
                         candidateIndex)) {
             Candidate candidate = agent.getApplications().get(applicationIndex).getApplicants().get(candidateIndex);
+            String isError = "";
+            if (profession.isEmpty() || agentService.validateProfession(profession)) {
+                candidate.setProfession(profession);
+            }
+            else {
+                isError += "&professionError";
+            }
+            if (agentService.validateSalary(requiredSalaryCuPerMonth)) {
+                candidate.setRequiredSalaryCuPerMonth(Integer.parseInt(requiredSalaryCuPerMonth));
+            }
+            else {
+                isError += "&salaryError";
+            }
             candidate.setName(name);
             candidate.setEmail(email);
+            candidate.setEmploymentType(EmploymentType.valueOf(employmentType));
+            candidate.setSkills(skills);
             agentService.updateCandidateInfo(candidate);
-            return "redirect:/agent/application/" + (applicationIndex + 1) + "/applicant/" + (candidateIndex + 1);
+            if (!isError.isEmpty()) {
+                isError = "?edit" + isError;
+            }
+            return "redirect:/agent/application/" + (applicationIndex + 1) + "/applicant/" + (candidateIndex + 1) + isError;
         } else
             return "error/wrong-input";
     }
