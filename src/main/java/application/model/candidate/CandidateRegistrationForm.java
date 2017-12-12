@@ -7,7 +7,7 @@ public class CandidateRegistrationForm extends UserRegistrationForm {
     private String email;
     private String name;
     private String profession;
-    private String employmentType = EmploymentType.NOT_IMPORTANT.name();
+    private String employmentType = "NOT_IMPORTANT";
     private String requiredSalaryCuPerMonth;
     private String experience;
     private String skills;

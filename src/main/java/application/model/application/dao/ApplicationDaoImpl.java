@@ -2,6 +2,7 @@ package application.model.application.dao;
 
 import application.model.application.Application;
 import application.model.application.ApplicationRegistrationForm;
+import application.model.application.EmploymentType;
 import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,7 +30,8 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public List<Application> findApplicationsByAgentId(int agentId) {
-        String sql = "SELECT id, enterprise_id, agent_id, registration_timestamp, profession, quantity, agent_note, agent_collapsed, agent_collapsed_applicants" +
+        String sql = "SELECT id, enterprise_id, agent_id, registration_timestamp, profession, quantity, employment_type," +
+                " salary_cu_per_months, demanded_skills, agent_note, agent_collapsed, agent_collapsed_applicants" +
                 " FROM applications WHERE agent_id=" + agentId +
                 " ORDER BY agent_order";
         return jdbcTemplate.query(sql, new AgentApplicationMapper());
@@ -46,10 +48,13 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public void updateAgentApplication(Application application) {
-        String sql = "UPDATE applications SET profession=?, quantity=?, agent_note=? WHERE id=?";
+        String sql = "UPDATE applications SET profession=?, quantity=?, employment_type=?, salary_cu_per_months=?, demanded_skills=?, agent_note=? WHERE id=?";
         jdbcTemplate.update(sql,
                 application.getProfession(),
                 application.getQuantity(),
+                application.getEmploymentType().name(),
+                application.getSalaryCuPerMonth(),
+                application.getDemandedSkills(),
                 application.getAgentNote(),
                 application.getId());
     }
@@ -74,8 +79,10 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public void createNewApplication(User user, ApplicationRegistrationForm form, int agentId) {
-        String sql = "INSERT INTO applications(agent_id, enterprise_id, profession, quantity) VALUE (?,?,?,?)";
-        jdbcTemplate.update(sql, agentId, user.getId(), form.getProfession(), form.getQuantity());
+        String sql = "INSERT INTO applications(agent_id, enterprise_id, profession, quantity, employment_type," +
+                " salary_cu_per_months, demanded_skills) VALUE (?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, agentId, user.getId(), form.getProfession(), form.getQuantity(), form.getEmploymentType(),
+                form.getSalaryCuPerMonth(), form.getDemandedSkills());
     }
 
     @Override
@@ -103,7 +110,8 @@ public class ApplicationDaoImpl implements ApplicationDao {
 
     @Override
     public List<Application> findApplicationsByEnterpriseId(int enterpriseId) {
-        String sql = "SELECT id, registration_timestamp, profession, quantity, enterprise_collapsed" +
+        String sql = "SELECT id, registration_timestamp, profession, quantity, employment_type, salary_cu_per_months," +
+                " demanded_skills, enterprise_collapsed" +
                 " FROM applications WHERE enterprise_id=" + enterpriseId + " ORDER BY enterprise_order";
         return jdbcTemplate.query(sql, (rs, i) -> {
             Application application = new Application();
@@ -112,7 +120,26 @@ public class ApplicationDaoImpl implements ApplicationDao {
             application.setRegistrationTimestamp(rs.getTimestamp("registration_timestamp"));
             application.setProfession(rs.getString("profession"));
             application.setQuantity(rs.getShort("quantity"));
+            application.setEmploymentType(EmploymentType.valueOf(rs.getString("employment_type")));
+            application.setSalaryCuPerMonth(rs.getInt("salary_cu_per_months"));
             application.setEnterpriseCollapsed(rs.getBoolean("enterprise_collapsed"));
+            Blob demandedSkillsBlob = rs.getBlob("demanded_skills");
+            if (demandedSkillsBlob != null) {
+                BufferedReader agentNoteReader = new BufferedReader(new InputStreamReader(
+                        demandedSkillsBlob.getBinaryStream()));
+
+                StringBuilder stringBuilder = new StringBuilder();
+                try {
+                    String line = agentNoteReader.readLine();
+                    while (line != null) {
+                        stringBuilder.append(line);
+                        line = agentNoteReader.readLine();
+                    }
+                } catch (IOException e) {
+                    throw new SQLException("Error reading notes");
+                }
+                application.setDemandedSkills(stringBuilder.toString());
+            }
             return application;
         });
     }
@@ -151,6 +178,27 @@ public class ApplicationDaoImpl implements ApplicationDao {
             application.setRegistrationTimestamp(resultSet.getTimestamp("registration_timestamp"));
             application.setProfession(resultSet.getString("profession"));
             application.setQuantity(resultSet.getShort("quantity"));
+            application.setEmploymentType(EmploymentType.valueOf(resultSet.getString("employment_type")));
+            application.setSalaryCuPerMonth(resultSet.getInt("salary_cu_per_months"));
+
+            Blob demandedSkillsBlob = resultSet.getBlob("demanded_skills");
+            if (demandedSkillsBlob != null) {
+                BufferedReader agentNoteReader = new BufferedReader(new InputStreamReader(
+                        demandedSkillsBlob.getBinaryStream()));
+
+                StringBuilder stringBuilder = new StringBuilder();
+                try {
+                    String line = agentNoteReader.readLine();
+                    while (line != null) {
+                        stringBuilder.append(line);
+                        line = agentNoteReader.readLine();
+                    }
+                } catch (IOException e) {
+                    throw new SQLException("Error reading notes");
+                }
+                application.setDemandedSkills(stringBuilder.toString());
+            }
+
             Blob agentNoteBlob = resultSet.getBlob("agent_note");
             if (agentNoteBlob != null) {
                 BufferedReader agentNoteReader = new BufferedReader(new InputStreamReader(

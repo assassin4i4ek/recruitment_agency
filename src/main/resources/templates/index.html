@@ -55,11 +55,11 @@
             <label>Profession:<input type="text" name="profession" th:value="${candidateRegistrationForm.profession}"></label>
             <label>Employment type:
                 <label><input type="radio" name="employmentType" th:value="${candidateRegistrationForm.employmentType}"
-                              th:selected="${candidateRegistrationForm.employmentType == 'NOT_IMPORTANT'}">not important</label>
+                                           th:checked="${candidateRegistrationForm.employmentType} == 'NOT_IMPORTANT'">not important</label>
                 <label><input type="radio" name="employmentType" th:value="${candidateRegistrationForm.employmentType}"
-                                           th:selected="${candidateRegistrationForm.employmentType == 'FULL_TIME'}">full-time</label>
+                                           th:checked="${candidateRegistrationForm.employmentType} == 'FULL_TIME'">full-time</label>
                 <label><input type="radio" name="employmentType" th:value="${candidateRegistrationForm.employmentType}"
-                                           th:selected="${candidateRegistrationForm.employmentType == 'PART_TIME'}">part-time</label>
+                                           th:checked="${candidateRegistrationForm.employmentType} == 'PART_TIME'">part-time</label>
             </label>
             <label>Required salary per month:<input type="text" name="requiredSalaryCuPerMonth" th:value="${candidateRegistrationForm.requiredSalaryCuPerMonth}"></label>
             <label>Experience:<textarea name="experience" th:value="${candidateRegistrationForm.experience}"></textarea></label>

@@ -19,6 +19,33 @@ public class Application {
     private boolean agentCollapsedApplicants;
     private boolean enterpriseCollapsed;
     private Enterprise enterprise;
+    private EmploymentType employmentType;
+    private int salaryCuPerMonth;
+    private String demandedSkills;
+
+    public EmploymentType getEmploymentType() {
+        return employmentType;
+    }
+
+    public void setEmploymentType(EmploymentType employmentType) {
+        this.employmentType = employmentType;
+    }
+
+    public int getSalaryCuPerMonth() {
+        return salaryCuPerMonth;
+    }
+
+    public void setSalaryCuPerMonth(int salaryCuPerMonth) {
+        this.salaryCuPerMonth = salaryCuPerMonth;
+    }
+
+    public String getDemandedSkills() {
+        return demandedSkills;
+    }
+
+    public void setDemandedSkills(String demandedSkills) {
+        this.demandedSkills = demandedSkills;
+    }
 
     public int getId() {
         return id;

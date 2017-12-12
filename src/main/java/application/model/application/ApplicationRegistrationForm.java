@@ -3,6 +3,33 @@ package application.model.application;
 public class ApplicationRegistrationForm {
     private String profession;
     private String quantity;
+    private EmploymentType employmentType;
+    private String salaryCuPerMonth;
+    private String demandedSkills;
+
+    public EmploymentType getEmploymentType() {
+        return employmentType;
+    }
+
+    public void setEmploymentType(EmploymentType employmentType) {
+        this.employmentType = employmentType;
+    }
+
+    public String getSalaryCuPerMonth() {
+        return salaryCuPerMonth;
+    }
+
+    public void setSalaryCuPerMonth(String salaryCuPerMonth) {
+        this.salaryCuPerMonth = salaryCuPerMonth;
+    }
+
+    public String getDemandedSkills() {
+        return demandedSkills;
+    }
+
+    public void setDemandedSkills(String demandedSkills) {
+        this.demandedSkills = demandedSkills;
+    }
 
     public String getProfession() {
         return profession;
