@@ -92,6 +92,18 @@ public class CandidateDaoImpl implements CandidateDao {
                 form.getEmploymentType(), form.getRequiredSalaryCuPerMonth(), form.getExperience(), form.getSkills());
     }
 
+    @Override
+    public List<Candidate> findCandidatesWithApplicationProfession(Application application, double salaryCoef) {
+        String sql = "SELECT user_id, email, name, profession, employment_type, required_salary_cu_per_month," +
+                " experience, skills FROM candidates_info LEFT JOIN applicants_for_applications" +
+                " ON application_id = " + application.getId() + " AND" +
+                " applicants_for_applications.candidate_id = candidates_info.user_id" +
+                " WHERE applicants_for_applications.candidate_id IS NULL AND required_salary_cu_per_month >= " +
+                salaryCoef * application.getSalaryCuPerMonth() + " AND (profession IS NULL OR profession = '" +
+                application.getProfession() + "')";
+        return jdbcTemplate.query(sql, new CandidateMapper());
+    }
+
     private class CandidateMapper implements RowMapper<Candidate> {
         @Override
         public Candidate mapRow(ResultSet resultSet, int i) throws SQLException {

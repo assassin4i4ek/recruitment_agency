@@ -53,9 +53,18 @@ VALUES
 SELECT * FROM applications;
 
 INSERT INTO `recruitment_agency`.`applicants_for_applications` (`application_id`,`candidate_id`) 
-VALUES(2, 5), (2, 6);/*, (3, 5), (3, 6);*/
+VALUES(2, 5), (2, 6), (3, 5);/*, (3, 6);*/
 
 SELECT * FROM applicants_for_applications;
 
 SELECT * FROM agents_skills;
+
+SELECT 
+    user_id, email, name, profession, employment_type, required_salary_cu_per_month, experience, skills
+FROM
+    candidates_info
+        LEFT JOIN
+    applicants_for_applications ON application_id = 1 AND applicants_for_applications.candidate_id = candidates_info.user_id
+    WHERE applicants_for_applications.candidate_id IS NULL;
+
 

@@ -121,7 +121,7 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    public List<Applicant> getPossibleApplicants(Application application) {
+    public List<Candidate> getPossibleApplicants(Application application) {
         return candidateService.getPossibleApplicants(application);
     }
 

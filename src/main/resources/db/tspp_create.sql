@@ -81,7 +81,6 @@ CREATE TABLE IF NOT EXISTS applications (
                             FOREIGN KEY(profession) REFERENCES professions_and_spheres(profession));
                             
 CREATE TABLE IF NOT EXISTS applicants_for_applications (
-										  id INT NOT NULL AUTO_INCREMENT,
 										  application_id INT NOT NULL,
                                           candidate_id INT NOT NULL,
                                           stage ENUM('INTERNAL_INVITED',
@@ -92,7 +91,7 @@ CREATE TABLE IF NOT EXISTS applicants_for_applications (
                                                      'EXTERNAL_PASSED',
 													 'GOT_JOB') DEFAULT 'INTERNAL_INVITED',
                                           applicant_order INT,           
-                                          PRIMARY KEY(id),
+                                          PRIMARY KEY(application_id,candidate_id),
                                           FOREIGN KEY(application_id) REFERENCES applications(id),
                                           FOREIGN KEY(candidate_id) REFERENCES candidates_info(user_id));
 			

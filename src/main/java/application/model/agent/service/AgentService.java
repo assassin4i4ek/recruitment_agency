@@ -24,6 +24,6 @@ public interface AgentService {
     int getAppropriateAgentIdForApplication(ApplicationRegistrationForm form);
     boolean validateProfession(String profession);
     void checkForUpdates(Agent agent);
-    List<Applicant> getPossibleApplicants(Application application);
+    List<Candidate> getPossibleApplicants(Application application);
     boolean validateSalary(String salaryCuPerMonth);
 }

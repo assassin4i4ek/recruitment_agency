@@ -376,7 +376,7 @@ public class AgentController {
         applicationIndex = applicationIndex - 1;
         if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
             Application application = agent.getApplications().get(applicationIndex);
-            List<Applicant> possibleApplicants = agentService.getPossibleApplicants(application);
+            List<Candidate> possibleApplicants = agentService.getPossibleApplicants(application);
 
             model.addAttribute("possibleApplicants", possibleApplicants);
             model.addAttribute("app", application);

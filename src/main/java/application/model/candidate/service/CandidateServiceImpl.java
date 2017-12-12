@@ -8,8 +8,10 @@ import application.model.candidate.dao.CandidateDao;
 import application.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.ListUtils;
+import org.thymeleaf.util.MapUtils;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
@@ -53,7 +55,23 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public List<Applicant> getPossibleApplicants(Application application) {
-        return null;
+    public List<Candidate> getPossibleApplicants(Application application) {
+        double salaryCoef = 0.75;
+        List<Candidate> candidates = candidateDao.findCandidatesWithApplicationProfession(application, salaryCoef);
+        //у кандидатов с указанными профессиями изначальную прибавку к итоговому коеффициенту?
+        Map<Integer, Integer> resultMap = new HashMap<>();
+        String[] demandedSkills = application.getDemandedSkills().split(",\\s*|\\.\\s+|;\\s*|\\n");
+        for (Candidate candidate : candidates) {
+            int matchLevel = 0;
+            for (String skill : demandedSkills) {
+                if (candidate.getSkills().contains(skill)) {
+                    ++matchLevel;
+                }
+            }
+            resultMap.put(candidate.getId(), matchLevel);
+        }
+
+        Collections.sort(candidates, Comparator.comparingInt(a -> resultMap.get(a.getId())));
+        return candidates;
     }
 }
