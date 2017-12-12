@@ -33,6 +33,11 @@
             Quantity value is wrong.
         </div>
     </div>
+    <div th:if="${param1.salaryError}">
+        <div class="alert alert-danger">
+            Salary value is wrong.
+        </div>
+    </div>
     <div th:if="${param1.success}">
         <div class="alert alert-info">
             You successfully registered
@@ -47,6 +52,18 @@
             <label>Name:<input type="text" name="name" th:value="${candidateRegistrationForm.name}"></label>
             <label>Password:<input type="password" name="password" th:value="${candidateRegistrationForm.password}"></label>
             <label>Confirm password:<input type="password" name="confirmPassword" th:value="${candidateRegistrationForm.confirmPassword}"></label>
+            <label>Profession:<input type="text" name="profession" th:value="${candidateRegistrationForm.profession}"></label>
+            <label>Employment type:
+                <label><input type="radio" name="employmentType" th:value="${candidateRegistrationForm.employmentType}"
+                              th:selected="${candidateRegistrationForm.employmentType == 'NOT_IMPORTANT'}">not important</label>
+                <label><input type="radio" name="employmentType" th:value="${candidateRegistrationForm.employmentType}"
+                                           th:selected="${candidateRegistrationForm.employmentType == 'FULL_TIME'}">full-time</label>
+                <label><input type="radio" name="employmentType" th:value="${candidateRegistrationForm.employmentType}"
+                                           th:selected="${candidateRegistrationForm.employmentType == 'PART_TIME'}">part-time</label>
+            </label>
+            <label>Required salary per month:<input type="text" name="requiredSalaryCuPerMonth" th:value="${candidateRegistrationForm.requiredSalaryCuPerMonth}"></label>
+            <label>Experience:<textarea name="experience" th:value="${candidateRegistrationForm.experience}"></textarea></label>
+            <label>Skills:<input type="text" name="skills" th:value="${candidateRegistrationForm.skills}"></label>
 
             <input type="submit" value="Register">
         </form>

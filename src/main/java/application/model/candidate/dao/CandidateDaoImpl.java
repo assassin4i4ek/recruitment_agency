@@ -32,15 +32,15 @@ public class CandidateDaoImpl implements CandidateDao {
 
     @Override
     public Candidate findCandidateById(int candidateId) {
-        String sql = "SELECT user_id, email, name, employment_type, required_salary_cu_per_month, experience, skills" +
-                " FROM candidates_info WHERE user_id=" + candidateId;
+        String sql = "SELECT user_id, email, name, profession, employment_type, required_salary_cu_per_month," +
+                " experience, skills FROM candidates_info WHERE user_id=" + candidateId;
         List<Candidate> candidates = jdbcTemplate.query(sql, new CandidateMapper());
         return candidates != null ? candidates.get(0) : null;
     }
 
     @Override
     public List<Applicant> findApplicantsForApplication(Application application) {
-        String  sql = "SELECT user_id, email, name, employment_type, required_salary_cu_per_month, experience," +
+        String  sql = "SELECT user_id, email, name, profession, employment_type, required_salary_cu_per_month, experience," +
                 " skills, stage FROM candidates_info" +
                 " INNER JOIN applicants_for_applications ON candidates_info.user_id=applicants_for_applications.candidate_id" +
                 " WHERE applicants_for_applications.application_id=" + application.getId() +
@@ -76,19 +76,19 @@ public class CandidateDaoImpl implements CandidateDao {
 
     @Override
     public void updateCandidateInfo(Candidate candidate) {
-        String sql = "UPDATE candidates_info SET name=?, email=?, employment_type=?, required_salary_cu_per_month=?," +
+        String sql = "UPDATE candidates_info SET name=?, email=?, profession=?, employment_type=?, required_salary_cu_per_month=?," +
                 " experience=?, skills=? WHERE user_id=?";
-        jdbcTemplate.update(sql, candidate.getName(), candidate.getEmail(), candidate.getEmploymentType().name(),
-                candidate.getRequiredSalaryCuPerMonth(), candidate.getExperience(), candidate.getSkills(),
-                candidate.getId());
+        jdbcTemplate.update(sql, candidate.getName(), candidate.getEmail(), candidate.getProfession(),
+                candidate.getEmploymentType().name(), candidate.getRequiredSalaryCuPerMonth(),
+                candidate.getExperience(), candidate.getSkills(), candidate.getId());
     }
 
     @Override
     public void createNewCandidate(User user, CandidateRegistrationForm form) {
-        String sql = "INSERT INTO candidates_info(user_id,email,name,employment_type,required_salary_cu_per_month," +
-                "experience,skills) VALUE (?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, user.getId(), form.getEmail(), form.getName(), form.getEmploymentType(),
-                form.getRequiredSalaryCuPerMonth(), form.getExperience(), form.getSkills());
+        String sql = "INSERT INTO candidates_info(user_id,email,name,profession,employment_type,required_salary_cu_per_month," +
+                "experience,skills) VALUE (?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql, user.getId(), form.getEmail(), form.getName(), form.getProfession().isEmpty() ? null : form.getProfession(),
+                form.getEmploymentType(), form.getRequiredSalaryCuPerMonth(), form.getExperience(), form.getSkills());
     }
 
     private class CandidateMapper implements RowMapper<Candidate> {
@@ -98,6 +98,7 @@ public class CandidateDaoImpl implements CandidateDao {
             candidate.setId(resultSet.getInt("user_id"));
             candidate.setName(resultSet.getString("name"));
             candidate.setEmail(resultSet.getString("email"));
+            candidate.setProfession(resultSet.getString("profession"));
             candidate.setEmploymentType(EmploymentType.valueOf(resultSet.getString("employment_type")));
             candidate.setRequiredSalaryCuPerMonth(resultSet.getInt("required_salary_cu_per_month"));
             Blob experienceBlob = resultSet.getBlob("experience");
@@ -145,6 +146,7 @@ public class CandidateDaoImpl implements CandidateDao {
             applicant.setId(resultSet.getInt("user_id"));
             applicant.setName(resultSet.getString("name"));
             applicant.setEmail(resultSet.getString("email"));
+            applicant.setProfession(resultSet.getString("profession"));
             applicant.setEmploymentType(EmploymentType.valueOf(resultSet.getString("employment_type")));
             applicant.setRequiredSalaryCuPerMonth(resultSet.getInt("required_salary_cu_per_month"));
             Blob experienceBlob = resultSet.getBlob("experience");

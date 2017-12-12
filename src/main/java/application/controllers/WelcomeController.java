@@ -85,7 +85,7 @@ public class WelcomeController {
         if (userService.validateUsername(candidateRegistrationForm)) {
             if (userService.validateEmail(candidateRegistrationForm)) {
                 if (userService.validatePassword(candidateRegistrationForm)) {
-                    if (userService.validateProfession(profession)) {
+                    if (profession.isEmpty() || userService.validateProfession(profession)) {
                         if (userService.validateSalary(requiredSalaryCuPerMonth)) {
                             userService.registerNewUser(candidateRegistrationForm);
                             candidateRegistrationForm.resetAll();

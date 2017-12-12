@@ -1,11 +1,13 @@
 package application.model.candidate;
 
+import application.model.application.EmploymentType;
 import application.model.user.UserRegistrationForm;
 
 public class CandidateRegistrationForm extends UserRegistrationForm {
     private String email;
     private String name;
-    private String employmentType;
+    private String profession;
+    private String employmentType = EmploymentType.NOT_IMPORTANT.name();
     private String requiredSalaryCuPerMonth;
     private String experience;
     private String skills;
@@ -61,5 +63,13 @@ public class CandidateRegistrationForm extends UserRegistrationForm {
 
     public void setSkills(String skills) {
         this.skills = skills;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
     }
 }

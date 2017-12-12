@@ -6,6 +6,7 @@ public class Candidate {
     private int id;
     private String name;
     private String email;
+    private String profession;
     private int requiredSalaryCuPerMonth;
     private EmploymentType employmentType;
     private String experience;
@@ -65,5 +66,13 @@ public class Candidate {
 
     public void setSkills(String skills) {
         this.skills = skills;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
     }
 }
