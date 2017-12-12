@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -250,8 +251,7 @@ public class AgentController {
                                              @RequestParam("requiredSalaryCuPerMonth") String requiredSalaryCuPerMonth,
                                              @RequestParam("experience") String experience,
                                              @RequestParam("skills") String skills,
-                                            @PathVariable("applicantIndex") int candidateIndex,
-                                            Model model) {
+                                            @PathVariable("applicantIndex") int candidateIndex) {
         applicationIndex = applicationIndex - 1;
         candidateIndex = candidateIndex - 1;
 
@@ -275,6 +275,7 @@ public class AgentController {
             candidate.setName(name);
             candidate.setEmail(email);
             candidate.setEmploymentType(EmploymentType.valueOf(employmentType));
+            candidate.setExperience(experience);
             candidate.setSkills(skills);
             agentService.updateCandidateInfo(candidate);
             if (!isError.isEmpty()) {
@@ -376,14 +377,118 @@ public class AgentController {
         applicationIndex = applicationIndex - 1;
         if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
             Application application = agent.getApplications().get(applicationIndex);
-            List<Candidate> possibleApplicants = agentService.getPossibleApplicants(application);
-
-            model.addAttribute("possibleApplicants", possibleApplicants);
+            application.setPossibleApplicants(agentService.getPossibleApplicants(application));
             model.addAttribute("app", application);
             model.addAttribute("applicationIndex", applicationIndex);
             return "/agent/application/index";
         }
         else
             return "/error/wrong-input";
+    }
+
+    @GetMapping("/agent/application/{index}/possibleApplicants/{candidateIndex}")
+    public String getPossibleApplicant(@ModelAttribute("agent") Agent agent,
+                                       @PathVariable("index") int applicationIndex,
+                                       @PathVariable("candidateIndex") int candidateIndex,
+                                       @RequestParam(name = "edit", required = false) String edit,
+                                       @RequestParam(name = "professionError", required = false) String professionError,
+                                       @RequestParam(name = "salaryError", required = false) String salaryError,
+                                       Model model) {
+        applicationIndex = applicationIndex - 1;
+        candidateIndex = candidateIndex - 1;
+
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+            Application application = agent.getApplications().get(applicationIndex);
+            if (application.getPossibleApplicants() == null) {
+                application.setPossibleApplicants(agentService.getPossibleApplicants(application));
+            }
+            if (indexValidator.validateApplicantsIndexes(application.getPossibleApplicants(), candidateIndex)) {
+                Candidate candidate = application.getPossibleApplicants().get(candidateIndex);
+                model.addAttribute("candidate", candidate);
+
+                CandidateRequestParameter parameter = new CandidateRequestParameter();
+                if (edit != null)
+                    parameter.setEdit(true);
+                if (professionError != null)
+                    parameter.setProfessionError(true);
+                if (salaryError != null)
+                    parameter.setSalaryError(true);
+                model.addAttribute("param", parameter);
+                return "agent/candidate/index";
+            }
+        }
+        return "error/wrong-input";
+    }
+
+    @PostMapping("/agent/application/{index}/possibleApplicants/{candidateIndex}")
+    public String savePossibleApplicant(@ModelAttribute(name = "agent") Agent agent,
+                                        @PathVariable("index") int applicationIndex,
+                                        @PathVariable("candidateIndex") int candidateIndex,
+                                        @RequestParam("save") String save,
+                                        @RequestParam("name") String name,
+                                        @RequestParam("email") String email,
+                                        @RequestParam("profession") String profession,
+                                        @RequestParam("employmentType") String employmentType,
+                                        @RequestParam("requiredSalaryCuPerMonth") String requiredSalaryCuPerMonth,
+                                        @RequestParam("experience") String experience,
+                                        @RequestParam("skills") String skills) {
+        applicationIndex = applicationIndex - 1;
+        candidateIndex = candidateIndex - 1;
+
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+            Application application = agent.getApplications().get(applicationIndex);
+            if (application.getPossibleApplicants() == null) {
+                application.setPossibleApplicants(agentService.getPossibleApplicants(application));
+            }
+            if (indexValidator.validateApplicantsIndexes(application.getPossibleApplicants(), candidateIndex)) {
+                Candidate candidate = application.getPossibleApplicants().get(candidateIndex);
+                String isError = "";
+                if (profession.isEmpty() || agentService.validateProfession(profession)) {
+                    candidate.setProfession(profession);
+                } else {
+                    isError += "&professionError";
+                }
+                if (agentService.validateSalary(requiredSalaryCuPerMonth)) {
+                    candidate.setRequiredSalaryCuPerMonth(Integer.parseInt(requiredSalaryCuPerMonth));
+                } else {
+                    isError += "&salaryError";
+                }
+                candidate.setName(name);
+                candidate.setEmail(email);
+                candidate.setEmploymentType(EmploymentType.valueOf(employmentType));
+                candidate.setExperience(experience);
+                candidate.setSkills(skills);
+                agentService.updateCandidateInfo(candidate);
+                if (!isError.isEmpty()) {
+                    isError = "?edit" + isError;
+                }
+                return "redirect:/agent/application/" + (applicationIndex + 1) + "/possibleApplicants/" + (candidateIndex + 1) + isError;
+            }
+        }
+        return "error/wrong-input";
+    }
+
+    @PostMapping("/agent/application/{index}/possibleApplicants/{candidateIndex}/addToApplicants")
+    public String addNewApplicant(HttpServletRequest request,
+                                @ModelAttribute(name = "agent") Agent agent,
+                                @PathVariable("index") int applicationIndex,
+                                @PathVariable("candidateIndex") int candidateIndex) {
+        applicationIndex = applicationIndex - 1;
+        candidateIndex = candidateIndex - 1;
+
+        if (indexValidator.validateApplicationIndexes(agent.getApplications(), applicationIndex)) {
+            Application application = agent.getApplications().get(applicationIndex);
+            if (application.getPossibleApplicants() == null) {
+                application.setPossibleApplicants(agentService.getPossibleApplicants(application));
+            }
+            if (indexValidator.validateApplicantsIndexes(application.getPossibleApplicants(), candidateIndex)) {
+                Applicant candidate = application.getPossibleApplicants().remove(candidateIndex);
+                candidate.setApplicantStage(ApplicantStage.INTERNAL_INVITED);
+                application.getApplicants().add(candidate);
+                agentService.reorderApplicantsOfApplication(application);
+                return "redirect:/agent/application/" + (applicationIndex + 1);
+            }
+        }
+        return "error/wrong-input";
     }
 }

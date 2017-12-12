@@ -55,23 +55,27 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public List<Candidate> getPossibleApplicants(Application application) {
+    public List<Applicant> getPossibleApplicants(Application application) {
         double salaryCoef = 0.75;
-        List<Candidate> candidates = candidateDao.findCandidatesWithApplicationProfession(application, salaryCoef);
-        //у кандидатов с указанными профессиями изначальную прибавку к итоговому коеффициенту?
+        List<Applicant> candidates = candidateDao.findCandidatesWithApplicationProfession(application, salaryCoef);
         Map<Integer, Integer> resultMap = new HashMap<>();
         String[] demandedSkills = application.getDemandedSkills().split(",\\s*|\\.\\s+|;\\s*|\\n");
+
         for (Candidate candidate : candidates) {
+            int skillMatchIncrement = 2, experienceMatchIncrement = 1;
             int matchLevel = 0;
+            if (candidate.getExperience().contains(candidate.getProfession())) {
+                matchLevel += experienceMatchIncrement;
+            }
             for (String skill : demandedSkills) {
                 if (candidate.getSkills().contains(skill)) {
-                    ++matchLevel;
+                    matchLevel += skillMatchIncrement;
                 }
             }
             resultMap.put(candidate.getId(), matchLevel);
         }
 
-        Collections.sort(candidates, Comparator.comparingInt(a -> resultMap.get(a.getId())));
+        candidates.sort(Comparator.comparingInt(a -> resultMap.get(a.getId())));
         return candidates;
     }
 }

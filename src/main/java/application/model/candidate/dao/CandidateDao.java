@@ -16,5 +16,5 @@ public interface CandidateDao {
     void deleteApplicantsForApplication(Application application);
     void updateCandidateInfo(Candidate candidate);
     void createNewCandidate(User user, CandidateRegistrationForm form);
-    List<Candidate> findCandidatesWithApplicationProfession(Application application, double salaryCoef);
+    List<Applicant> findCandidatesWithApplicationProfession(Application application, double salaryCoef);
 }

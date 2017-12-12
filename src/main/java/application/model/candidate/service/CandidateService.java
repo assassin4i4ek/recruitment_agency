@@ -16,5 +16,5 @@ public interface CandidateService {
     boolean deleteApplicantsForApplication(Application application);
     void updateCandidateInfo(Candidate candidate);
     void registerNewCandidate(User user, CandidateRegistrationForm form);
-    List<Candidate> getPossibleApplicants(Application application);
+    List<Applicant> getPossibleApplicants(Application application);
 }

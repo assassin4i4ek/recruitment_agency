@@ -8,9 +8,10 @@
 <body>
 <div th:fragment="candidate" th:with="appIndex = ${(status == null ? applicationIndex : status.index)}">
     <span class="sortable-handle">:::::::::::::::::::::::::::::::::::::::::</span>
-    <a th:href="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
-    <p th:text="${candidate.email}"></p>
+
     <div th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'formWrapper'">
+        <a th:href="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
+        <p th:text="${candidate.email}"></p>
         <form th:action="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1) + '/newStage'"
                 th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStage'">
             <button class="stageDenyButton" th:if="(${candidate.applicantStage.name().contains('INVITED')})" th:text="'Deny'"></button>

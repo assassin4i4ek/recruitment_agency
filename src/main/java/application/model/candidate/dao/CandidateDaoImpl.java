@@ -93,7 +93,7 @@ public class CandidateDaoImpl implements CandidateDao {
     }
 
     @Override
-    public List<Candidate> findCandidatesWithApplicationProfession(Application application, double salaryCoef) {
+    public List<Applicant> findCandidatesWithApplicationProfession(Application application, double salaryCoef) {
         String sql = "SELECT user_id, email, name, profession, employment_type, required_salary_cu_per_month," +
                 " experience, skills FROM candidates_info LEFT JOIN applicants_for_applications" +
                 " ON application_id = " + application.getId() + " AND" +
@@ -101,7 +101,7 @@ public class CandidateDaoImpl implements CandidateDao {
                 " WHERE applicants_for_applications.candidate_id IS NULL AND required_salary_cu_per_month >= " +
                 salaryCoef * application.getSalaryCuPerMonth() + " AND (profession IS NULL OR profession = '" +
                 application.getProfession() + "')";
-        return jdbcTemplate.query(sql, new CandidateMapper());
+        return jdbcTemplate.query(sql, new PossibleApplicantMapper());
     }
 
     private class CandidateMapper implements RowMapper<Candidate> {
@@ -152,7 +152,16 @@ public class CandidateDaoImpl implements CandidateDao {
         }
     }
 
-    private class ApplicantMapper implements RowMapper<Applicant> {
+    private class ApplicantMapper extends PossibleApplicantMapper implements RowMapper<Applicant> {
+        @Override
+        public Applicant mapRow(ResultSet resultSet, int i) throws SQLException {
+            Applicant applicant = super.mapRow(resultSet, i);
+            applicant.setApplicantStage(ApplicantStage.valueOf(resultSet.getString("stage")));
+            return applicant;
+        }
+    }
+
+    private class PossibleApplicantMapper implements RowMapper<Applicant> {
         @Override
         public Applicant mapRow(ResultSet resultSet, int i) throws SQLException {
             Applicant applicant = new Applicant();
@@ -196,7 +205,7 @@ public class CandidateDaoImpl implements CandidateDao {
                 }
                 applicant.setSkills(stringBuilder.toString());
             }
-            applicant.setApplicantStage(ApplicantStage.valueOf(resultSet.getString("stage")));
+            applicant.setApplicantStage(ApplicantStage.NOT_CONSIDERED);
             return applicant;
         }
     }

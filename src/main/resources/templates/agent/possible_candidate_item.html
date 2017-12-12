@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Secured</title>
+</head>
+<body>
+<div th:fragment="candidate" th:with="appIndex = ${(status == null ? applicationIndex : status.index)}">
+    <span class="sortable-handle">:::::::::::::::::::::::::::::::::::::::::</span>
+    <div>
+        <a th:href="@{/agent/application/} + (${appIndex} + 1) + '/possibleApplicants/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
+        <div class="panel-heading">
+            <p th:text="${candidate.email}"></p>
+            <div class="panel-title">
+                <a data-toggle="collapse" th:href="'#possibleCandidate' + (${candidateStatus.index} + 1) + 'wrapper'">details</a>
+            </div>
+        </div>
+        <div th:id="'possibleCandidate' + (${candidateStatus.index} + 1) + 'wrapper'" aria-expanded="false" class="collapse">
+            <p th:text="${candidate.name}"></p>
+            <p th:text="${candidate.email}"></p>
+            <p th:text="'Profession: ' + ${(candidate.profession == null || candidate.profession.isEmpty())? 'not important' : candidate.profession}"></p>
+            <p th:text="'Employment type: ' + (${candidate.employmentType.name() == 'NOT_IMPORTANT' ? 'not important' :
+                                             candidate.employmentType.name() == 'FULL_TIME' ? 'full-time' : 'part-time'})"></p>
+            <p th:text="'Required salary: ' + ${candidate.requiredSalaryCuPerMonth}"></p>
+            <p th:text="'Experience: ' + ${candidate.experience}"></p>
+            <p th:text="'Skills: ' + ${candidate.skills}"></p>
+        </div>
+        <form th:id="'possibleCandidate' + (${candidateStatus.index} + 1) + 'form'"
+              th:action="@{/agent/application/} + (${appIndex} + 1) + '/possibleApplicants/' + (${candidateStatus.index} + 1) + '/addToApplicants'" method="POST">
+            <input type="submit" value="Invite for internal interview">
+        </form>
+    </div>
+    <!--<script th:inline="javascript">
+        $(function(){
+            var formId = /*[['#possibleCandidate' + (${candidateStatus.index} + 1) + 'form']]*/;
+            var mUrl = /*[[@{/agent/application/} + (${appIndex} + 1) + '/possibleApplicants/' + (${candidateStatus.index} + 1) + '/addToApplicants']]*/;
+            $(formId).on('submit', function() {
+                $.ajax({
+                    url: mUrl,
+                    type: "POST"
+                });
+                var possibleApplicantLi = $(formId).parents('#possible-applicants-wrapper ul > li');
+                possibleApplicantLi.remove();
+                return false;
+            });
+        });
+    </script>-->
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package application.model.application;
 
 import application.model.candidate.Applicant;
+import application.model.candidate.Candidate;
 import application.model.enterprise.Enterprise;
 
 import java.sql.Timestamp;
@@ -22,6 +23,7 @@ public class Application {
     private EmploymentType employmentType;
     private int salaryCuPerMonth;
     private String demandedSkills;
+    private List<Applicant> possibleApplicants;
 
     public EmploymentType getEmploymentType() {
         return employmentType;
@@ -141,5 +143,13 @@ public class Application {
 
     public void setEnterpriseId(int enterpriseId) {
         this.enterpriseId = enterpriseId;
+    }
+
+    public List<Applicant> getPossibleApplicants() {
+        return possibleApplicants;
+    }
+
+    public void setPossibleApplicants(List<Applicant> possibleApplicants) {
+        this.possibleApplicants = possibleApplicants;
     }
 }
