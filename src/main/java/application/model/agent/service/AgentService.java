@@ -12,7 +12,6 @@ import java.util.List;
 public interface AgentService {
     Agent findAgentById(int agentId);
     void reorderApplicationsOfAgent(Agent agent);
-    Enterprise findEnterpriseOfApplication(Application application);
     void updateApplicationInfo(Application application);
     void reorderApplicantsOfApplication(Application application);
     void updateApplicantOfApplicationStage(Application application, Applicant applicant);

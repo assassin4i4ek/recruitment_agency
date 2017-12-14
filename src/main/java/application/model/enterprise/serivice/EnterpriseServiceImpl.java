@@ -21,9 +21,6 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     @Autowired
     private ApplicationService applicationService;
 
-    @Autowired
-    private UserDetailsService userService;
-
     @Override
     public Enterprise findEnterpriseById(int enterpriseId) {
         Enterprise enterprise = enterpriseDao.findEnterpriseById(enterpriseId);

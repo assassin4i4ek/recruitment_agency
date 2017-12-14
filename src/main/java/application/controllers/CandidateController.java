@@ -30,7 +30,7 @@ public class CandidateController {
     }
 
     @GetMapping("/candidate")
-    public String enterprise(@ModelAttribute("candidate") Candidate candidate,
+    public String getCandidate(@ModelAttribute("candidate") Candidate candidate,
                              @RequestParam(name = "edit", required = false) String edit,
                              Model model) {
         CandidateRequestParameter parameter = new CandidateRequestParameter();
@@ -41,7 +41,7 @@ public class CandidateController {
     }
 
     @PostMapping("/candidate")
-    public String saveEnterprise(@ModelAttribute("candidate") Candidate candidate,
+    public String saveCandidate(@ModelAttribute("candidate") Candidate candidate,
                                  @RequestParam("save") String save,
                                  @RequestParam("name") String name,
                                  @RequestParam("email") String email) {

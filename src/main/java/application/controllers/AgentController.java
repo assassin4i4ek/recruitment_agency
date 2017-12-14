@@ -48,7 +48,7 @@ public class AgentController {
     }
 
     @GetMapping("/agent")
-    public String agent(@ModelAttribute(name = "agent") Agent agent) {
+    public String getAgent(@ModelAttribute(name = "agent") Agent agent) {
         agentService.checkForUpdates(agent);
         return "/agent/index";
     }
@@ -474,8 +474,7 @@ public class AgentController {
     }
 
     @PostMapping("/agent/application/{index}/possibleApplicants/{candidateIndex}/addToApplicants")
-    public String addNewApplicant(HttpServletRequest request,
-                                @ModelAttribute(name = "agent") Agent agent,
+    public String addNewApplicant(@ModelAttribute(name = "agent") Agent agent,
                                 @PathVariable("index") int applicationIndex,
                                 @PathVariable("candidateIndex") int candidateIndex) {
         applicationIndex = applicationIndex - 1;

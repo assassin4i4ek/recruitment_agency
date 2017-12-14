@@ -20,3 +20,7 @@ ul {
 ul li {
     background-color: #FFFFFF;
 }
+
+.sortable-handle {
+    cursor:move;
+}

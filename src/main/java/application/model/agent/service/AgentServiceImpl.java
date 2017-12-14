@@ -44,11 +44,6 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    public Enterprise findEnterpriseOfApplication(Application application) {
-        return enterpriseService.findEnterpriseById(application.getEnterpriseId());
-    }
-
-    @Override
     public void updateApplicationInfo(Application application) {
         applicationService.updateAgentApplicationInfo(application);
     }

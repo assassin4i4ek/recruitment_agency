@@ -45,7 +45,7 @@ public class EnterpriseController {
     }
 
     @GetMapping("/enterprise")
-    public String enterprise(@ModelAttribute("enterprise") Enterprise enterprise,
+    public String getEnterprise(@ModelAttribute("enterprise") Enterprise enterprise,
                              @RequestParam(name = "edit", required = false) String edit,
                              Model model) {
         enterpriseService.checkForUpdates(enterprise);
@@ -60,9 +60,11 @@ public class EnterpriseController {
     public String saveEnterprise(@ModelAttribute("enterprise") Enterprise enterprise,
                                  @RequestParam("save") String save,
                                  @RequestParam("name") String name,
-                                 @RequestParam("email") String email) {
+                                 @RequestParam("email") String email,
+                                 @RequestParam("contactPersonName") String contactPersonName) {
         enterprise.setName(name);
         enterprise.setEmail(email);
+        enterprise.setContactPersonName(contactPersonName);
         enterpriseService.updateEnterpriseInfo(enterprise);
         return "redirect:/enterprise";
     }

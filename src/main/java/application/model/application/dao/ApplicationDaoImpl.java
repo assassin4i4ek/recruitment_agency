@@ -81,7 +81,7 @@ public class ApplicationDaoImpl implements ApplicationDao {
     public void createNewApplication(User user, ApplicationRegistrationForm form, int agentId) {
         String sql = "INSERT INTO applications(agent_id, enterprise_id, profession, quantity, employment_type," +
                 " salary_cu_per_month, demanded_skills) VALUE (?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, agentId, user.getId(), form.getProfession(), form.getQuantity(), form.getEmploymentType(),
+        jdbcTemplate.update(sql, agentId, user.getId(), form.getProfession(), form.getQuantity(), form.getEmploymentType().name(),
                 form.getSalaryCuPerMonth(), form.getDemandedSkills());
     }
 
