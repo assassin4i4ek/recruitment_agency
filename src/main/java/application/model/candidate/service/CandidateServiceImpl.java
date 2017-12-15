@@ -13,6 +13,7 @@ import org.thymeleaf.util.ListUtils;
 import org.thymeleaf.util.MapUtils;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
@@ -66,13 +67,18 @@ public class CandidateServiceImpl implements CandidateService {
         String[] demandedSkills = application.getDemandedSkills().split(",\\s*|\\.\\s+|;\\s*|\\n");
 
         for (Candidate candidate : candidates) {
-            int skillMatchIncrement = 2, experienceMatchIncrement = 1;
+            int professionMatchIncrement = 3, skillMatchIncrement = 2, experienceMatchIncrement = 1;
             int matchLevel = 0;
-            if (candidate.getExperience().contains(candidate.getProfession())) {
+            if (application.getProfession().equals(candidate.getProfession())) {
+                matchLevel += professionMatchIncrement;
+            }
+            if (Pattern.compile(Pattern.quote(application.getProfession()),
+                    Pattern.CASE_INSENSITIVE).matcher(candidate.getExperience()).find()) {
                 matchLevel += experienceMatchIncrement;
             }
             for (String skill : demandedSkills) {
-                if (candidate.getSkills().contains(skill)) {
+                if (Pattern.compile(Pattern.quote(skill),
+                        Pattern.CASE_INSENSITIVE).matcher(candidate.getSkills()).find()) {
                     matchLevel += skillMatchIncrement;
                 }
             }
