@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public boolean validateUsername(UserRegistrationForm form) {
-        return userDao.findUserByUsername(form.getUsername()) == null;
+        return !form.getUsername().isEmpty() && userDao.findUserByUsername(form.getUsername()) == null;
     }
 
     @Override
