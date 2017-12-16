@@ -18,29 +18,49 @@
         <p th:text="'Skills: ' + ${candidate.skills}"></p>
         <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
     </div>
+    <div id="candidateRegisterFormWrapper" class="col-sm-6 col-sm-offset-3">
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" method="POST">
-        <label>Email:<input type="text" name="email" th:value="${candidate.email}"></label>
-        <label>Name:<input type="text" name="name" th:value="${candidate.name}"></label>
-        <label>Profession:
-            <input type="text" list="profession" name="profession" th:value="${candidate.profession}">
-            <datalist id="profession" type="text" name="profession">
+        <div class="form-group">
+            <label for="candidateEmail">Email</label>
+            <input id="candidateEmail" class="form-control" type="text" name="email" th:value="${candidate.email}">
+        </div>
+        <div class="form-group">
+            <label for="candidateName">Name</label>
+            <input id="candidateName" class="form-control" type="text" name="name" th:value="${candidate.name}">
+        </div>
+        <div class="form-group">
+            <label for="candidateProfession">Profession</label>
+            <input id="candidateProfession" class="form-control" type="text" list="candidateProfessionList" name="profession" th:value="${candidate.profession}">
+            <datalist id="candidateProfessionList" type="text" name="profession">
                 <option th:each="profession : ${availableProfessions}" th:value="${profession}"></option>
             </datalist>
-        </label>
-        <label>Employment type:
-            <label><input type="radio" name="employmentType" th:value="'NOT_IMPORTANT'"
-                          th:checked="${candidate.employmentType.name()} == 'NOT_IMPORTANT'">not important</label>
-            <label><input type="radio" name="employmentType" th:value="'FULL_TIME'"
-                          th:checked="${candidate.employmentType.name()} == 'FULL_TIME'">full-time</label>
-            <label><input type="radio" name="employmentType" th:value="'PART_TIME'"
-                          th:checked="${candidate.employmentType.name()} == 'PART_TIME'">part-time</label>
-        </label>
-        <label>Required salary per month:<input type="text" name="requiredSalaryCuPerMonth" th:value="${candidate.requiredSalaryCuPerMonth}"></label>
-        <label>Experience:<textarea name="experience" th:value="${candidate.experience}"></textarea></label>
-        <label>Skills:<input type="text" name="skills" th:value="${candidate.skills}"></label>
-        <input type="submit" value="Save">
+        </div>
+        <div class="form-group">
+            <label for="candidateProfession">Employment type</label>
+            <div class="form-group">
+                <label class="lol"><input type="radio" name="employmentType" th:value="'NOT_IMPORTANT'"
+                                          th:checked="${candidate.employmentType} == 'NOT_IMPORTANT'">"not important      "</label>
+                <label class="lol"><input type="radio" name="employmentType" th:value="'FULL_TIME'"
+                                          th:checked="${candidate.employmentType} == 'FULL_TIME'">full-time  </label>
+                <label class="lol"><input type="radio" name="employmentType" th:value="'PART_TIME'"
+                                          th:checked="${candidate.employmentType} == 'PART_TIME'">part-time</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="candidateSalary">Required salary per month</label>
+            <input id="candidateSalary" class="form-control" type="text" name="requiredSalaryCuPerMonth" th:value="${candidate.requiredSalaryCuPerMonth}">
+        </div>
+        <div class="form-group">
+            <label for="candidateExperience">Experience</label>
+            <textarea id="candidateExperience" class="form-control" name="experience" th:value="${candidate.experience}"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="candidateSkills">Skills</label>
+            <textarea id="candidateSkills" class="form-control" type="text" name="skills" th:value="${candidate.skills}"></textarea>
+        </div>
+        <input id="candidateRegister" class="form-control" type="submit" value="Save">
     </form>
-    <p><a href="/" th:href="@{/}">Back to home page</a></p>
+    </div>
 </div>
 </body>
 </html>

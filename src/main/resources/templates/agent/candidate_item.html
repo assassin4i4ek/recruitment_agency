@@ -7,28 +7,34 @@
 </head>
 <body>
 <div th:fragment="candidate" th:with="appIndex = ${(status == null ? applicationIndex : status.index)}">
-    <span class="sortable-handle">:::::::::::::::::::::::::::::::::::::::::</span>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="sortable-handle"></div>
+            <div th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'formWrapper'">
+                <div class="panel-heading">
+                    <a th:href="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
+                </div>
 
-    <div th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'formWrapper'">
-        <a th:href="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1)" th:text="${candidate.name}"></a>
-        <p th:text="${candidate.email}"></p>
-        <form th:action="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1) + '/newStage'"
-                th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStage'">
-            <button class="stageDenyButton" th:if="(${candidate.applicantStage.name().contains('INVITED')})" th:text="'Deny'"></button>
-            <select name="stage" th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStageSelect'">
-                <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_INVITED'"th:value="INTERNAL_INVITED" th:text="'Invited to internal audition'"></option>
-                <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_PASSED'"th:value="INTERNAL_PASSED" th:text="'Passed internal audition'"></option>
-                <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_FAILED'" th:value="INTERNAL_FAILED" th:text="'Failed internal audition'"></option>
-                <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_INVITED'" th:value="EXTERNAL_INVITED" th:text="'Invited to external audition'"></option>
-                <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_PASSED'" th:value="EXTERNAL_PASSED" th:text="'Passed external audition'"></option>
-                <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_FAILED'" th:value="EXTERNAL_FAILED" th:text="'Failed external audition'"></option>
-                <option th:selected="${candidate.applicantStage.name()} == 'GOT_JOB'" th:value="GOT_JOB" th:text="'Got a job'"></option>
-            </select>
-            <button class="stageNextButton" th:if="(${candidate.applicantStage.name().contains('PASSED')})" th:text="'Next stage'"></button>
-            <button class="stageAcceptButton" th:if="(${candidate.applicantStage.name().contains('INVITED')})" th:text="'Accept'"></button>
-        </form>
-    </div>
-    <script th:inline="javascript">
+                <p th:text="${candidate.email}"></p>
+                    <form th:action="@{/agent/application/} + (${appIndex} + 1) + '/applicant/' + (${candidateStatus.index} + 1) + '/newStage'"
+                            th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStage'">
+                        <div class="panel-heading">
+                            <button class="stageDenyButton form-control finalize-button" th:if="(${candidate.applicantStage.name().contains('INVITED')})" th:text="'Deny'"></button>
+                            <select name="stage" class="form-control stage-select" th:id="'application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStageSelect'">
+                                <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_INVITED'"th:value="INTERNAL_INVITED" th:text="'Invited to internal audition'"></option>
+                                <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_PASSED'"th:value="INTERNAL_PASSED" th:text="'Passed internal audition'"></option>
+                                <option th:selected="${candidate.applicantStage.name()} == 'INTERNAL_FAILED'" th:value="INTERNAL_FAILED" th:text="'Failed internal audition'"></option>
+                                <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_INVITED'" th:value="EXTERNAL_INVITED" th:text="'Invited to external audition'"></option>
+                                <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_PASSED'" th:value="EXTERNAL_PASSED" th:text="'Passed external audition'"></option>
+                                <option th:selected="${candidate.applicantStage.name()} == 'EXTERNAL_FAILED'" th:value="EXTERNAL_FAILED" th:text="'Failed external audition'"></option>
+                                <option th:selected="${candidate.applicantStage.name()} == 'GOT_JOB'" th:value="GOT_JOB" th:text="'Got a job'"></option>
+                            </select>
+                            <button class="stageNextButton form-control finalize-button" th:if="(${candidate.applicantStage.name().contains('PASSED')})" th:text="'Next stage'"></button>
+                            <button class="stageAcceptButton form-control finalize-button" th:if="(${candidate.applicantStage.name().contains('INVITED')})" th:text="'Accept'"></button>
+                        </div>
+                    </form>
+            </div>
+            <script th:inline="javascript">
         $(function() {
             var selectId = /*[['#application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStageSelect']]*/;
             var formId = /*[['#application' + (${appIndex} + 1) + 'applicant' + (${candidateStatus.index} + 1) + 'newStage']]*/;
@@ -47,13 +53,13 @@
                 $(selectId + ' > option:contains(' + selectVal + ')').prop({selected: true});
                 $(formId + ' button').remove();
                 if (selectVal.indexOf('INVITED') >= 0) {
-                    $(formId).prepend('<button class=\'stageDenyButton\'>Deny</button>');
-                    $(formId).append('<button class=\'stageAcceptButton\'>Accept</button>');
+                    $(formId + ' .panel-heading').prepend('<button class=\'stageDenyButton form-control finalize-button\'>Deny</button>');
+                    $(formId + ' .panel-heading').append('<button class=\'stageAcceptButton form-control finalize-button\'>Accept</button>');
                     initStageAcceptButton();
                     initStageDenyButton();
                 }
                 if (selectVal.indexOf('PASSED') >= 0) {
-                    $(formId).append('<button class=\'stageNextButton\'>Next stage</button>');
+                    $(formId + ' .panel-heading').append('<button class=\'stageNextButton form-control finalize-button\'>Next stage</button>');
                     initStageNextButton();
                 }
                 if (selectVal.indexOf('FAILED') < 0) {
@@ -96,6 +102,8 @@
             initStageNextButton();
         });
     </script>
+        </div>
+    </div>
 </div>
 </body>
 </html>

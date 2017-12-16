@@ -7,7 +7,9 @@
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
-    <p>This is an unsecured page, but you can access the secured pages after authenticating.</p>
+    <p>Рекрутинговое агентство «NIPPLE» — это помощник №1 в подборе профессионалов, способных сделать бизнес Клиентов еще эффективнее.</p>
+    <p>Мы специализируемся на поиске и подборе специалистов всех уровней по всей Украине.</p>
+    <p>Наша команда - эксперты по нахождению персонала в своей области, которые ежедневно изучают профильные сегменты рынка и владеют точной и нужной Клиенту информацией.</p>
     <div th:if="${param1.usernameError}">
         <div class="alert alert-danger">
             This username is already taken.
@@ -43,64 +45,129 @@
             You successfully registered
         </div>
     </div>
-
-    <a href="/user" th:href="@{/user}">Enter</a>
-    <div>
-        <form action="/registerCandidate" method="POST">
-            <label>Username:<input type="text" name="username" th:value="${candidateRegistrationForm.username}"></label>
-            <label>Email:<input type="text" name="email" th:value="${candidateRegistrationForm.email}"></label>
-            <label>Name:<input type="text" name="name" th:value="${candidateRegistrationForm.name}"></label>
-            <label>Password:<input type="password" name="password" th:value="${candidateRegistrationForm.password}"></label>
-            <label>Confirm password:<input type="password" name="confirmPassword" th:value="${candidateRegistrationForm.confirmPassword}"></label>
-            <label>Profession:
-                <input type="text" list="candidateProfession" name="profession" th:value="${candidateRegistrationForm.profession}">
-                <datalist id="candidateProfession" type="text" name="profession">
-                    <option th:each="profession : ${availableProfessions}" th:value="${profession}"></option>
-                </datalist>
-            </label>
-            <label>Employment type:
-                <label><input type="radio" name="employmentType" th:value="'NOT_IMPORTANT'"
-                                           th:checked="${candidateRegistrationForm.employmentType} == 'NOT_IMPORTANT'">not important</label>
-                <label><input type="radio" name="employmentType" th:value="'FULL_TIME'"
-                                           th:checked="${candidateRegistrationForm.employmentType} == 'FULL_TIME'">full-time</label>
-                <label><input type="radio" name="employmentType" th:value="'PART_TIME'"
-                                           th:checked="${candidateRegistrationForm.employmentType} == 'PART_TIME'">part-time</label>
-            </label>
-            <label>Required salary per month:<input type="text" name="requiredSalaryCuPerMonth" th:value="${candidateRegistrationForm.requiredSalaryCuPerMonth}"></label>
-            <label>Experience:<textarea name="experience" th:value="${candidateRegistrationForm.experience}"></textarea></label>
-            <label>Skills:<input type="text" name="skills" th:value="${candidateRegistrationForm.skills}"></label>
-
-            <input type="submit" value="Register">
-        </form>
+    <div id="registrationFormsWrappers" class="row">
+        <ul class="col-sm-6 col-sm-offset-3">
+            <li><a href="#enterpriseRegisterFormWrapper">Enterprise</a></li>
+            <li><a href="#candidateRegisterFormWrapper">Candidate</a></li>
+        </ul>
+        <div id="candidateRegisterFormWrapper" class="col-sm-6 col-sm-offset-3">
+            <form action="/registerCandidate" method="POST">
+                <div class="form-group">
+                    <label for="candidateUsername">Username</label>
+                    <input id="candidateUsername" class="form-control" type="text" name="username" th:value="${candidateRegistrationForm.username}">
+                </div>
+                <div class="form-group">
+                    <label for="candidateEmail">Email</label>
+                    <input id="candidateEmail" class="form-control" type="text" name="email" th:value="${candidateRegistrationForm.email}">
+                </div>
+                <div class="form-group">
+                    <label for="candidateName">Name</label>
+                    <input id="candidateName" class="form-control" type="text" name="name" th:value="${candidateRegistrationForm.name}">
+                </div>
+                <div class="form-group">
+                    <label for="candidatePassword">Password</label>
+                    <input id="candidatePassword" class="form-control" type="password" name="password" th:value="${candidateRegistrationForm.password}">
+                </div>
+                <div class="form-group">
+                    <label for="candidateConfirmPassword">Confirm password</label>
+                    <input id="candidateConfirmPassword" class="form-control" type="password" name="confirmPassword" th:value="${candidateRegistrationForm.confirmPassword}">
+                </div>
+                <div class="form-group">
+                    <label for="candidateProfession">Profession</label>
+                    <input id="candidateProfession" class="form-control" type="text" list="candidateProfessionList" name="profession" th:value="${candidateRegistrationForm.profession}">
+                        <datalist id="candidateProfessionList" type="text" name="profession">
+                            <option th:each="profession : ${availableProfessions}" th:value="${profession}"></option>
+                        </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="candidateProfession">Employment type</label>
+                    <div class="form-group">
+                        <label class="lol"><input type="radio" name="employmentType" th:value="'NOT_IMPORTANT'"
+                                                   th:checked="${candidateRegistrationForm.employmentType} == 'NOT_IMPORTANT'">"not important      "</label>
+                        <label class="lol"><input type="radio" name="employmentType" th:value="'FULL_TIME'"
+                                                   th:checked="${candidateRegistrationForm.employmentType} == 'FULL_TIME'">full-time  </label>
+                        <label class="lol"><input type="radio" name="employmentType" th:value="'PART_TIME'"
+                                                   th:checked="${candidateRegistrationForm.employmentType} == 'PART_TIME'">part-time</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="candidateSalary">Required salary per month</label>
+                    <input id="candidateSalary" class="form-control" type="text" name="requiredSalaryCuPerMonth" th:value="${candidateRegistrationForm.requiredSalaryCuPerMonth}">
+                </div>
+                <div class="form-group">
+                    <label for="candidateExperience">Experience</label>
+                    <textarea id="candidateExperience" class="form-control" name="experience" th:value="${candidateRegistrationForm.experience}"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="candidateSkills">Skills</label>
+                    <textarea id="candidateSkills" class="form-control" type="text" name="skills" th:value="${candidateRegistrationForm.skills}"></textarea>
+                </div>
+                <input id="candidateRegister" class="form-control" type="submit" value="R E G I S T E R">
+            </form>
+        </div>
+        <div id="enterpriseRegisterFormWrapper" class="col-sm-6 col-sm-offset-3">
+            <form action="/registerEnterprise" method="POST">
+                <div class="form-group">
+                    <label for="employerUsername">Username</label>
+                    <input id="employerUsername" class="form-control" type="text" name="username" th:value="${enterpriseRegistrationForm.username}">
+                </div>
+                <div class="form-group">
+                    <label for="employerEmail">Email</label>
+                    <input id="employerEmail" class="form-control" type="text" name="email" th:value="${enterpriseRegistrationForm.email}">
+                </div>
+                <div class="form-group">
+                    <label for="employerName">Name</label>
+                    <input id="employerName" class="form-control" type="text" name="name" th:value="${enterpriseRegistrationForm.name}">
+                </div>
+                <div class="form-group">
+                    <label for="employerCPName">Contact name</label>
+                    <input id="employerCPName" class="form-control" type="text" name="contactPersonName" th:value="${enterpriseRegistrationForm.contactPersonName}">
+                </div>
+                <div class="form-group">
+                    <label for="employerPassword">Password</label>
+                    <input id="employerPassword" class="form-control" type="password" name="password" th:value="${enterpriseRegistrationForm.password}">
+                </div>
+                <div class="form-group">
+                    <label for="employerConfirmPassword">Confirm password</label>
+                    <input id="employerConfirmPassword" class="form-control" type="password" name="confirmPassword" th:value="${enterpriseRegistrationForm.confirmPassword}">
+                </div>
+                <div class="form-group">
+                    <label for="employerProfession">Profession</label>
+                    <input id="employerProfession" class="form-control" type="text" list="employerProfessionList" name="profession" th:value="${applicationRegistrationForm.profession}">
+                    <datalist id="employerProfessionList" type="text" name="profession">
+                        <option th:each="profession : ${availableProfessions}" th:value="${profession}"></option>
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="employerQuantity">Quantity</label>
+                    <input id="employerQuantity" class="form-control" type="text" name="quantity" th:value="${applicationRegistrationForm.quantity}">
+                </div>
+                <div class="form-group">
+                    <label for="employerQuantity">Employment type</label>
+                    <div class="form-group">
+                        <label class="lol"><input type="radio" name="employmentType" th:value="'FULL_TIME'"
+                                      th:checked="${applicationRegistrationForm.employmentType.name()} == 'FULL_TIME'">full-time</label>
+                        <label class="lol"><input type="radio" name="employmentType" th:value="'PART_TIME'"
+                                      th:checked="${applicationRegistrationForm.employmentType.name()} == 'PART_TIME'">part-time</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="employerSalaryCuPerMonth">Salary per month</label>
+                    <input id="employerSalaryCuPerMonth" class="form-control" type="text" name="salaryCuPerMonth" th:value="${applicationRegistrationForm.salaryCuPerMonth}">
+                </div>
+                <div class="form-group">
+                    <label for="employerDemandedSkills">Demanded skills</label>
+                    <textarea id="employerDemandedSkills" class="form-control" type="text" name="demandedSkills" th:value="${applicationRegistrationForm.demandedSkills}"></textarea>
+                </div>
+                <input id="employerRegister" class="form-control" type="submit" value="R E G I S T E R">
+            </form>
+        </div>
     </div>
-    <div>
-        <form action="/registerEnterprise" method="POST">
-            <label>Username:<input type="text" name="username" th:value="${enterpriseRegistrationForm.username}"></label>
-            <label>Email:<input type="text" name="email" th:value="${enterpriseRegistrationForm.email}"></label>
-            <label>Name:<input type="text" name="name" th:value="${enterpriseRegistrationForm.name}"></label>
-            <label>Contact name:<input type="text" name="contactPersonName" th:value="${enterpriseRegistrationForm.contactPersonName}"></label>
-            <label>Password:<input type="password" name="password" th:value="${enterpriseRegistrationForm.password}"></label>
-            <label>Confirm password:<input type="password" name="confirmPassword" th:value="${enterpriseRegistrationForm.confirmPassword}"></label>
-            <label>Profession:
-                <input type="text" list="enterpriseProfession" name="profession" th:value="${applicationRegistrationForm.profession}">
-                <datalist id="enterpriseProfession" type="text" name="profession">
-                    <option th:each="profession : ${availableProfessions}" th:value="${profession}"></option>
-                </datalist>
-            </label>
-            <label>Quantity:<input type="text" name="quantity" th:value="${applicationRegistrationForm.quantity}"></label>
-
-            <label>Employment type:
-                <label><input type="radio" name="employmentType" th:value="'FULL_TIME'"
-                              th:checked="${applicationRegistrationForm.employmentType.name()} == 'FULL_TIME'">full-time</label>
-                <label><input type="radio" name="employmentType" th:value="'PART_TIME'"
-                              th:checked="${applicationRegistrationForm.employmentType.name()} == 'PART_TIME'">part-time</label>
-            </label>
-            <label>Salary per month:<input type="text" name="salaryCuPerMonth" th:value="${applicationRegistrationForm.salaryCuPerMonth}"></label>
-            <label>Demanded skills:<input type="text" name="demandedSkills" th:value="${applicationRegistrationForm.demandedSkills}"></label>
-
-            <input type="submit" value="Register">
-        </form>
-    </div>
+    <script>
+        $( function() {
+            $('#registrationFormsWrappers').tabs();
+        });
+    </script>
 </div>
 </body>
 </html>

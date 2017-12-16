@@ -7,7 +7,6 @@
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
-    <h1>This is a secured AGENT page!</h1>
     <div class="panel-heading">
         <h4 class="panel-title">
             <a data-toggle="collapse" href="#apps-wrapper">Applications</a>
@@ -24,7 +23,7 @@
         <input type="hidden" id="prevIndex" name="prevIndex" value="0"/>
         <input type="hidden" id="newIndex" name="newIndex" value="0"/>
     </form>
-    <p><a href="/" th:href="@{/}">Back to home page</a></p>
+
     <script>
 		$(function() {
             $( "#apps" ).sortable({

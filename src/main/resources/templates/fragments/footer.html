@@ -4,15 +4,9 @@
 <body>
 <th:block th:fragment="footer">
     <footer>
-        <div class="container fixed-bottom">
-            <p>
-                &copy; Memorynotfound.com
-                <span sec:authorize="isAuthenticated()" style="display: inline-block;">
-                    | Logged user: <span sec:authentication="name"></span> |
-                    Roles: <span sec:authentication="principal.authorities"></span> |
-                    <a th:href="@{/logout}">Sign Out</a>
-                </span>
-            </p>
+        <div class="footer-links">
+            <a href="/" th:href="@{/}">Back to home page</a>
+            <a href="/" th:href="@{/login?logout}">Sign out</a>
         </div>
     </footer>
 </th:block>

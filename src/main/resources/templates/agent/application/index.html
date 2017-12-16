@@ -5,9 +5,9 @@
 <head>
     <title>Secured</title>
 </head>
+
 <body>
 <div layout:fragment="content" th:remove="tag">
-    <h1>This is a secured Application page!</h1>
     <div th:if="${param.quantityError}" class="alert alert-danger">
         Invalid quantity.
     </div>
@@ -17,7 +17,11 @@
     <div th:if="${param.finalizeError}" class="alert alert-danger">
         Application doesn't meet requirements.
     </div>
-    <a th:href="@{/agent/application/} + (${applicationIndex} + 1) + '/enterprise'" th:text="${app.enterprise.name}"></a>
+    <div class="panel-heading">
+        <div>
+            <a th:href="@{/agent/application/} + (${applicationIndex} + 1) + '/enterprise'" th:text="${app.enterprise.name}"></a>
+        </div>
+    </div>
     <p th:text="${app.enterprise.contactPersonName}"></p>
     <form th:if="${param.edit}" th:action="@{__${#httpServletRequest.requestURI}__?save}" th:method="POST">
         <label>Profession:
@@ -46,7 +50,9 @@
         <p th:text="'Employment type: ' + ${app.employmentType.name() == 'FULL_TIME' ? 'Full-time' : 'Part-time'}"></p>
         <p th:text="'Salary per month: ' + ${app.salaryCuPerMonth}"></p>
         <p th:text="'Demanded skills: ' + ${app.demandedSkills}"></p>
-        <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
+        <div class="application-item-center-button">
+            <a th:href="@{__${#httpServletRequest.requestURI}__?edit}" th:text="Edit" ></a>
+        </div>
         <div>
             <div class="panel-heading">
                 <div class="panel-title">
@@ -91,11 +97,12 @@
             </div>
         </div>
         <a th:if="${app.possibleApplicants == null}" th:href="@{/agent/application/} + (${applicationIndex} + 1) + '/possibleApplicants'">Get possible applicants</a>
-        <form th:action="@{/agent/application/} + (${applicationIndex} + 1) + '/finalizeApplication'" method="POST">
-            <input type="submit" value="Finalize">
-        </form>
+        <div class="application-item-center-button">
+            <form th:action="@{/agent/application/} + (${applicationIndex} + 1) + '/finalizeApplication'" method="POST">
+                <input type="submit" value="Finalize">
+            </form>
+        </div>
     </div>
-    <p><a href="/" th:href="@{/}">Back to home page</a></p>
     <form th:id="'reorderApplicants' + (${applicationIndex} + 1)"
           th:action="'agent/application/' + (${applicationIndex} + 1) + '/reorderApplicants'"
           method="POST">

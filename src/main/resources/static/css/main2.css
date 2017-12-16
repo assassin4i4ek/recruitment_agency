@@ -1,0 +1,120 @@
+#registrationFormsWrappers {
+    margin-top: 20px;
+}
+
+#registrationFormsWrappers > ul li {
+    display: inline;
+}
+
+textarea {
+    resize: vertical;
+}
+
+a {
+    color: rgba(255, 255, 255, 1.0);
+    font-family: Impact;
+    font-size: 20px;
+    border: 1px solid rgba(254, 66, 0, 0.0);
+}
+
+a:hover, a:focus{
+    color: rgba(254, 66, 0, 1.0);
+    text-decoration: none;
+    outline: none !important;
+    box-shadow: 0 0 10px rgba(254, 66, 0, 1.0);
+    border: 1px solid rgba(254, 66, 0, 1.0);
+}
+
+.ui-tabs-active a{
+    color: rgba(254, 66, 0, 1.0);
+    outline: none !important;
+    box-shadow: 0 0 10px rgba(254, 66, 0, 1.0);
+    border: 1px solid rgba(254, 66, 0, 1.0);
+}
+
+#employerRegister {
+    background-color: rgba(254, 66, 0, 1.0);
+    color: rgba(255, 255, 255, 1.0);
+    font-weight: bold;
+}
+
+.content {
+    padding-bottom: 200px;
+}
+
+.panel-title a {
+    color: rgba(255, 255, 255, 1.0);
+}
+
+.panel-title a:hover {
+    color: rgba(254, 66, 0, 1.0);
+        text-decoration: none;
+        outline: none !important;
+        box-shadow: 0 0 10px rgba(254, 66, 0, 1.0);
+        border: 1px solid rgba(254, 66, 0, 1.0);
+}
+
+.sortable-handle {
+    height: 12px;
+    background:  #555;
+}
+
+.panel-heading {
+    display: flex;
+    justify-content: space-around;
+}
+
+.application-item-wrapper {
+    margin-bottom: 10px;
+}
+
+.application-item-center-button {
+    display: flex;
+    justify-content: center;
+}
+
+.ui-sortable {
+    padding: 0px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-around;
+}
+
+.finalize-button {
+    border-radius: 0;
+    border: 0px;
+    border-bottom: 1px solid rgba(254, 66, 0, 1.0);
+    background-color: rgba(254, 66, 0, 1.0);
+    color: rgba(255, 255, 255, 1.0);
+    font-weight: bold;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s
+}
+
+.finalize-button:focus {
+    color: rgba(255, 255, 255, 1.0);
+    text-decoration: none;
+    outline: none !important;
+    box-shadow: 0 0 10px rgba(254, 66, 0, 1.0);
+    border: 1px solid rgba(254, 66, 0, 1.0);
+}
+
+.candidate-item-wrapper {
+    margin-left: 40px;
+}
+
+.col-md-6 {
+    float: none;
+    margin: 0 auto;
+}
+
+.stage-select {
+    color: rgba(254, 66, 0, 1.0);
+    background-color: rgba(255, 255, 255, 0.0);
+}
+
+.stage-select option {
+    color: rgba(254, 66, 0, 1.0);
+    background-color: rgba(0, 0, 0, 1.0);
+}

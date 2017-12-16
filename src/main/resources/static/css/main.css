@@ -1,12 +1,134 @@
+body {
+    background-image: url("../img/bckgrnd.png");
+}
+
 h1 {
     color: #78ab46;
 }
 
-footer {
+p {
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    font-family: Arial Black;
+    font-size: 16px;
+}
+/*
+input[type="radio"] {
+
+}
+
+.lol {
+    background: red;
+}
+
+.lol:after {
+    background: green;
+}
+
+input[type="radio"] + label:before {
+    background:url("../img/dick.png") no-repeat 0 1px;
+}
+
+input[type="radio"]:not(checked) + label:after{
+    background: #CDD1DA;
+}
+*/
+
+.lol {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.5);
+    color: rgba(254, 66, 0, 1.0);
+    height: 2em;
+    line-height: 2em;
+    border: 1px solid;
+    padding: 0 .5em;
+    flex-direction: column;
+    vertical-align: middle;
+    border-radius: 1em;
+    overflow: hidden;
+    text-align: center;
+}
+
+.lol input {
+  margin: 0;
+  flex: 0 0 2em;
+  order: 1;
+  font-size: inherit;
+  visibility: hidden;
+}
+
+.lol input:checked {
+  order: 3;
+}
+
+.lol:after {
+  content: "";
+  flex: 0 0 2em;
+  margin: -2em -.5em 0;
+  background-color: rgba(255, 255, 255, 1.0);;
+  order: 2;
+  z-index: -1;
+}
+
+.navbar {
+    background-color: rgba(0, 0, 0, 0.5);
+	height: 100px;
+}
+
+.navbar-header img {
+    margin-top: 20px;
+}
+
+.navbar-header a {
+    color: rgba(255, 255, 255, 1.0);
+    font-family: Impact;
+    font-size: 20px;
+    margin-top: 40px;
+    float: right;
+}
+
+.navbar-header a:hover {
+    color: rgba(254, 66, 0, 1.0);
+    text-decoration: none;
+}
+
+.navbar-header {
+    text-align: center;
+    width: 100%;
+}
+
+/*footer {
     height: 50px;
     bottom: 0;
     width: 100%;
     background-color: #ccc
+}*/
+
+.form-control, textarea {
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid rgba(254, 66, 0, 1.0);
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s
+}
+
+#candidateRegister {
+    background-color: rgba(254, 66, 0, 1.0);
+    color: rgba(255, 255, 255, 1.0);
+    font-weight: bold;
+}
+
+.form-control:focus, textarea:focus {
+    color: rgba(254, 66, 0, 1.0);
+    outline: none !important;
+    box-shadow: 0 0 10px rgba(254, 66, 0, 1.0);
+    border: 1px solid rgba(254, 66, 0, 1.0);
+}
+
+label {
+    color: rgba(255, 255, 255, 1.0);
 }
 
 footer p {
@@ -15,10 +137,6 @@ footer p {
 
 ul {
   list-style-type: none;
-}
-
-ul li {
-    background-color: #FFFFFF;
 }
 
 .sortable-handle {
